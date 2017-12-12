@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.onwing.household.comm.dal.dao.AccessRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.AccessRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="household_id" property="householdId" jdbcType="BIGINT" />
+    <result column="out_off_time" property="outOffTime" jdbcType="TIMESTAMP" />
+    <result column="out_off" property="outOff" jdbcType="CHAR" />
+    <result column="stranger_photo_id" property="strangerPhotoId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, household_id, out_off_time, out_off, stranger_photo_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_access_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tbl_access_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.onwing.household.comm.dal.model.AccessRecord" useGeneratedKeys="true" keyProperty="id" >
+    insert into tbl_access_record (household_id, out_off_time, out_off, 
+      stranger_photo_id)
+    values (#{householdId,jdbcType=BIGINT}, #{outOffTime,jdbcType=TIMESTAMP}, #{outOff,jdbcType=CHAR}, 
+      #{strangerPhotoId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.AccessRecord" useGeneratedKeys="true" keyProperty="id" >
+    insert into tbl_access_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="householdId != null" >
+        household_id,
+      </if>
+      <if test="outOffTime != null" >
+        out_off_time,
+      </if>
+      <if test="outOff != null" >
+        out_off,
+      </if>
+      <if test="strangerPhotoId != null" >
+        stranger_photo_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="householdId != null" >
+        #{householdId,jdbcType=BIGINT},
+      </if>
+      <if test="outOffTime != null" >
+        #{outOffTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outOff != null" >
+        #{outOff,jdbcType=CHAR},
+      </if>
+      <if test="strangerPhotoId != null" >
+        #{strangerPhotoId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.onwing.household.comm.dal.model.AccessRecord" >
+    update tbl_access_record
+    <set >
+      <if test="householdId != null" >
+        household_id = #{householdId,jdbcType=BIGINT},
+      </if>
+      <if test="outOffTime != null" >
+        out_off_time = #{outOffTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outOff != null" >
+        out_off = #{outOff,jdbcType=CHAR},
+      </if>
+      <if test="strangerPhotoId != null" >
+        stranger_photo_id = #{strangerPhotoId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.AccessRecord" >
+    update tbl_access_record
+    set household_id = #{householdId,jdbcType=BIGINT},
+      out_off_time = #{outOffTime,jdbcType=TIMESTAMP},
+      out_off = #{outOff,jdbcType=CHAR},
+      stranger_photo_id = #{strangerPhotoId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
