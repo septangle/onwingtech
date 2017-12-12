@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class BaseDto implements Serializable {
 	private static final long serialVersionUID = -1470795469324417184L;
 
-	private int pageNum;//当前页
+	private int pageNum;//当前�?
 	private int pageSize = 10;//每页多少条数
 	private long total;//总记录数
 
 	private Integer profileId = null;//用户ID
 	private Integer operaId = null;//操作人ID
-	private String operaName = null;//操作人姓名
+	private String operaName = null;//操作人姓�?
 
 	public Integer getProfileId() {
 		return profileId;
