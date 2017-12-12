@@ -14,7 +14,6 @@ public class AdminiStratorFacadeImpl implements AdminiStratorFacade{
 	@Autowired
 	private AdminiStratorBiz adminiStratorBiz;
 	
-	@Override
 	public AdminiStratorResponse login(AdminiStratorRequest request) throws Exception {
 		AdminiStratorResponse adminiStratorResponse = new AdminiStratorResponse();
 		AdminiStratorDto adminiStratorDto=adminiStratorBiz.queryLoginUser(request.getAdminiStratorDto());
