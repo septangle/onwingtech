@@ -10,6 +10,18 @@ import java.io.Serializable;
 public class BaseResponse implements Serializable {
 
 	private Error error = null;
+	
+	private String message;
+	
+	
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
 	public Error getError() {
 		return error;

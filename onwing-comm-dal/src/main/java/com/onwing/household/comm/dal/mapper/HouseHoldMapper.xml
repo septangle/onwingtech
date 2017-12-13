@@ -131,4 +131,40 @@
       remarks = #{remarks,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  	<!--===============自定义sql =============== -->
+	<select id="selectBySelective" resultMap="BaseResultMap"
+		parameterType="com.onwing.household.comm.dal.model.HouseHold">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_household
+		where 1=1
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="householdName != null">
+			and household_name = #{householdName,jdbcType=VARCHAR},
+		</if>
+		<if test="gender != null">
+			and gender = #{gender,jdbcType=CHAR},
+		</if>
+		<if test="tel != null">
+			and tel = #{tel,jdbcType=VARCHAR},
+		</if>
+		<if test="buildingBlockNumber != null">
+			and building_block_number = #{buildingBlockNumber,jdbcType=VARCHAR},
+		</if>
+		<if test="roomNumber != null">
+			and room_number = #{roomNumber,jdbcType=VARCHAR},
+		</if>
+		<if test="photoId != null">
+			and photo_id = #{photoId,jdbcType=VARCHAR},
+		</if>
+		<if test="cardNumber != null">
+			and card_number = #{cardNumber,jdbcType=VARCHAR},
+		</if>
+		<if test="remarks != null">
+			and remarks = #{remarks,jdbcType=VARCHAR},
+		</if>
+	</select>
 </mapper>

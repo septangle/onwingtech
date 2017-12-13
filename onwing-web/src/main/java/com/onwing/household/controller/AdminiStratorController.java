@@ -62,29 +62,6 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 		return adminiStratorResponse;
 	}
 
-	/**
-	 * 注册
-	 */
-	@ApiOperation(value = "注册", httpMethod = "POST", response = AdminiStratorResponse.class)
-	@ApiImplicitParams({
-		    @ApiImplicitParam(name = "adminiStratorDto.adminName", value = "姓名", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "adminiStratorDto.tel", value = "联系电话", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "adminiStratorDto.password", value = "密码", required = true, dataType = "string")})
-	@RequestMapping(value = "/register.do", method = RequestMethod.POST)
-	public @ResponseBody AdminiStratorResponse register(@RequestBody AdminiStratorRequest request,
-			HttpServletRequest servletRequest) throws Exception {
-		return null;
-	}
-	
-	/**
-	 * 注销
-	 */
-	@ApiOperation(value = "注销", httpMethod = "GET", response = AdminiStratorResponse.class)
-	@RequestMapping(value = "/outLogin.do", method = RequestMethod.GET)
-	public @ResponseBody AdminiStratorResponse outLogin(HttpServletRequest servletRequest) throws Exception {
-     	return null;
-	}
-	
 	
 
 }

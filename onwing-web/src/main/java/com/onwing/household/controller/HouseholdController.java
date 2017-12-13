@@ -1,12 +1,14 @@
 package com.onwing.household.controller;
 
 import javax.servlet.http.HttpServletRequest;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.onwing.household.biz.logic.facade.HouseHoldFacade;
 import com.onwing.household.biz.request.HouseholdRequest;
 import com.onwing.household.biz.response.HouseholdResponse;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
@@ -15,42 +17,68 @@ import com.wordnik.swagger.annotations.ApiOperation;
 
 @Controller
 @RequestMapping("/household")
-public class HouseholdController extends BaseController<HouseholdController>{
- 
+public class HouseholdController extends BaseController<HouseholdController> {
+
+	@Autowired
+	private HouseHoldFacade householdfacade;
+
 	/**
 	 * 增加业主信息
 	 */
 	@ApiOperation(value = "录入业主信息", httpMethod = "POST", response = HouseholdResponse.class)
 	@ApiImplicitParams({
-		    @ApiImplicitParam(name = "houseHoldDto.householdName", value = "业主姓名", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "houseHoldDto.gender", value = "性别", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "houseHoldDto.tel", value = "联系电话", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "houseHoldDto.buildingBlockNumber", value = "楼栋号", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "houseHoldDto.roomNumber", value = "门牌号", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "houseHoldDto.cardNumber", value = "联系电话", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "houseHoldDto.remarks", value = "联系电话", required = true, dataType = "string")})
+			@ApiImplicitParam(name = "householdDto.householdName", value = "业主姓名", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.gender", value = "性别", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.tel", value = "联系电话", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.buildingBlockNumber", value = "楼栋号", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.roomNumber", value = "门牌号", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.cardNumber", value = "卡号", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.remarks", value = "备注", required = true, dataType = "string") })
 	@RequestMapping(value = "/addHouseHold.do", method = RequestMethod.POST)
 	public @ResponseBody HouseholdResponse addHouseHold(@RequestBody HouseholdRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		//拼接照片id字段
-
-		return null;
+		return householdfacade.addHouseHold(request);
 	}
-	
+
 	/**
 	 * 删除业主信息
 	 */
 	@ApiOperation(value = "删除业主信息", httpMethod = "POST", response = HouseholdResponse.class)
 	@ApiImplicitParams({
-		    @ApiImplicitParam(name = "houseHoldDto.id", value = "业主id", required = true, dataType = "string")})
-	@RequestMapping(value = "/delHouseHold.do", method = RequestMethod.POST)
-	public @ResponseBody HouseholdResponse delHouseHold(@RequestBody HouseholdRequest request,
+			@ApiImplicitParam(name = "householdDto.id", value = "业主id", required = true, dataType = "string") })
+	@RequestMapping(value = "/removeHouseHold.do", method = RequestMethod.POST)
+	public @ResponseBody HouseholdResponse removeHouseHold(@RequestBody HouseholdRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		return null;
+
+		return householdfacade.removeHouseHold(request);
+
 	}
-	
+
 	/**
 	 * 修改业主信息
 	 */
-	
+	@ApiOperation(value = "修改业主信息", httpMethod = "POST", response = HouseholdResponse.class)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "householdDto.id", value = "id", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.householdName", value = "业主姓名", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.gender", value = "性别", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.tel", value = "联系电话", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.remarks", value = "备注", required = true, dataType = "string") })
+	@RequestMapping(value = "/updateHouseHold.do", method = RequestMethod.POST)
+	public @ResponseBody HouseholdResponse updateHouseHold(@RequestBody HouseholdRequest request,
+			HttpServletRequest servletRequest) throws Exception {
+
+		return householdfacade.updateHouseHold(request);
+	}
+
+	/**
+	 * 查询业主信息
+	 */
+	@ApiOperation(value = "查询业主信息", httpMethod = "GET", response = HouseholdResponse.class)
+	@RequestMapping(value = "/findHouseHold.do", method = RequestMethod.GET)
+	public @ResponseBody HouseholdResponse findHouseHold(HttpServletRequest servletRequest) throws Exception {
+
+		return householdfacade.findHouseHold();
+	}
+
 }
