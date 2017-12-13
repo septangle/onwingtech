@@ -46,7 +46,7 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade{
 	}
 
 	@Override
-	public HouseholdResponse findHouseHold() throws Exception {
+	public HouseholdResponse findAllHouseHold() throws Exception {
 		HouseholdResponse householdResponse= new HouseholdResponse();
 		List<HouseHoldDto> householdList = householdBiz.findHousehold();
 		householdResponse.setHouseholdlist(householdList);

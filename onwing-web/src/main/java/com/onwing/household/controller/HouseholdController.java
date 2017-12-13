@@ -75,10 +75,10 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	 * 查询业主信息
 	 */
 	@ApiOperation(value = "查询业主信息", httpMethod = "GET", response = HouseholdResponse.class)
-	@RequestMapping(value = "/findHouseHold.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/findAllHouseHold.do", method = RequestMethod.GET)
 	public @ResponseBody HouseholdResponse findHouseHold(HttpServletRequest servletRequest) throws Exception {
 
-		return householdfacade.findHouseHold();
+		return householdfacade.findAllHouseHold();
 	}
 
 }

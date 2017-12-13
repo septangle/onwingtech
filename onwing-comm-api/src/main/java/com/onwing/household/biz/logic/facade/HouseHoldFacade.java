@@ -38,5 +38,5 @@ public interface HouseHoldFacade {
      * @throws Exception
 	 * @author zx
      */
-    public HouseholdResponse findHouseHold() throws Exception;
+    public HouseholdResponse findAllHouseHold() throws Exception;
 }
