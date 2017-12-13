@@ -25,7 +25,7 @@ public class HouseHoldimpl implements HouseHoldBiz{
 		HouseHold household;
 		try {
 			household = ModelUtil.dtoToModel(householdDto, HouseHold.class);
-			household.setPhotoId(householdDto.getBuildingBlockNumber()+"-"+householdDto.getRoomNumber()+"-"+householdDto.getHouseholdName());
+			household.setPhotoId(householdDto.getBuildingBlockNumber()+"-"+householdDto.getRoomNumber()+"-"+householdDto.getHouseholdName()+".jpg");
 			int i=householdMapper.insertSelective(household);
 			if (i==0) {
 				throw new BusinessException(AppConstants.ADD_HOUSE_HOLD_FAIL_CODE,
