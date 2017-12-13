@@ -13,6 +13,8 @@ public class AppConstants {
 	public final static String QUERY_LOGIN_USER_ERROR_MESSAGE = "用户登录失败:账号或密码错误！";
 	public final static String QUERY_LOGIN_USERLOING_ERROR_CODE = "10010002";
 	public final static String QUERY_LOGIN_USERLOING_ERROR_MESSAGE = "该用户已登录！";
+	public final static String NOT_LOGIN_CODE="10010003";
+	public final static String NOT_LOGIN_MESSAGE="该用户未登录";
 
 	//addHousehold 1003
 	public final static String ADD_HOUSE_HOLD_FAIL_CODE = "10030001";
