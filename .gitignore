@@ -1,7 +1,12 @@
-target/
+onwing-comm-api/target/
+onwing-comm-biz/target/
+onwing-comm-dal/target/
+onwing-comm-util/target/
 .settings/
 bin/
 out/
 .project
 .classpath
 *.class
+.DS_Store
+onwing-comm-api/.DS_Store
