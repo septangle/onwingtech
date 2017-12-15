@@ -18,13 +18,9 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-	<!-- <listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring/photo_web_spring.xml</param-value>
-	</context-param> -->
+	<!-- <listener> <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class> 
+		</listener> <context-param> <param-name>contextConfigLocation</param-name> 
+		<param-value>classpath:spring/photo_web_spring.xml</param-value> </context-param> -->
 
 	<filter>
 		<filter-name>requestBodyCachedFilter</filter-name>
@@ -57,4 +53,9 @@
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
 	</welcome-file-list>
+
+	<!-- 开启socket server服务 -->
+	<listener>
+		<listener-class>com.onwing.socket.server.SocketServiceLoader</listener-class>
+	</listener>
 </web-app>
