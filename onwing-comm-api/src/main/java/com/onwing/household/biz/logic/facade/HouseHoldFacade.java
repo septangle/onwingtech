@@ -39,4 +39,12 @@ public interface HouseHoldFacade {
 	 * @author zx
      */
     public HouseholdResponse findAllHouseHold() throws Exception;
+    
+    /**
+     * 根据id查询业主信息
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public HouseholdResponse findHouseHoldById(HouseholdRequest householdRequest) throws Exception;
 }

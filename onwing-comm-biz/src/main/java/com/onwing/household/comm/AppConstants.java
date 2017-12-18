@@ -30,5 +30,9 @@ public class AppConstants {
 	public final static String UPDATE_HOUSE_HOLD_FAIL_CODE = "10050001";
 	public final static String UPDATE_HOUSE_HOLD_FAIL_MESSAGE = "住户信息更新失败";
 	public final static String UPDATE_HOUSE_HOLD_SUCCESS_MESSAGE = "住户信息更新成功";
+	
+	//addphoto
+	public final static String ADD_PHOTO_SUCCESS="上传成功";
+	
 
 }

@@ -44,7 +44,6 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 	public @ResponseBody AdminiStratorResponse login(@RequestBody AdminiStratorRequest request,
 			HttpServletRequest servletRequest) throws Exception {
 		HttpSession session = servletRequest.getSession();
-		
 		AdminiStratorDto adminiStratorDto = (AdminiStratorDto) session.getAttribute("adminiStratorDto");
         if (adminiStratorDto!=null) {
         	throw new BusinessException(AppConstants.QUERY_LOGIN_USERLOING_ERROR_CODE,

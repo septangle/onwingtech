@@ -46,5 +46,13 @@ public interface HouseHoldBiz {
 	 * @throws BusinessException
 	 */
 	public List<HouseHoldDto> findHousehold() throws BusinessException;
+	
+	/**
+	 * 根据id查询HouseHold
+	 * @param id
+	 * @return HouHoldDto
+	 * @throws BusineException
+	 */
+	public HouseHoldDto findHouseholdById(HouseHoldDto houseHoldDto) throws BusinessException;
 
 }

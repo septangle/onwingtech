@@ -106,5 +106,24 @@ public class HouseholdController extends BaseController<HouseholdController> {
 		}
 		return householdfacade.findAllHouseHold();
 	}
+	
+	/**
+	 * 根据id查询业主信息
+	 */
+	@ApiOperation(value = "根据id查询业主信息", httpMethod = "POST", response = HouseholdResponse.class)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "householdDto.id", value = "业主id", required = true, dataType = "string") })
+	@RequestMapping(value = "/findHouseHoldById.do", method = RequestMethod.POST)
+	public @ResponseBody HouseholdResponse findHouseHoldById(@RequestBody HouseholdRequest request,
+			HttpServletRequest servletRequest) throws Exception {
+		HttpSession session = servletRequest.getSession();
+		AdminiStratorDto adminiStratorDto = (AdminiStratorDto) session.getAttribute("adminiStratorDto");
+		if (adminiStratorDto==null) {
+        	throw new BusinessException(AppConstants.NOT_LOGIN_CODE,
+					AppConstants.NOT_LOGIN_MESSAGE);
+		}	
+		return householdfacade.findHouseHoldById(request);
+	}
 
+	
 }
