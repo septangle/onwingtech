@@ -42,12 +42,12 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@RequestMapping(value = "/addHouseHold.do", method = RequestMethod.POST)
 	public @ResponseBody HouseholdResponse addHouseHold(@RequestBody HouseholdRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		HttpSession session = servletRequest.getSession();
+/*		HttpSession session = servletRequest.getSession();
 		AdminiStratorDto adminiStratorDto = (AdminiStratorDto) session.getAttribute("adminiStratorDto");
 		if (adminiStratorDto==null) {
         	throw new BusinessException(AppConstants.NOT_LOGIN_CODE,
 					AppConstants.NOT_LOGIN_MESSAGE);
-		}
+		}*/
 		return householdfacade.addHouseHold(request);
 	}
 
@@ -60,12 +60,12 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@RequestMapping(value = "/removeHouseHold.do", method = RequestMethod.POST)
 	public @ResponseBody HouseholdResponse removeHouseHold(@RequestBody HouseholdRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		HttpSession session = servletRequest.getSession();
+/*		HttpSession session = servletRequest.getSession();
 		AdminiStratorDto adminiStratorDto = (AdminiStratorDto) session.getAttribute("adminiStratorDto");
 		if (adminiStratorDto==null) {
         	throw new BusinessException(AppConstants.NOT_LOGIN_CODE,
 					AppConstants.NOT_LOGIN_MESSAGE);
-		}
+		}*/
 		return householdfacade.removeHouseHold(request);
 
 	}
@@ -83,12 +83,12 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@RequestMapping(value = "/updateHouseHold.do", method = RequestMethod.POST)
 	public @ResponseBody HouseholdResponse updateHouseHold(@RequestBody HouseholdRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		HttpSession session = servletRequest.getSession();
+/*		HttpSession session = servletRequest.getSession();
 		AdminiStratorDto adminiStratorDto = (AdminiStratorDto) session.getAttribute("adminiStratorDto");
 		if (adminiStratorDto==null) {
         	throw new BusinessException(AppConstants.NOT_LOGIN_CODE,
 					AppConstants.NOT_LOGIN_MESSAGE);
-		}
+		}*/
 		return householdfacade.updateHouseHold(request);
 	}
 
@@ -98,12 +98,12 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@ApiOperation(value = "查询业主信息", httpMethod = "GET", response = HouseholdResponse.class)
 	@RequestMapping(value = "/findAllHouseHold.do", method = RequestMethod.GET)
 	public @ResponseBody HouseholdResponse findHouseHold(HttpServletRequest servletRequest) throws Exception {
-		HttpSession session = servletRequest.getSession();
+/*		HttpSession session = servletRequest.getSession();
 		AdminiStratorDto adminiStratorDto = (AdminiStratorDto) session.getAttribute("adminiStratorDto");
 		if (adminiStratorDto==null) {
         	throw new BusinessException(AppConstants.NOT_LOGIN_CODE,
 					AppConstants.NOT_LOGIN_MESSAGE);
-		}
+		}*/
 		return householdfacade.findAllHouseHold();
 	}
 	

@@ -43,6 +43,8 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public @ResponseBody AdminiStratorResponse login(@RequestBody AdminiStratorRequest request,
 			HttpServletRequest servletRequest) throws Exception {
+		String a=System.getProperty("onwing.root"); 
+		System.out.println(a);
 		HttpSession session = servletRequest.getSession();
 		AdminiStratorDto adminiStratorDto = (AdminiStratorDto) session.getAttribute("adminiStratorDto");
         if (adminiStratorDto!=null) {

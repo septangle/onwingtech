@@ -22,6 +22,7 @@
 		</listener> <context-param> <param-name>contextConfigLocation</param-name> 
 		<param-value>classpath:spring/photo_web_spring.xml</param-value> </context-param> -->
 
+
 	<filter>
 		<filter-name>requestBodyCachedFilter</filter-name>
 		<filter-class>com.onwing.household.framework.filter.RequestBodyCachedFilter</filter-class>
@@ -58,4 +59,25 @@
 	<listener>
 		<listener-class>com.onwing.socket.server.SocketServiceLoader</listener-class>
 	</listener>
+	
+	<!-- Web 应用根目录以该属性名添加到系统参数中   -->
+	<context-param>   
+        <param-name>webAppRootKey</param-name>   
+        <param-value>onwing.root</param-value> ① 
+    </context-param>   
+  
+    <listener>   
+        <listener-class>   
+          org.springframework.web.util.WebAppRootListener   
+        </listener-class>   
+    </listener> 
+    <filter>
+    <filter-name>CorsFilter</filter-name>
+    <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+</filter>
+
+    <filter-mapping>
+        <filter-name>CorsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

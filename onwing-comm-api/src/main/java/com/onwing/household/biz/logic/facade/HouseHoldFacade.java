@@ -47,4 +47,12 @@ public interface HouseHoldFacade {
      * @throws Exception
      */
     public HouseholdResponse findHouseHoldById(HouseholdRequest householdRequest) throws Exception;
+    
+    /**
+     * 根据条件查询用户信息
+     * @param
+     * @return
+     * @throws Exception
+     */
+    public HouseholdResponse queryHouseHold(HouseholdRequest householdRequest) throws Exception;
 }

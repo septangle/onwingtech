@@ -63,4 +63,12 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade {
 		return householdResponse;
 	}
 
+	@Override
+	public HouseholdResponse queryHouseHold(HouseholdRequest householdRequest) throws Exception {
+		HouseholdResponse householdResponse = new HouseholdResponse();
+		List<HouseHoldDto> householdList = householdBiz.queryHouseHold(householdRequest.getHouseholdDto());
+		householdResponse.setHouseholdlist(householdList);
+		return householdResponse;
+	}
+
 }
