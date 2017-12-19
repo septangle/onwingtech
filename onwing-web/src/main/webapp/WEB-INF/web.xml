@@ -63,7 +63,7 @@
 	<!-- Web 应用根目录以该属性名添加到系统参数中   -->
 	<context-param>   
         <param-name>webAppRootKey</param-name>   
-        <param-value>onwing.root</param-value> ① 
+        <param-value>onwing.root</param-value>
     </context-param>   
   
     <listener>   
