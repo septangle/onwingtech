@@ -29,6 +29,11 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="lockControlProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:spring/lockControl.properties"/>
+    </bean>
 
 	<!-- swagger configuration Bean -->
 	<bean class="com.onwing.household.swagger.CustomSwaggerConfig" />
@@ -76,9 +81,16 @@
 		<property name="prefix" value="/WEB-INF/views/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
+	
+	<!-- start netty server -->
+	<bean class="com.onwing.socket.server.SocketServerThread" init-method="start" destroy-method="closeSocketServer">
+	</bean>
+	<bean class="com.onwing.socket.server.OnwingChannelInitializer">
+	</bean>
+	
 
 	<import resource="classpath:spring/dao_spring.xml" />
-	<import resource="classpath*:spring/onwing_biz_spring.xml" />
+	<import resource="classpath*:onwing_biz_spring.xml" />
     
 
 	

@@ -56,9 +56,9 @@
 	</welcome-file-list>
 
 	<!-- 开启socket server服务 -->
-	<listener>
+	<!-- <listener>
 		<listener-class>com.onwing.socket.server.SocketServiceLoader</listener-class>
-	</listener>
+	</listener>  -->
 	
 	<!-- Web 应用根目录以该属性名添加到系统参数中   -->
 	<context-param>   

@@ -9,13 +9,14 @@ public class ClientTest {
 		try {
 			Socket socket = new Socket("192.168.1.163", 8888);
 			OutputStream out = socket.getOutputStream();
-			byte[] msgBytes = "{'data': '俞小洋', 'time': '2017/12/13 17:30:52'}{1111}".getBytes();
+			byte[] msgBytes = "{\"data\": \"俞小洋\", \"time\": \"2017/12/13 17:30:52\"}".getBytes();
 			out.write(msgBytes);
 			Thread.sleep(5000);
-			out.write("{hello world".getBytes());
+			/*
+			out.write("{'data': 'zouxu', 'time': '2017/12/19 01:30:52'".getBytes());
 			Thread.sleep(5000);
 			out.write("}".getBytes());
-			
+			*/
 			out.close();
 			socket.close();
 		} catch (Exception e) {

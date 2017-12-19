@@ -1,5 +1,7 @@
 package com.onwing.socket.server;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.onwing.socket.server.decoder.CameraRecognitionMsgDecoder;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -16,6 +18,9 @@ public class SocketServerThread extends Thread {
 	private EventLoopGroup bossGroup;
 	private EventLoopGroup workerGroup;
 	
+	@Autowired
+	private OnwingChannelInitializer onwingChannelInitializer;
+
 	public SocketServerThread() {
 		
 	}
@@ -34,13 +39,7 @@ public class SocketServerThread extends Thread {
 			ServerBootstrap b = new ServerBootstrap();
 			b.group(bossGroup, workerGroup)
 					// 配置 Channel
-					.channel(NioServerSocketChannel.class).childHandler(new ChannelInitializer<SocketChannel>() {
-						@Override
-						public void initChannel(SocketChannel ch) throws Exception {
-							// 注册handler
-							ch.pipeline().addLast(new CameraRecognitionMsgDecoder(), new SimpleServerHandler());
-						}
-					}).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
+					.channel(NioServerSocketChannel.class).childHandler(onwingChannelInitializer).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
 
 			// 绑定端口，开始接收进来的连接
 			ChannelFuture f = b.bind(port).sync();
