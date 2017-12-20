@@ -118,8 +118,14 @@ td.ivu-table-expanded-cell {
                         width: 110,
                         align: 'center'
                     },{
+                        title: '住址',
+                        key: 'addres',
+                        ellipsis:'true',
+                        width: 130,
+                        align: 'center'
+                    },{
                         title: '进入时间',
-                        key: 'intime',
+                        key: 'outOffTime',
                         align: 'center'
                     }]
             }
@@ -131,22 +137,37 @@ td.ivu-table-expanded-cell {
                 /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
                 _this.page_loading = true;
                 /* 获取所有住户信息并将值传入进inout_data数组 */
-                axios.get('testdate/inout.html')
+                axios.get(GlobalServer.findAllAccessRecord)
                 .then(function(response){
                     let data = response.data;
-                    if(data.inoutlist){
+                    if(data.error === null){
                         /* 将获取到的住户信息数据存入inout_data,用以缓存/分页 */
-                        _this.inout_data = data.inoutlist;
+                        _this.inout_data = data.houseAccessRecordDtosList;
                         /* 获取数据的条数,并将值赋给vue实例中的datacount */
                         _this.datacount = _this.inout_data.length;
                         /* 如果数据条目数小于每页显示的条目数,则将所有数据传入分页数据对象,
                            如果数据条目数大于每页显示的条目数,则将第一页要显示的数据传入分页数据对象
-                         */
-                        if (_this.datacount < _this.pagesize) {
+                        */
+
+                        let tempArr = _this.inout_data;
+
+                        _this.inout_page_data = tempArr.map(function(value){
+                            let tempObj = {}
+                            let tempDate = _this.setDate(value.outOffTime);
+                            tempObj.id = value.id;
+                            tempObj.householdName = value.householdName;
+                            tempObj.addres = value.buildingBlockNumber + '单元' + value.roomNumber + '室';
+                            tempObj.outOffTime = tempDate;
+                            console.info(tempObj);
+                            return tempObj;
+                        });
+                        
+                        console.info(_this.inout_page_data)
+                        /* if (_this.datacount < _this.pagesize) {
                             _this.inout_page_data = _this.inout_data;
                         } else {
                             _this.inout_page_data = _this.inout_data.slice(0,_this.pagesize)
-                        }
+                        } */
                         /* 将page_loading值设置为false,隐藏'下在加载数据'的蒙板 */
                         _this.page_loading = false;
                     }
@@ -161,6 +182,7 @@ td.ivu-table-expanded-cell {
                 /* end 每页的结束数据 */
                 let end = index * this.pagesize;
 
+                
                 this.inout_page_data = this.inout_data.slice(start,end);
             },
             exportData (type) {
@@ -176,6 +198,17 @@ td.ivu-table-expanded-cell {
                         original: false
                     });
                 } 
+            },
+            setDate (value) {
+                let temp = new Date(value);
+                let year = temp.getFullYear() + '年',
+                    month = temp.getMonth() + '月',
+                    date = temp.getDate() + '日',
+                    hours = temp.getHours() + '点',
+                    minutes = temp.getMinutes() + '分',
+                    second = temp.getSeconds() + '秒',
+                    fullDate = '';
+                return fullDate = year + month + date + hours + minutes + second;
             }
         },
         beforeCreate() {},

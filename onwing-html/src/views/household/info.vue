@@ -1,7 +1,7 @@
 <template>
     <div class="validateMain">
         <div class="photoView">
-          <img :src="photoUrl">
+          <img :src="baseUrl + photoUrl">
         </div>
         <div class="validateView">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" class="formstyle">
@@ -55,7 +55,7 @@
                     id: ''
                 },
                 photoUrl:'',
-                baseUrl:'',
+                baseUrl:GlobalServer.ServerHost + 'onwing-web/',
                 ruleValidate: {
                     cardnumber: [
                         { required: false }

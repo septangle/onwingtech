@@ -90,11 +90,16 @@ td.ivu-table-expanded-cell {
 <script>
     import axios from 'axios';
     import GlobalServer from '../../config.js';
-    
+
     export default {
         name: 'household_index',
         data () {
             return {
+                dto:{
+                    householdDto:{
+                        id:''
+                    }
+                },
                 baseUrl: '',
                 progresshow:false,
                 progresscount:0,
@@ -176,7 +181,8 @@ td.ivu-table-expanded-cell {
                                     on: {
                                         click: () => {
                                             let rowIndex = params.row._index;
-                                            let photoid = this.household_page_data[rowIndex].photoId;
+                                            let photoUrl = this.household_page_data[rowIndex].photoUrl;
+                                            let photoId = this.household_page_data[rowIndex].photoId;
                                             let argu = {
                                                 id: params.row.id,
                                                 cardNumber: params.row.cardNumber,
@@ -186,8 +192,8 @@ td.ivu-table-expanded-cell {
                                                 buildingblockNumber: params.row.buildingBlockNumber,
                                                 roomNumber: params.row.roomNumber,
                                                 remarks: params.row.remarks,
-                                                photoId: photoid,
-                                                photoUrl: this.baseUrl + photoid + '.jpg'
+                                                photoId: photoId,
+                                                photoUrl: photoUrl
                                             };
                                             this.$router.push({
                                                 name: 'household_info',
@@ -203,7 +209,8 @@ td.ivu-table-expanded-cell {
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index);
+                                            console.info(params);
+                                            this.remove(params);
                                         }
                                     }
                                 }, '删除')
@@ -222,7 +229,6 @@ td.ivu-table-expanded-cell {
                 /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
                 _this.page_loading = true;
                 /* 获取所有住户信息并将值传入进household_data数组 */
-                /* http://192.168.1.118:8080/onwing-web/household/findAllHouseHold.do */
                 axios.get(GlobalServer.findAllHouseHold)
                 .then(function(response){
                     let data = response.data;
@@ -243,12 +249,12 @@ td.ivu-table-expanded-cell {
                     console.info('error=' + error);
                 })
             },
-            remove (index) {
+            remove (params) {
                 /* 删除一条住户信息 */
                 let _this = this;
-                axios.post(this.GlobalServer.removeHouseHold,{
-                    id: _this.household_data[index]
-                })
+                let index = params.index;
+                _this.dto.householdDto.id = params.row.id;
+                axios.post(GlobalServer.removeHouseHold,_this.dto)
                 .then(function(response){
                     // 如果返回值中的error为null，表示删除成功，并将household_data数组中对应的值删除
                     if(response.data.error == null){

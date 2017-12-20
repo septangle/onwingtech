@@ -4,7 +4,8 @@ const findAllHouseHold = ServerHost + 'onwing-web/household/findAllHouseHold.do'
 const updateHouseHold = ServerHost + 'onwing-web/household/updateHouseHold.do';
 const addHouseHold = ServerHost + 'onwing-web/household/addHouseHold.do';
 const removeHouseHold = ServerHost + 'onwing-web/household/removeHouseHold.do';
-const photoUp = ServerHost + '';
+const findAllAccessRecord = ServerHost + 'onwing-web/accessRecord/findAllAccessRecord.do';
+const uploadPhotos = ServerHost + 'onwing-web/addphotos/uploadPhotos.do';
 
 export default {
   ServerHost,
@@ -13,5 +14,6 @@ export default {
   updateHouseHold,
   addHouseHold,
   removeHouseHold,
-  photoUp
+  findAllAccessRecord,
+  uploadPhotos
 };

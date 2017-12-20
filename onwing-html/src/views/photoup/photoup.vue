@@ -1,7 +1,7 @@
 <template>
   <div>
-    <form :action="photoupUrl" method="post" enctype="multiple/form-data">
-        <input id="uploadfile-input" name="uploadfile" class="uploadfile-input" type="file" multiple accept="image/x-png, image/jpg, image/jpeg, image/gif"/>
+    <form id="photoupForm" :action="photoupUrl" method="post" enctype="multipart/form-data" target="formSubmit">
+        <input id="uploadfile-input" name="file" class="uploadfile-input" type="file" multiple accept="image/x-png, image/jpg, image/jpeg, image/gif"/>
         <p id="uploadfile-button" @click="uploadClick()" class="uploadfile-button">
           <span>请选择要上传的文件</span>
         </p>
@@ -10,14 +10,16 @@
           <input id="uploadfile-submit" type="submit" value="提 交" />
         </div>
     </form>
+    <iframe name="formSubmit" style="display:none;"></iframe>
   </div>
 </template>
 <script>
   import GlobalServer from '../../config.js';
+
   export default {
     data(){
       return {
-        photoupUrl: GlobalServer.photoUp
+        photoupUrl: GlobalServer.uploadPhotos
       }
     },
     methods: {
@@ -28,7 +30,17 @@
       },
       submitClick(){
         let EleSubmit = document.getElementById("uploadfile-submit");
+        let EleForm = document.getElementById("photoupForm");
+
         EleSubmit.click();
+      },
+      saveReport() {
+        jquery("#showDataForm").ajaxSubmit(function(message) { 
+          // 对于表单提交成功后处理，message为提交页面saveReport.htm的返回内容 
+          console.info(message);
+        }); 
+
+        return false; 
       },
       fileChange() {
         var EleInput = document.getElementById("uploadfile-input");

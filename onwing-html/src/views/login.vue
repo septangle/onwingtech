@@ -60,9 +60,10 @@ export default {
     },
     methods: {
         handleSubmit () {
-            let dto = {};
+            let dto = {
+                adminiStratorDto:{}
+            };
             let _this = this;
-            dto.adminiStratorDto = {};
             _this.$refs.loginForm.validate((valid) => {
                 if (valid) {
                     dto.adminiStratorDto.adminName = _this.form.username;
@@ -74,6 +75,12 @@ export default {
                             let adminName = data.adminiStratorDto.adminName
                             Cookies.set('user', adminName);
                             Cookies.set('access',0);
+                            _this.$Message.success('登录成功！');
+                            setTimeout(function(){
+                                _this.$router.push({
+                                    name: 'home_index'
+                                });
+                            },2000);
                         }
                         //_this.respData.adminName = 
                         /* if(response){
@@ -94,11 +101,7 @@ export default {
 
                     _this.$store.commit('setAvator', '../images/avatars-admin.png');
 
-                    setTimeout(function(){
-                        _this.$router.push({
-                            name: 'home_index'
-                        });
-                    },2000);
+
                 }
             });
         }

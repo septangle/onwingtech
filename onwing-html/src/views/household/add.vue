@@ -1,6 +1,6 @@
 <template>
     <div class="validateMain">
-        <div class="photoView">
+        <!-- <div class="photoView">
             <template>
                 <div class="editWrap" style="">
                     <Icon size="24" type="edit" @click.native="handleFileUp()"></Icon>
@@ -8,7 +8,7 @@
                 </div>
                 <img :src="photoUrl" ref="img">
             </template>
-        </div>
+        </div> -->
 
         <div class="validateView">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" class="formstyle">
@@ -27,8 +27,8 @@
                         <Radio label="女">女</Radio>
                     </RadioGroup>
                 </FormItem>
-                <FormItem label="楼号/单元号" prop="buildingblockNumber">
-                  <Input v-model="formValidate.buildingblockNumber"></Input>
+                <FormItem label="楼号/单元号" prop="buildingBlockNumber">
+                  <Input v-model="formValidate.buildingBlockNumber"></Input>
                 </FormItem>
                 <FormItem label="房号" prop="roomNumber">
                   <Input v-model="formValidate.roomNumber"></Input>
@@ -42,15 +42,15 @@
                 </FormItem>
             </Form>
             <form :action="baseUrl" method="post" type="" style="display:none">
-              <input id="household_photoup" type="file" name="household_photoup" @change="handleFilechange()" ref="photoup">
-              <input type="text" name="cardNumber" :value="formValidate.cardNumber">
+              <input id="household_photoup" type="file" name="photoUrl" @change="handleFilechange()" ref="photoup">
+              <!-- <input type="text" name="cardNumber" :value="formValidate.cardNumber">
               <input type="text" name="householdName" :value="formValidate.householdName">
               <input type="text" name="tel" :value="formValidate.tel">
               <input type="text" name="gender" :value="formValidate.gender">
               <input type="text" name="buildingBlockNumber" :value="formValidate.buildingBlockNumber">
               <input type="text" name="roomNumber" :value="formValidate.roomNumber">
               <textarea type="textarea" name="remarks" :value="formValidate.remarks"></textarea>
-              <input type="submit" ref="addSubmit">
+              <input type="submit" ref="addSubmit"> -->
 
             </form>
         </div>
@@ -65,18 +65,19 @@
         data () {
             return {
                 photoUrl:"/images/avatars-man.png",
+                baseUrl:GlobalServer.addHouseHold,
+                dto: {
+                    householdDto:{}
+                },
                 formValidate: {
                     cardNumber: '',
                     householdName: '',
                     tel: '',
                     gender: '',
-                    buildingblockNumber: '',
+                    buildingBlockNumber: '',
                     roomNumber: '',
-                    remarks: '',
-                    photoId: '',
-                    id: ''
+                    remarks: ''
                 },
-                baseUrl:GlobalServer.addHouseHold,
                 ruleValidate: {
                     cardNumber: [
                         { required: true, message:'请输入门禁卡号', trigger: 'blur' }
@@ -92,7 +93,7 @@
                     gender: [
                         { required: true, message: '请选择性别', trigger: 'change' }
                     ],
-                    buildingblockNumber: [
+                    buildingBlockNumber: [
                         { required: true, message: '请输入楼号/单元号', trigger: 'blur' }
                     ],
                     roomNumber: [
@@ -136,11 +137,24 @@
               this.photoUrl = "/images/avatars-man.png";
             },
             handleSubmit(name) {
-              this.$refs[name].validate((valid) => {
-                if(valid) {
-                  this.$refs.addSubmit.click();
-                }
-              });
+                let _this = this;
+                _this.$refs[name].validate((valid) => {
+                    if(valid) {
+                        _this.dto.householdDto = _this.formValidate;
+                        console.info(_this.dto);
+                        axios.post(GlobalServer.addHouseHold,_this.dto)
+                        .then(function(response){
+                            let data = response.data;
+                            if(data.error === null) {
+                                console.info('保存成功');
+                            }
+                        })
+                        .catch(function(error){
+                            console.info(error);
+                        });
+                    /* this.$refs.addSubmit.click(); */
+                    }
+                });
             },
             handleFilechange() {
               var file = this.$refs.photoup.files[0];
