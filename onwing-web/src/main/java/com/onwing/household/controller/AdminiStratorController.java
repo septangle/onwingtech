@@ -38,13 +38,11 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 	 */
 	@ApiOperation(value = "登录", httpMethod = "POST", response = AdminiStratorResponse.class)
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "adminiStratorDto.tel", value = "联系电话", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "adminiStratorDto.adminName", value = "用户名", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "adminiStratorDto.password", value = "密码", required = true, dataType = "string") })
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public @ResponseBody AdminiStratorResponse login(@RequestBody AdminiStratorRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		String a=System.getProperty("onwing.root"); 
-		System.out.println(a);
 		HttpSession session = servletRequest.getSession();
 		AdminiStratorDto adminiStratorDto = (AdminiStratorDto) session.getAttribute("adminiStratorDto");
         if (adminiStratorDto!=null) {

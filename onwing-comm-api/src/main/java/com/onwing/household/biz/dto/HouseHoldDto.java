@@ -18,6 +18,8 @@ public class HouseHoldDto {
 	    private String cardNumber;
 
 	    private String remarks;
+	    
+	    private String photoUrl;
 
 		public Long getId() {
 			return id;
@@ -89,6 +91,14 @@ public class HouseHoldDto {
 
 		public void setRemarks(String remarks) {
 			this.remarks = remarks;
+		}
+
+		public String getPhotoUrl() {
+			return photoUrl;
+		}
+
+		public void setPhotoUrl(String photoUrl) {
+			this.photoUrl = photoUrl;
 		}
 	    
 	    

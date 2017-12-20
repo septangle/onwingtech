@@ -104,7 +104,8 @@ public class HouseholdController extends BaseController<HouseholdController> {
         	throw new BusinessException(AppConstants.NOT_LOGIN_CODE,
 					AppConstants.NOT_LOGIN_MESSAGE);
 		}*/
-		return householdfacade.findAllHouseHold();
+		String fileStr=System.getProperty("onwing.root");
+		return householdfacade.findAllHouseHold(fileStr+"image");
 	}
 	
 	/**

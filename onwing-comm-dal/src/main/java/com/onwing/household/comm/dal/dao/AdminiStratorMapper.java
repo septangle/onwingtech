@@ -21,4 +21,6 @@ public interface AdminiStratorMapper {
     /****************自定义查询*******************/
     
     List<AdminiStrator> selectBySelective(AdminiStrator record);
+    
+    AdminiStrator login(AdminiStrator record);
 }

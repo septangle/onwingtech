@@ -25,8 +25,7 @@ public class AdminiStratorimpl implements AdminiStratorBiz{
 		AdminiStrator adminStrator;
 		try {
 			adminStrator = ModelUtil.dtoToModel(adminiStratorDto, AdminiStrator.class);
-			List<AdminiStrator> adminiStratorList=adminiStratorMapper.selectBySelective(adminStrator);
-			adminStrator = adminiStratorList.get(0);
+			adminStrator=adminiStratorMapper.login(adminStrator);
 			adminiStratorDto = ModelUtil.modelToDto(adminStrator, AdminiStratorDto.class);
 			adminiStratorDto.setPassword(null);
 		} catch (Exception e) {

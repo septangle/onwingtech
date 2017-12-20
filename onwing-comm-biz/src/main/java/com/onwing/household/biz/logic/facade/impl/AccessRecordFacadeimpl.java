@@ -15,6 +15,8 @@ public class AccessRecordFacadeimpl implements AccessRecordFacade {
 
 	@Autowired
 	private AccessRecordBiz accessRecordBiz;
+	
+	
 	@Override
 	public AccessRecordResponse findAllAccessRecord() throws Exception {
 		AccessRecordResponse accessRecordResponse= new AccessRecordResponse();

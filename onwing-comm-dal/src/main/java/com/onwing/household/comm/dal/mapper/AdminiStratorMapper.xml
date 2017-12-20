@@ -94,4 +94,12 @@
 			and tel = #{tel,jdbcType=VARCHAR}
 		</if>
 	</select>
+	
+	<select id="login" resultMap="BaseResultMap" parameterType="com.onwing.household.comm.dal.model.AdminiStrator">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_administrator
+		where admin_name = #{adminName,jdbcType=VARCHAR} 
+		and password = #{password,jdbcType=VARCHAR}
+	</select>
 </mapper>

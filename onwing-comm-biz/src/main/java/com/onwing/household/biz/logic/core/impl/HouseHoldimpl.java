@@ -1,6 +1,8 @@
 package com.onwing.household.biz.logic.core.impl;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +82,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 	}
 
 	@Override
-	public List<HouseHoldDto> findHousehold() throws BusinessException {
+	public List<HouseHoldDto> findHousehold(String strFile) throws BusinessException {
 		HouseHold houseHold = new HouseHold();
 		List<HouseHoldDto> householdDtoList = null;
 		try {
@@ -91,6 +93,26 @@ public class HouseHoldimpl implements HouseHoldBiz {
 					householdDtoList.add(ModelUtil.modelToDto(houseHoldParam, HouseHoldDto.class));
 				}
 			}
+	    	HashMap<String, String> testMap =new HashMap<String, String>();
+	    	//查找指定路径
+	    	File root = new File(strFile); 
+	    	//存入集合
+	        File[] files = root.listFiles();
+	        //格式key=12-46-李四    value=12-46-李四.jpg
+	        for (File file : files) { 
+	        	String [] fileKey =file.getName().split("\\.");
+	        	testMap.put(fileKey[0], file.getName());
+	        }  
+	        //循环业主信息
+	        for (int i = 0; i < householdDtoList.size(); i++) {
+	        	HouseHoldDto houses =householdDtoList.get(i);
+	        	String photoId=houses.getPhotoId();
+	        	if (testMap.containsKey(photoId)) {
+	        		householdDtoList.get(i).setPhotoUrl(AppConstants.FILE_PATH+testMap.get(photoId));
+	        	}
+				
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

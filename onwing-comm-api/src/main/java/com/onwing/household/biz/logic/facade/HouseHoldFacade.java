@@ -38,7 +38,7 @@ public interface HouseHoldFacade {
      * @throws Exception
 	 * @author zx
      */
-    public HouseholdResponse findAllHouseHold() throws Exception;
+    public HouseholdResponse findAllHouseHold(String fileStr) throws Exception;
     
     /**
      * 根据id查询业主信息

@@ -33,6 +33,7 @@ public class AppConstants {
 	
 	//addphoto
 	public final static String ADD_PHOTO_SUCCESS="上传成功";
+	public final static String FILE_PATH="image/";
 	
 
 }
