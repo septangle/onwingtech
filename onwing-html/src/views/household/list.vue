@@ -3,16 +3,6 @@
     <Row>
         <Col :md="24">
             <div>
-                <!-- <div id="container" style="margin-bottom:10px;">
-                    <Button type="primary" size="large"  icon="ios-cloud-upload-outline" id='pickfiles' @click="qiniu_upload" style="padding-bottom:5px;">上传文件</Button>
-                    <Progress :percent="progresscount" :status="progresstatus" style="width=90%;vertical-align:middle" v-if="progresshow">
-                        <Icon type="checkmark-circled" v-if="progresscount==100"></Icon>
-                        <span v-if="progresscount===100">上传成功</span>
-                        <Icon type="close-circled" v-if="progresstatus==='wrong'"></Icon>
-                        <span v-if="progresstatus==='wrong'">上传失败</span>
-                        <span style="position:absolute;left:50%;top:-5px;" v-if="progresscount!==0&&progresscount!=100">{{progressspeed}}</span>
-                    </Progress>
-                </div> -->
                 <div style="position:relative;">
                     <!-- 表格开始 -->
                     <Table stripe border height="auto" :columns="columns_title" :data="household_page_data" ref="table"></Table>
@@ -35,15 +25,12 @@
                 <Page :total="datacount" :page-size="pagesize" show-total @on-change="changePage" style="text-align:right;margin-top:50px"></Page>
                 </div>
                 <!-- 分页结束 -->
-
             </div>
         </Col>
         <Col :md="12"></Col>
     </Row>
 </div>
 </template>
-
-
 
 <style type="text/css" scoped>
 .ivu-tag-dot {
@@ -101,17 +88,10 @@ td.ivu-table-expanded-cell {
 }
 </style>
 <script>
-    /* import expandRow from './table-expand.vue'; */
     import axios from 'axios';
     import GlobalServer from '../../config.js';
-    /* import { _host } from '@/config.js'; */
-    /* console.info(_host); */
-    /* var vue;
-    var uploader; */
+    
     export default {
-        components: { 
-            /* expandRow */
-        },
         name: 'household_index',
         data () {
             return {

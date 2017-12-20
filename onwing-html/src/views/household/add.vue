@@ -2,32 +2,12 @@
     <div class="validateMain">
         <div class="photoView">
             <template>
-                <!-- <div @click="handleFileUp()" style="position:absolute;width:100%;height:100%;top:0;left:0;z-index:99"></div> -->
                 <div class="editWrap" style="">
-                    <!-- <Icon type="ios-eye-outline" @click.native="handleView()"></Icon> -->
                     <Icon size="24" type="edit" @click.native="handleFileUp()"></Icon>
                     <Icon size="30" type="trash-b" @click.native="handlePhotoRemove()"></Icon>
                 </div>
                 <img :src="photoUrl" ref="img">
-            <!-- <Upload
-                ref="upload"
-                :show-upload-list="false"
-                :default-file-list="defaultList"
-                :on-success="handleSuccess"
-                :format="['jpg','jpeg','png']"
-                :max-size="2048"
-                :on-format-error="handleFormatError"
-                :on-exceeded-size="handleMaxSize"
-                action=""
-                style="display: inline-block;position:absolute;width:100%;height:100%;top:0;left:0;">
-                <div style="width: 100%;height:100%;height:100%;position:absolute;top:0;left:0;z-index:99;">
-                    <Icon size="20"></Icon>
-                </div>
-            </Upload> -->
             </template>
-            <!-- <template>
-                <Progress></Progress>
-            </template> -->
         </div>
 
         <div class="validateView">
@@ -154,11 +134,6 @@
             },
             handlePhotoRemove() {
               this.photoUrl = "/images/avatars-man.png";
-              /* let s = this.$refs.img.src;
-              console.info(s);
-              let index = s.indexof("data");
-              if (index >= 0){
-              } */
             },
             handleSubmit(name) {
               this.$refs[name].validate((valid) => {
@@ -166,30 +141,6 @@
                   this.$refs.addSubmit.click();
                 }
               });
-               /* let _this = this;
-                let dto = {};
-                dto.householdDto = {};
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        dto.householdDto.id = _this.formValidate.id;
-                        dto.householdDto.gender = _this.formValidate.gender;
-                        dto.householdDto.tel = _this.formValidate.tel;
-                        dto.householdDto.householdName = _this.formValidate.householdName;
-                        dto.householdDto.remarks = _this.formValidate.remarks;
-                        // 表单内容验证通过则开始提交修改
-                        axios.post(this.baseUrl + '/household/addHouseHold.do',dto)
-                        .then(function(response){
-                        let data = response.data;
-                            if(data.error == null) {
-                                _this.$Message.success('住户信息更新成功!');
-                            } else {
-                                _this.$Message.error(data.error.message);
-                            }
-                        })
-                    } else {
-                        _this.$Message.error('请检查是否有信息未填写!');
-                    }
-                }); */
             },
             handleFilechange() {
               var file = this.$refs.photoup.files[0];

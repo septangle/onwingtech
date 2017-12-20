@@ -23,17 +23,12 @@
                 <Page :total="datacount" :page-size="pagesize" show-total @on-change="changePage" style="text-align:right;margin-top:50px"></Page>
                 </div>
                 <!-- 分页结束 -->
-
-
-                <!-- <Button type="primary" size="large" @click="exportData(2)"><Icon type="ios-download-outline"></Icon> 导出排序和过滤后的数据</Button> -->
             </div>
         </Col>
         <Col :md="12"></Col>
     </Row>
 </div>
 </template>
-
-
 
 <style type="text/css" scoped>
 .ivu-tag-dot {
@@ -91,15 +86,10 @@ td.ivu-table-expanded-cell {
 }
 </style>
 <script>
-    /* import expandRow from './table-expand.vue'; */
     import GlobalServer from '../../config.js';
     import axios from 'axios';
-    /* var vue;
-    var uploader; */
+
     export default {
-        components: { 
-            /* expandRow */
-        },
         name: 'inoutlist_index',
         data () {
             return {

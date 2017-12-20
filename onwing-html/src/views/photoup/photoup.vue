@@ -1,17 +1,5 @@
 <template>
   <div>
-    <!-- <div class="demo-upload-list" v-for="item in uploadList">
-      <template v-if="item.status === 'finished'">
-        <img :src="item.url">
-        <div class="demo-upload-list-cover">
-          <Icon type="ios-eye-outline" @click.native=""></Icon>
-          <Icon type="ios-trash-outline" @click.native=""></Icon>
-        </div>
-      </template>
-      <template v-else>
-        <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-      </template>
-    </div> -->
     <form :action="photoupUrl" method="post" enctype="multiple/form-data">
         <input id="uploadfile-input" name="uploadfile" class="uploadfile-input" type="file" multiple accept="image/x-png, image/jpg, image/jpeg, image/gif"/>
         <p id="uploadfile-button" @click="uploadClick()" class="uploadfile-button">
@@ -22,11 +10,6 @@
           <input id="uploadfile-submit" type="submit" value="提 交" />
         </div>
     </form>
-    <!-- <div v-if="file !== null">Upload file: {{ file.name }}
-      <Button type="text" @click="upload" :loading="loadingStatus">
-        {{ loadingStatus ? 'Uploading' : '上传图片' }}
-      </Button>
-    </div> -->
   </div>
 </template>
 <script>
@@ -39,12 +22,9 @@
     },
     methods: {
       uploadClick() {
-        var EleButton = document.getElementById("uploadfile-button");
         let EleInput = document.getElementById("uploadfile-input");
 
         EleInput.click();
-        // EleButton.addEventListener('click',function(){
-        // },false);
       },
       submitClick(){
         let EleSubmit = document.getElementById("uploadfile-submit");
@@ -62,7 +42,6 @@
               var fr = new FileReader();
               fr.readAsDataURL(fileList[i]);
               fr.onload = function(e) {
-                console.info(e);
                 imgEle.id = 'id' + i;
                 imgEle.src = e.target.result;
               };

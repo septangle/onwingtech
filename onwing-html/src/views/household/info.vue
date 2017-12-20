@@ -144,7 +144,6 @@
           this.init();
         }
     }
-/* https://cn.vuejs.org/images/logo.png */
 </script>
 <style type="text/css" scoped>
   .validateMain {
