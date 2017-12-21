@@ -99,19 +99,22 @@ public class HouseHoldimpl implements HouseHoldBiz {
 	    	//存入集合
 	        File[] files = root.listFiles();
 	        //格式key=12-46-李四    value=12-46-李四.jpg
-	        for (File file : files) { 
-	        	String [] fileKey =file.getName().split("\\.");
-	        	testMap.put(fileKey[0], file.getName());
-	        }  
-	        //循环业主信息
-	        for (int i = 0; i < householdDtoList.size(); i++) {
-	        	HouseHoldDto houses =householdDtoList.get(i);
-	        	String photoId=houses.getPhotoId();
-	        	if (testMap.containsKey(photoId)) {
-	        		householdDtoList.get(i).setPhotoUrl(AppConstants.FILE_PATH+testMap.get(photoId));
-	        	}
-				
+	        if (files!=null) {
+	        	  for (File file : files) { 
+	  	        	String [] fileKey =file.getName().split("\\.");
+	  	        	testMap.put(fileKey[0], file.getName());
+	  	        }  
+	  	        //循环业主信息
+	  	        for (int i = 0; i < householdDtoList.size(); i++) {
+	  	        	HouseHoldDto houses =householdDtoList.get(i);
+	  	        	String photoId=houses.getPhotoId();
+	  	        	if (testMap.containsKey(photoId)) {
+	  	        		householdDtoList.get(i).setPhotoUrl(AppConstants.FILE_PATH+testMap.get(photoId));
+	  	        	}
+	  				
+	  			}
 			}
+	      
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -18,8 +18,8 @@ import com.onwing.household.comm.AppConstants;
  * @author zx
  *  登录验证
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class TestAspect {
 	private static Logger logger = Logger.getLogger(TestAspect.class);
 
