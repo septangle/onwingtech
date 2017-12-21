@@ -4,4 +4,6 @@ public interface DoorLockBiz {
 	public void connect(String ip, int port);
 	
 	public void openBigDoorLock();
+	
+	public void closeBigDoorLock();
 }
