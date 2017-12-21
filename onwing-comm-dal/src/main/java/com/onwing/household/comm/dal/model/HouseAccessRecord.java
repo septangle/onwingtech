@@ -10,6 +10,8 @@ public class HouseAccessRecord {
     
     private String buildingBlockNumber;
     
+    private String roomNumber;
+    
     private Date outOffTime;
 
 	public Long getId() {
@@ -34,6 +36,16 @@ public class HouseAccessRecord {
 
 	public void setBuildingBlockNumber(String buildingBlockNumber) {
 		this.buildingBlockNumber = buildingBlockNumber;
+	}
+	
+	
+
+	public String getRoomNumber() {
+		return roomNumber;
+	}
+
+	public void setRoomNumber(String roomNumber) {
+		this.roomNumber = roomNumber;
 	}
 
 	public Date getOutOffTime() {
