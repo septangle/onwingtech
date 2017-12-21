@@ -2,7 +2,9 @@ package com.onwing.household.biz.logic.core;
 
 import java.util.List;
 
+import com.onwing.household.biz.dto.AccessRecordDto;
 import com.onwing.household.biz.dto.HouseAccessRecordDto;
+import com.onwing.household.comm.dal.model.AccessRecord;
 
 /**
  * 查询出入记录
@@ -18,6 +20,8 @@ public interface AccessRecordBiz {
 	 * @throws Exception
 	 */
 	public List<HouseAccessRecordDto> selectAccessRecord();
+	
+	public void addAccessRecord(AccessRecord accessRecord);
 
 	
 

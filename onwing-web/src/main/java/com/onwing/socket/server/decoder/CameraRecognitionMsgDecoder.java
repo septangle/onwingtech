@@ -1,5 +1,6 @@
 package com.onwing.socket.server.decoder;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -40,13 +41,15 @@ public class CameraRecognitionMsgDecoder extends ByteToMessageDecoder {
 	 * @param target
 	 * @param out
 	 * @return remained bytes
+	 * @throws UnsupportedEncodingException 
 	 */
-	private byte[] cutMsgFromBytes(byte[] target, List<Object> out) {
+	private byte[] cutMsgFromBytes(byte[] target, List<Object> out) throws UnsupportedEncodingException {
 		int length = target.length;
 		int flag = 0;
 		for (int i = 0; i < length; i++) {
 			if (target[i] == 125) {
-				String msg = new String(target, flag, i - flag + 1);
+				//String msg = new String(target, flag, i - flag + 1);
+				String msg = new String(target, flag, i - flag + 1, "GBK");
 				out.add(msg);
 				flag = i + 1;
 			}
