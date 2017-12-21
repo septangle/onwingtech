@@ -143,28 +143,28 @@
 			and id = #{id,jdbcType=BIGINT}
 		</if>
 		<if test="householdName != null">
-			and household_name = #{householdName,jdbcType=VARCHAR},
+			and household_name = #{householdName,jdbcType=VARCHAR} 
 		</if>
 		<if test="gender != null">
-			and gender = #{gender,jdbcType=CHAR},
+			and gender = #{gender,jdbcType=CHAR} 
 		</if>
 		<if test="tel != null">
-			and tel = #{tel,jdbcType=VARCHAR},
+			and tel = #{tel,jdbcType=VARCHAR} 
 		</if>
 		<if test="buildingBlockNumber != null">
-			and building_block_number = #{buildingBlockNumber,jdbcType=VARCHAR},
+			and building_block_number = #{buildingBlockNumber,jdbcType=VARCHAR} 
 		</if>
 		<if test="roomNumber != null">
-			and room_number = #{roomNumber,jdbcType=VARCHAR},
+			and room_number = #{roomNumber,jdbcType=VARCHAR} 
 		</if>
 		<if test="photoId != null">
-			and photo_id = #{photoId,jdbcType=VARCHAR},
+			and photo_id = #{photoId,jdbcType=VARCHAR} 
 		</if>
 		<if test="cardNumber != null">
-			and card_number = #{cardNumber,jdbcType=VARCHAR},
+			and card_number = #{cardNumber,jdbcType=VARCHAR} 
 		</if>
 		<if test="remarks != null">
-			and remarks = #{remarks,jdbcType=VARCHAR},
+			and remarks = #{remarks,jdbcType=VARCHAR} 
 		</if>
 	</select>
 </mapper>
