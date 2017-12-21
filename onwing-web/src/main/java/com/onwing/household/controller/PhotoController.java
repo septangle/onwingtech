@@ -46,9 +46,7 @@ public class PhotoController extends BaseController<PhotoController> {
 					multipartFile.transferTo(new File(filePath));
 				}
 				photoResponse.setMessage(AppConstants.ADD_PHOTO_SUCCESS);
-
 			}
-
 		}
 		return photoResponse;
 
