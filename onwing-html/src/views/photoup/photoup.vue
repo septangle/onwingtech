@@ -1,16 +1,22 @@
 <template>
   <div>
     <form id="photoupForm" :action="photoupUrl" method="post" enctype="multipart/form-data" target="formSubmit">
-        <input id="uploadfile-input" name="file" class="uploadfile-input" type="file" multiple accept="image/x-png, image/jpg, image/jpeg, image/gif"/>
+        <input id="uploadfile-input" name="file" class="uploadfile-input" type="file" multiple accept="image/x-png, image/jpg, image/jpeg, image/gif" @change="fileChange($event)"/>
         <p id="uploadfile-button" @click="uploadClick()" class="uploadfile-button">
-          <span>请选择要上传的文件</span>
+            <span>请选择要上传的文件</span>
         </p>
         <div class="submitWrap" @click="submitClick()">
-          <span>提&nbsp;交</span>
-          <input id="uploadfile-submit" type="submit" value="提 交" />
+            <span>提&nbsp;交</span>
+            <input id="uploadfile-submit" type="submit" value="提 交" />
         </div>
     </form>
-    <iframe name="formSubmit" style="display:none;"></iframe>
+    <iframe id="iframe" name="formSubmit" style="display:none;"></iframe>
+    <div>
+      <p class="photoNumber" v-show="show"><span>本次上传照片的数量为：</span><span>{{photoNumber}}</span><span>张</span></p>
+      <ul class="filelist">
+        <li v-for="value in values">{{value.filename}}</li>
+      </ul>
+    </div>
   </div>
 </template>
 <script>
@@ -19,6 +25,9 @@
   export default {
     data(){
       return {
+        show: false,
+        photoNumber:'',
+        values:[],
         photoupUrl: GlobalServer.uploadPhotos
       }
     },
@@ -31,38 +40,25 @@
       submitClick(){
         let EleSubmit = document.getElementById("uploadfile-submit");
         let EleForm = document.getElementById("photoupForm");
-
         EleSubmit.click();
       },
-      saveReport() {
-        jquery("#showDataForm").ajaxSubmit(function(message) { 
-          // 对于表单提交成功后处理，message为提交页面saveReport.htm的返回内容 
-          console.info(message);
-        }); 
+      fileChange(event) {
+        var files = event.target.files,
+            length = files.length;
+        
+        if(length === 0) {
+          return false;
+        }
 
-        return false; 
-      },
-      fileChange() {
-        var EleInput = document.getElementById("uploadfile-input");
-        EleInput.addEventListener('change',function(source){
-          var fileList = source.target.files,
-              fileLength = fileList.length,
-              gallaryEle = document.getElementById('photoGallary');
-          var imgEle = document.createElement('img');
-          if(window.FileReader) {
-            for(var i=0;i<fileLength;i++){
-              var fr = new FileReader();
-              fr.readAsDataURL(fileList[i]);
-              fr.onload = function(e) {
-                imgEle.id = 'id' + i;
-                imgEle.src = e.target.result;
-              };
-              gallaryEle.appendChild(imgEle);
-            }
-          } else {
-            console.info('浏览器不支持FileReader');
-          }
-        })
+        this.photoNumber = length;
+        this.values = [];
+        this.show=true;
+        for(var i=0; i<length; i++){
+          var obj = {};
+          var filename = files[i].name;
+          obj = {filename:filename};
+          this.values.push(obj);
+        }
       }
     },
     mounted() {
@@ -70,44 +66,6 @@
       /* this.fileChange(); */
     }
   }
-    /* export default {
-        data () {
-            return {
-                file: null,
-                loadingStatus: false,
-                uploadList:[]
-            }
-        },
-        methods: {
-            photoView() {
-              console.info('mounted');
-              let inputEle = document.getElementById('uploadfile-input');
-              inputEle.addEventListener('change',function(){
-                console.info('change');
-                console.info(this);
-              })
-            },
-            handleUpload (file,event) {
-                console.info(file);
-                this.file = file;
-                console.info(event);
-                return false;
-            },
-            upload () {
-                this.loadingStatus = true;
-                setTimeout(() => {
-                    this.file = null;
-                    this.loadingStatus = false;
-                    this.$Message.success('Success')
-                }, 1500);
-            }
-        },
-        mounted () {
-          console.info('mounted_2');
-          photoView();
-          console.info(this.$refs.upload);
-        }
-    } */
 </script>
 
 <style scoped>
@@ -186,48 +144,20 @@
       display: none;
     }
 
-    .photoGallary{
-      margin: 15px 0;
-      width: 800px;
+    .photoNumber {
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .filelist {
+      margin-top: 10px;
+    }
+
+    .filelist li {
       display: inline-block;
-    }
-    .photoGallary p {
-      float: left;
-      position: relative;
-      padding: 5px;
-      width: 100px;
-    }
-    .photoGallary .removePhoto {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 10px;
-      height: 10px;
-      background-color: #f00;
-      border-radius: 50%;
-      transform: rotate(45deg);
-      cursor: pointer;
-      z-index: 99;
-    }
-    .photoGallary .removePhoto:before {
-      content: "";
-      position: absolute;
-      left: 5%;
-      top:4px;
-      background-color: #fff;
-      width: 80%;
-      height: 2px;
-    }
-    .photoGallary .removePhoto:after{
-      content: "";
-      position: absolute;
-      left: 4px;
-      top:5%;
-      background-color: #fff;
-      width: 2px;
-      height: 80%;
-    }
-    .photoGallary img {
-      width: 100%;
+      padding: 5px 10px 10px 0;
+      font-size: 14px;
+      line-height: 1;
     }
 </style>

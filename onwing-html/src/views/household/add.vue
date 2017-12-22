@@ -8,6 +8,9 @@
                 </div>
                 <img :src="photoUrl" ref="img">
             </template>
+            <form :action="baseUrl" method="post" type="" style="display:none">
+                <input id="household_photoup" type="file" name="photoUrl" @change="handleFilechange()" ref="photoup">
+            </form>
         </div> -->
 
         <div class="validateView">
@@ -41,18 +44,7 @@
                     <Button @click="handleReset('formValidate')">重填</Button>
                 </FormItem>
             </Form>
-            <form :action="baseUrl" method="post" type="" style="display:none">
-              <input id="household_photoup" type="file" name="photoUrl" @change="handleFilechange()" ref="photoup">
-              <!-- <input type="text" name="cardNumber" :value="formValidate.cardNumber">
-              <input type="text" name="householdName" :value="formValidate.householdName">
-              <input type="text" name="tel" :value="formValidate.tel">
-              <input type="text" name="gender" :value="formValidate.gender">
-              <input type="text" name="buildingBlockNumber" :value="formValidate.buildingBlockNumber">
-              <input type="text" name="roomNumber" :value="formValidate.roomNumber">
-              <textarea type="textarea" name="remarks" :value="formValidate.remarks"></textarea>
-              <input type="submit" ref="addSubmit"> -->
 
-            </form>
         </div>
     </div>
 </template>
@@ -141,18 +133,19 @@
                 _this.$refs[name].validate((valid) => {
                     if(valid) {
                         _this.dto.householdDto = _this.formValidate;
-                        console.info(_this.dto);
+
                         axios.post(GlobalServer.addHouseHold,_this.dto)
                         .then(function(response){
                             let data = response.data;
                             if(data.error === null) {
-                                console.info('保存成功');
+                                _this.$Message.success('添加成功！');
+                                _this.handleReset('formValidate');
+                                _this.dto.householdDto = {};
                             }
                         })
                         .catch(function(error){
                             console.info(error);
                         });
-                    /* this.$refs.addSubmit.click(); */
                     }
                 });
             },

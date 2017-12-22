@@ -69,13 +69,10 @@ tr.ivu-table-row-hover td .ivu-tag-dot {
     top: -20px;
 }
 
-;
 .demo-i-circle-custom span i {
     font-style: normal;
     color: #3f414d;
 }
-
-/*wz-btn wz-btn-primary wz-btn-small wz-btn-loading*/
 
 .ivu-btn.ivu-btn-primary.ivu-btn-small:not(.ivu-btn-loading) {
     padding: 2px 10px!important;
@@ -158,16 +155,8 @@ td.ivu-table-expanded-cell {
                             tempObj.householdName = value.householdName;
                             tempObj.addres = value.buildingBlockNumber + '单元' + value.roomNumber + '室';
                             tempObj.outOffTime = tempDate;
-                            console.info(tempObj);
                             return tempObj;
                         });
-                        
-                        console.info(_this.inout_page_data)
-                        /* if (_this.datacount < _this.pagesize) {
-                            _this.inout_page_data = _this.inout_data;
-                        } else {
-                            _this.inout_page_data = _this.inout_data.slice(0,_this.pagesize)
-                        } */
                         /* 将page_loading值设置为false,隐藏'下在加载数据'的蒙板 */
                         _this.page_loading = false;
                     }
@@ -182,7 +171,6 @@ td.ivu-table-expanded-cell {
                 /* end 每页的结束数据 */
                 let end = index * this.pagesize;
 
-                
                 this.inout_page_data = this.inout_data.slice(start,end);
             },
             exportData (type) {
@@ -216,17 +204,7 @@ td.ivu-table-expanded-cell {
             this.getInoutDate();
         },
         beforeMount() {},
-        mounted(){
-            // const vue=this;
-            // 将list_loadding的值变更为true,显示'内容加载提示蒙板'
-            // this.list_loadding=true;
-            // 2秒后将list_loadding的值变更为false,隐藏'内容加载提示蒙板'
-            /* setTimeout(function(){
-                vue.list_loadding=false;
-            },2000) */
-            //this.setInitPage(1);
-            /* this.getInoutDate(); */
-        },
+        mounted() {},
         activated() {}
     }
 </script>

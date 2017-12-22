@@ -103,9 +103,9 @@
                     this.photoUrl = data.photoUrl;
                 } else if (!data.photoUrl) {
                     if (data.gender == '男'){
-                        this.photoUrl = '../../images/avatars-man.png';
+                        this.photoUrl = 'image/avatars-man.png';
                     } else if (data.gender == '女') {
-                        this.photoUrl = '../../images/avatars-woman.png';
+                        this.photoUrl = 'image/avatars-woman.png';
                     }
                 }
             },

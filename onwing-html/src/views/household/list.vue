@@ -210,7 +210,7 @@ td.ivu-table-expanded-cell {
                                     on: {
                                         click: () => {
                                             console.info(params);
-                                            this.remove(params);
+                                            /* this.remove(params); */
                                         }
                                     }
                                 }, '删除')
@@ -223,7 +223,6 @@ td.ivu-table-expanded-cell {
         /* 这儿开始是定义所有函数的地方 */
         methods: {
             getHouseholdDate() {
-                console.info(GlobalServer.findAllHouseHold);
                 /* axios有自己的作用域,无法获取vue实例,所以要将vue实例的this传到一个变量中以便在axios中调用 */
                 var _this = this;
                 /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
@@ -232,7 +231,6 @@ td.ivu-table-expanded-cell {
                 axios.get(GlobalServer.findAllHouseHold)
                 .then(function(response){
                     let data = response.data;
-                    console.info(data);
                     if(data.householdlist){
                         /* 将获取到的住户信息数据存入household_data,用以缓存/分页 */
                         _this.household_data = data.householdlist;
@@ -294,16 +292,6 @@ td.ivu-table-expanded-cell {
             this.getHouseholdDate();
         },
         beforeMount() {},
-        mounted(){
-            // const vue=this;
-            // 将page_loading的值变更为true,显示'内容加载提示蒙板'
-            // this.page_loading=true;
-            // 2秒后将page_loading的值变更为false,隐藏'内容加载提示蒙板'
-            /* setTimeout(function(){
-                vue.page_loading=false;
-            },2000) */
-            //this.getHouseholdDate();
-        }
-
+        mounted() {}
     }
 </script>
