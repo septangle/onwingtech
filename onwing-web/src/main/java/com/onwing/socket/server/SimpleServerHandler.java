@@ -55,28 +55,35 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			return;
 		}
 		System.out.println(result);
-		// open lock
-		String lockControlId = "0"; // 0号 锁控制器
-		DoorLockBiz doorLockimpl = doorLockMap.getLockSocketMap().get(lockControlId);
-		if (doorLockimpl == null) {
-			doorLockimpl = new DoorLockimpl();
-			doorLockMap.getLockSocketMap().put(lockControlId, doorLockimpl);
-		}
 
-		String connectInfo = lockControlProperties.get(lockControlId);
-		String[] connectInfoList = connectInfo.split(":");
-		doorLockimpl.connect(connectInfoList[0], Integer.parseInt(connectInfoList[1]));
-		doorLockimpl.openBigDoorLock();
-		// 延时若干秒关闭大门
-		Thread.sleep(1000 * Integer.parseInt(lockControlProperties.get("closeDelayInSecond")));
-		doorLockimpl.closeBigDoorLock();
-		// end
-
-		// 记录出入记录
 		String[] photoKeyWords = photoName.split("-");
 		String buildingBlockNumber = photoKeyWords[0];
 		String roomNumber = photoKeyWords[1];
 		String householdName = photoKeyWords[2];
+		
+		if (buildingBlockNumber.equals("0") && roomNumber.equals("0") && householdName.equals("0")) {
+			// 判断为陌生人，do nothing
+		} else {
+			// open lock
+			String lockControlId = "0"; // 0号 锁控制器
+			DoorLockBiz doorLockimpl = doorLockMap.getLockSocketMap().get(lockControlId);
+			if (doorLockimpl == null) {
+				doorLockimpl = new DoorLockimpl();
+				doorLockMap.getLockSocketMap().put(lockControlId, doorLockimpl);
+			}
+
+			String connectInfo = lockControlProperties.get(lockControlId);
+			String[] connectInfoList = connectInfo.split(":");
+			doorLockimpl.connect(connectInfoList[0], Integer.parseInt(connectInfoList[1]));
+			doorLockimpl.openBigDoorLock();
+			// 延时若干秒关闭大门
+			// Thread.sleep(1000 *
+			// Integer.parseInt(lockControlProperties.get("closeDelayInSecond")));
+			doorLockimpl.closeBigDoorLock();
+			// open lock end
+		}
+		
+		// 记录出入记录
 		// 根据上述三个字段向数据库查找householdId
 		HouseHold houseHold = new HouseHold();
 		houseHold.setBuildingBlockNumber(buildingBlockNumber);
@@ -93,7 +100,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			accessRecord.setOutOffTime(new Date());
 			accessRecordBiz.addAccessRecord(accessRecord);
 		}
-		// end
+		// 记录出入记录end
 
 		// 更新住户进入时间
 		personEnterTimeMap.put(photoName, currentTime);
