@@ -45,16 +45,16 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 
 		ObjectMapper mapper = new ObjectMapper();
 		FaceRecognitionMsg faceRecognitionMsg = mapper.readValue(result, FaceRecognitionMsg.class);
-		System.out.println(result);
 		String photoName = faceRecognitionMsg.getPhotoName();// 11-1131-俞小洋
 		Date enterTime = personEnterTimeMap.get(photoName); // 上一次成功进入时间
 		Date currentTime = new Date();
-		long timeDeltaInSecond = (currentTime.getTime() - enterTime.getTime()) / 1000L;
-		if (enterTime != null
-				&& (timeDeltaInSecond < Integer.parseInt(lockControlProperties.get("timeDeltaInSecond")))) { // 住户连续刷脸，时间间隔小于设定值，则忽略，并不开门
+		// long timeDeltaInSecond = (currentTime.getTime() -
+		// enterTime.getTime()) / 1000L;
+		if (enterTime != null && (((currentTime.getTime() - enterTime.getTime()) / 1000L) < Integer
+				.parseInt(lockControlProperties.get("timeDeltaInSecond")))) { // 住户连续刷脸，时间间隔小于设定值，则忽略，并不开门
 			return;
 		}
-
+		System.out.println(result);
 		// open lock
 		String lockControlId = "0"; // 0号 锁控制器
 		DoorLockBiz doorLockimpl = doorLockMap.getLockSocketMap().get(lockControlId);
@@ -67,7 +67,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 		String[] connectInfoList = connectInfo.split(":");
 		doorLockimpl.connect(connectInfoList[0], Integer.parseInt(connectInfoList[1]));
 		doorLockimpl.openBigDoorLock();
-		//延时若干秒关闭大门
+		// 延时若干秒关闭大门
 		Thread.sleep(1000 * Integer.parseInt(lockControlProperties.get("closeDelayInSecond")));
 		doorLockimpl.closeBigDoorLock();
 		// end

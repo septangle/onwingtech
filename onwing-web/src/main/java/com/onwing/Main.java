@@ -33,6 +33,7 @@ public class Main {
 					new DirResourceSet(resources, "/WEB-INF/classes", additionWebInfClasses.getAbsolutePath(), "/"));
 			ctx.setResources(resources);
 			*/
+			tomcat.getConnector().setURIEncoding("utf-8");//等同于tomcat server.xml中配置URIEncoding属性
 			tomcat.start();
 			tomcat.getServer().await();
 		} catch (Exception e) {
