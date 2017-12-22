@@ -9,7 +9,7 @@ public class ClientTest {
 		try {
 			Socket socket = new Socket("192.168.1.163", 8888);
 			OutputStream out = socket.getOutputStream();
-			byte[] msgBytes = "{\"data\": \"俞小洋\", \"time\": \"2017/12/13 17:30:52\"}".getBytes();
+			byte[] msgBytes = "{\"data\": \"22-203-俞小洋\", \"time\": \"2017/12/13 17:30:52\"}".getBytes("GBK");
 			out.write(msgBytes);
 			Thread.sleep(5000);
 			/*
