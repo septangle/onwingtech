@@ -58,7 +58,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 				.parseInt(lockControlProperties.get("timeDeltaInSecond")))) { // 住户连续刷脸，时间间隔小于设定值，则忽略，并不开门
 			return;
 		}
-		logger.debug(result);
+		logger.info(result);
 
 		String[] photoKeyWords = photoName.split("-");
 		String buildingBlockNumber = photoKeyWords[0];
@@ -80,12 +80,18 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			String connectInfo = lockControlProperties.get(lockControlId);
 			String[] connectInfoList = connectInfo.split(":");
 			logger.info("start to open lock with photoName: {}", photoName);
-			doorLockimpl.connect(connectInfoList[0], Integer.parseInt(connectInfoList[1]));
-			doorLockimpl.openBigDoorLock();
-			// 延时若干秒关闭大门
-			// Thread.sleep(1000 *
-			// Integer.parseInt(lockControlProperties.get("closeDelayInSecond")));
-			doorLockimpl.closeBigDoorLock();
+			try {
+				doorLockimpl.connect(connectInfoList[0], Integer.parseInt(connectInfoList[1]));
+				doorLockimpl.openBigDoorLock();
+				// 延时若干秒关闭大门
+				// Thread.sleep(1000 *
+				// Integer.parseInt(lockControlProperties.get("closeDelayInSecond")));
+				doorLockimpl.closeBigDoorLock();
+			} catch (Exception ex) {
+				logger.error("cannot connect to lock control {}:{}", connectInfoList[0],
+						Integer.parseInt(connectInfoList[1]), ex);
+				doorLockimpl.closeSocket();
+			}
 			// open lock end
 		}
 
@@ -124,7 +130,6 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		// 当出现异常就关闭连接
-		cause.printStackTrace();
 		logger.error("c++ socket connect exceptionCaught:", cause);
 		ctx.close();
 	}
@@ -133,4 +138,11 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
 		ctx.flush();
 	}
+
+	@Override
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		super.channelActive(ctx);
+		logger.info("c++ socket connected: {}", ctx.channel().remoteAddress().toString());
+	}
+
 }

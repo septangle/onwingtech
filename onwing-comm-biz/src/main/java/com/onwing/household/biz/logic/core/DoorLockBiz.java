@@ -1,9 +1,11 @@
 package com.onwing.household.biz.logic.core;
 
 public interface DoorLockBiz {
-	public void connect(String ip, int port);
+	public void connect(String ip, int port) throws Exception;
+
+	public void openBigDoorLock() throws Exception;
+
+	public void closeBigDoorLock() throws Exception;
 	
-	public void openBigDoorLock();
-	
-	public void closeBigDoorLock();
+	public void closeSocket();
 }
