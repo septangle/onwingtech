@@ -70,11 +70,13 @@
         <listener-class>   
           org.springframework.web.util.WebAppRootListener   
         </listener-class>   
-    </listener> 
+    </listener>
+    
+    <!-- 解决ajax跨域问题 -->
     <filter>
-    <filter-name>CorsFilter</filter-name>
-    <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
-</filter>
+    	<filter-name>CorsFilter</filter-name>
+    	<filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+	</filter>
 
     <filter-mapping>
         <filter-name>CorsFilter</filter-name>
