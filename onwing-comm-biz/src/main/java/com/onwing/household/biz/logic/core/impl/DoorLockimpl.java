@@ -17,7 +17,7 @@ public class DoorLockimpl implements DoorLockBiz {
 
 		try {
 			// 创建一个流套接字并将其连接到指定主机上的指定端口号
-			if (socket == null)
+			if (socket == null || !socket.isConnected())
 				socket = new Socket(ip, port);
 
 			// 读取服务器端数据

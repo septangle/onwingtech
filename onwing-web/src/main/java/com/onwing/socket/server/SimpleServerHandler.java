@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onwing.household.biz.logic.core.AccessRecordBiz;
 import com.onwing.household.biz.logic.core.DoorLockBiz;
@@ -19,6 +22,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
+	private final static Logger logger = LoggerFactory.getLogger(SimpleServerHandler.class);
 	private Map<String, String> lockControlProperties;
 	private DoorLockMap doorLockMap;
 	private AccessRecordBiz accessRecordBiz;
@@ -36,12 +40,12 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		// System.out.println("complete json msg received");
+		// logger.debug("complete json msg received");
 		String result = (String) msg;
 
 		// 接收并打印客户端的信息
 		// String remote = ctx.channel().remoteAddress().toString();
-		// System.out.println(remote + " said:" + result);
+		// logger.debug(remote + " said:" + result);
 
 		ObjectMapper mapper = new ObjectMapper();
 		FaceRecognitionMsg faceRecognitionMsg = mapper.readValue(result, FaceRecognitionMsg.class);
@@ -54,15 +58,16 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 				.parseInt(lockControlProperties.get("timeDeltaInSecond")))) { // 住户连续刷脸，时间间隔小于设定值，则忽略，并不开门
 			return;
 		}
-		System.out.println(result);
+		logger.debug(result);
 
 		String[] photoKeyWords = photoName.split("-");
 		String buildingBlockNumber = photoKeyWords[0];
 		String roomNumber = photoKeyWords[1];
 		String householdName = photoKeyWords[2];
-		
+
 		if (buildingBlockNumber.equals("0") && roomNumber.equals("0") && householdName.equals("0")) {
 			// 判断为陌生人，do nothing
+			logger.info("stranger 0-0-0 catched, do nothing");
 		} else {
 			// open lock
 			String lockControlId = "0"; // 0号 锁控制器
@@ -74,6 +79,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 
 			String connectInfo = lockControlProperties.get(lockControlId);
 			String[] connectInfoList = connectInfo.split(":");
+			logger.info("start to open lock with photoName: {}", photoName);
 			doorLockimpl.connect(connectInfoList[0], Integer.parseInt(connectInfoList[1]));
 			doorLockimpl.openBigDoorLock();
 			// 延时若干秒关闭大门
@@ -82,7 +88,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			doorLockimpl.closeBigDoorLock();
 			// open lock end
 		}
-		
+
 		// 记录出入记录
 		// 根据上述三个字段向数据库查找householdId
 		HouseHold houseHold = new HouseHold();
@@ -92,6 +98,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 		List<HouseHold> houseHoldList = householdMapper.selectBySelective(houseHold);
 		if (houseHoldList.size() != 1) {
 			// 日志记录错误，查找无人或不止一个人
+			logger.error("no houseHold or not single household found in DB with photoName: {}", photoName);
 		} else {
 			HouseHold selHouseHold = houseHoldList.get(0);
 			AccessRecord accessRecord = new AccessRecord();
@@ -118,6 +125,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		// 当出现异常就关闭连接
 		cause.printStackTrace();
+		logger.error("c++ socket connect exceptionCaught:", cause);
 		ctx.close();
 	}
 
