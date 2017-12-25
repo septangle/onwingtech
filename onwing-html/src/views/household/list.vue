@@ -22,7 +22,7 @@
                 </div>
                 <!-- 分页开始 -->
                 <div style="float:right;margin-top:-30px">
-                <Page :total="datacount" :page-size="pagesize" show-total @on-change="changePage" style="text-align:right;margin-top:50px"></Page>
+                <Page ref="page" :total="datacount" :page-size="pagesize" show-total @on-change="changePage" style="text-align:right;margin-top:50px"></Page>
                 </div>
                 <!-- 分页结束 -->
             </div>
@@ -209,8 +209,8 @@ td.ivu-table-expanded-cell {
                                     },
                                     on: {
                                         click: () => {
-                                            console.info(params);
-                                            /* this.remove(params); */
+                                            /* console.info(params); */
+                                            this.remove(params);
                                         }
                                     }
                                 }, '删除')
@@ -249,14 +249,19 @@ td.ivu-table-expanded-cell {
             },
             remove (params) {
                 /* 删除一条住户信息 */
-                let _this = this;
-                let index = params.index;
+                let _this = this,
+                    currentPage = _this.$refs.page.currentPage,
+                    index = params.index,
+                    indexInHouseholdData = (currentPage-1)*10 + index-1;
+
                 _this.dto.householdDto.id = params.row.id;
                 axios.post(GlobalServer.removeHouseHold,_this.dto)
                 .then(function(response){
                     // 如果返回值中的error为null，表示删除成功，并将household_data数组中对应的值删除
                     if(response.data.error == null){
-                        this.household_data.splice(index, 1);
+                        _this.household_page_data.splice(index, 1);
+                        _this.household_data.splice(indexInHouseholdData, 1);
+                        _this.$Message.success('删除成功！');
                     }
                 })
                 .catch(function(error){

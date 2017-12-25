@@ -81,6 +81,8 @@ export default {
                                     name: 'home_index'
                                 });
                             },2000);
+                        } else {
+                            _this.$Message.error('用户名或密码错误！');
                         }
                         //_this.respData.adminName = 
                         /* if(response){

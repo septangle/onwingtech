@@ -139,10 +139,10 @@
                 this.$refs[name].resetFields();
             }
         },
-        created(){},
-        activated () {
-          this.init();
-        }
+        created(){
+            this.init();
+        },
+        activated () {}
     }
 </script>
 <style type="text/css" scoped>
