@@ -1,4 +1,4 @@
-const ServerHost = '//192.168.1.11:8080/';
+const ServerHost = '//192.168.1.163:8080/';
 const login = ServerHost + 'onwing-web/adminiStator/login.do';
 const findAllHouseHold = ServerHost + 'onwing-web/household/findAllHouseHold.do';
 const updateHouseHold = ServerHost + 'onwing-web/household/updateHouseHold.do';

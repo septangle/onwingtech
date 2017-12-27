@@ -138,17 +138,15 @@ td.ivu-table-expanded-cell {
                 .then(function(response){
                     let data = response.data;
                     if(data.error === null){
-                        /* 将获取到的住户信息数据存入inout_data,用以缓存/分页 */
-                        _this.inout_data = data.houseAccessRecordDtosList;
-                        /* 获取数据的条数,并将值赋给vue实例中的datacount */
-                        _this.datacount = _this.inout_data.length;
-                        /* 如果数据条目数小于每页显示的条目数,则将所有数据传入分页数据对象,
-                           如果数据条目数大于每页显示的条目数,则将第一页要显示的数据传入分页数据对象
-                        */
+                        /* 定义tempArr数组，临时存放返回的出入记录 */
+                        let tempArr = [];
+                        tempArr = data.houseAccessRecordDtosList;
+                        
+                        /* 获取数据的条数,并将值赋给实例中的datacount */
+                        _this.datacount = tempArr.length;
 
-                        let tempArr = _this.inout_data;
-
-                        _this.inout_page_data = tempArr.map(function(value){
+                        /* 遍历tempArr数组，将数组中每一条出入记录对象中的单元号和房号进行拼接 */
+                        _this.inout_data = tempArr.map(function(value){
                             let tempObj = {}
                             let tempDate = _this.setDate(value.outOffTime);
                             tempObj.id = value.id;
@@ -157,6 +155,15 @@ td.ivu-table-expanded-cell {
                             tempObj.outOffTime = tempDate;
                             return tempObj;
                         });
+
+                        /* 如果数据条目数小于每页显示的条目数,则将所有数据传入分页数据对象,
+                           如果数据条目数大于每页显示的条目数,则将第一页要显示的数据传入分页数据对象 */
+                        if(_this.datacount <= _this.pagesize) {
+                            _this.inout_page_data = _this.inout_data;
+                        } else {
+                            _this.inout_page_data = _this.inout_data.slice(0,_this.pagesize-1);
+                        }
+
                         /* 将page_loading值设置为false,隐藏'下在加载数据'的蒙板 */
                         _this.page_loading = false;
                     }
