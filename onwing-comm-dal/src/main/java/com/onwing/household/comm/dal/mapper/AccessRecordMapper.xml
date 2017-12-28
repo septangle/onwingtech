@@ -113,6 +113,6 @@
 		parameterType="com.onwing.household.comm.dal.model.HouseAccessRecord">
 		select a.id,b.household_name,b.building_block_number,b.room_number,a.out_off_time
 		from tbl_access_record a,tbl_household b
-		where a.household_id=b.id
+		where a.household_id=b.id order by a.id DESC
 	</select>
 </mapper>
