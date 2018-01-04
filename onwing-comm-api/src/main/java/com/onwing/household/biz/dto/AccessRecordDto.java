@@ -13,6 +13,9 @@ public class AccessRecordDto {
 	private String outOff;
 
 	private String strangerPhotoId;
+	
+    private String strangerId;
+
 
 	public Long getId() {
 		return id;
@@ -53,5 +56,15 @@ public class AccessRecordDto {
 	public void setStrangerPhotoId(String strangerPhotoId) {
 		this.strangerPhotoId = strangerPhotoId == null ? null : strangerPhotoId.trim();
 	}
+
+	public String getStrangerId() {
+		return strangerId;
+	}
+
+	public void setStrangerId(String strangerId) {
+		this.strangerId = strangerId;
+	}
+	
+	
 
 }

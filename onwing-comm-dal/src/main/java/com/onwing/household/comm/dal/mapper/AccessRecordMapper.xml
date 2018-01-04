@@ -9,6 +9,8 @@
 		<result column="out_off" property="outOff" jdbcType="CHAR" />
 		<result column="stranger_photo_id" property="strangerPhotoId"
 			jdbcType="VARCHAR" />
+		<result column="stranger_id" property="strangerId"
+			jdbcType="VARCHAR" />
 	</resultMap>
 
 	<resultMap id="ResultMapAccess"
@@ -22,7 +24,7 @@
 			jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, household_id, out_off_time, out_off, stranger_photo_id
+		id, household_id, out_off_time, out_off, stranger_photo_id,stranger_id
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
