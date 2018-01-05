@@ -1,21 +1,17 @@
 package com.onwing.household.comm.dal.model;
 
-import java.util.Date;
-
 public class Stranger {
     private Long id;
 
     private String name;
 
-    private String idNumber;
+    private String identifyCard;
 
-    private String visitorPhone;
+    private String tel;
 
     private String reason;
 
-    private Date accessDate;
-
-    private String photoUrl;
+    private String outOffInto;
 
     public Long getId() {
         return id;
@@ -33,20 +29,20 @@ public class Stranger {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getIdNumber() {
-        return idNumber;
+    public String getIdentifyCard() {
+        return identifyCard;
     }
 
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber == null ? null : idNumber.trim();
+    public void setIdentifyCard(String identifyCard) {
+        this.identifyCard = identifyCard == null ? null : identifyCard.trim();
     }
 
-    public String getVisitorPhone() {
-        return visitorPhone;
+    public String getTel() {
+        return tel;
     }
 
-    public void setVisitorPhone(String visitorPhone) {
-        this.visitorPhone = visitorPhone == null ? null : visitorPhone.trim();
+    public void setTel(String tel) {
+        this.tel = tel == null ? null : tel.trim();
     }
 
     public String getReason() {
@@ -57,19 +53,11 @@ public class Stranger {
         this.reason = reason == null ? null : reason.trim();
     }
 
-    public Date getAccessDate() {
-        return accessDate;
+    public String getOutOffInto() {
+        return outOffInto;
     }
 
-    public void setAccessDate(Date accessDate) {
-        this.accessDate = accessDate;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl == null ? null : photoUrl.trim();
+    public void setOutOffInto(String outOffInto) {
+        this.outOffInto = outOffInto == null ? null : outOffInto.trim();
     }
 }

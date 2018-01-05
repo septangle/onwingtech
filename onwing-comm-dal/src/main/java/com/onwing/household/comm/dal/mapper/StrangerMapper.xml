@@ -4,14 +4,13 @@
   <resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.Stranger" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
-    <result column="visitor_phone" property="visitorPhone" jdbcType="VARCHAR" />
+    <result column="identify_card" property="identifyCard" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
     <result column="reason" property="reason" jdbcType="VARCHAR" />
-    <result column="access_date" property="accessDate" jdbcType="TIMESTAMP" />
-    <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+    <result column="out_off_into" property="outOffInto" jdbcType="CHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, id_number, visitor_phone, reason, access_date, photo_url
+    id, name, identify_card, tel, reason, out_off_into
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -24,12 +23,10 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.onwing.household.comm.dal.model.Stranger" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_stranger (name, id_number, visitor_phone, 
-      reason, access_date, photo_url
-      )
-    values (#{name,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, #{visitorPhone,jdbcType=VARCHAR}, 
-      #{reason,jdbcType=VARCHAR}, #{accessDate,jdbcType=TIMESTAMP}, #{photoUrl,jdbcType=VARCHAR}
-      )
+    insert into tbl_stranger (name, identify_card, tel, 
+      reason, out_off_into)
+    values (#{name,jdbcType=VARCHAR}, #{identifyCard,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{reason,jdbcType=VARCHAR}, #{outOffInto,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Stranger" useGeneratedKeys="true" keyProperty="id" >
     insert into tbl_stranger
@@ -37,40 +34,34 @@
       <if test="name != null" >
         name,
       </if>
-      <if test="idNumber != null" >
-        id_number,
+      <if test="identifyCard != null" >
+        identify_card,
       </if>
-      <if test="visitorPhone != null" >
-        visitor_phone,
+      <if test="tel != null" >
+        tel,
       </if>
       <if test="reason != null" >
         reason,
       </if>
-      <if test="accessDate != null" >
-        access_date,
-      </if>
-      <if test="photoUrl != null" >
-        photo_url,
+      <if test="outOffInto != null" >
+        out_off_into,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="idNumber != null" >
-        #{idNumber,jdbcType=VARCHAR},
+      <if test="identifyCard != null" >
+        #{identifyCard,jdbcType=VARCHAR},
       </if>
-      <if test="visitorPhone != null" >
-        #{visitorPhone,jdbcType=VARCHAR},
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
       </if>
       <if test="reason != null" >
         #{reason,jdbcType=VARCHAR},
       </if>
-      <if test="accessDate != null" >
-        #{accessDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="photoUrl != null" >
-        #{photoUrl,jdbcType=VARCHAR},
+      <if test="outOffInto != null" >
+        #{outOffInto,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -80,20 +71,17 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="idNumber != null" >
-        id_number = #{idNumber,jdbcType=VARCHAR},
+      <if test="identifyCard != null" >
+        identify_card = #{identifyCard,jdbcType=VARCHAR},
       </if>
-      <if test="visitorPhone != null" >
-        visitor_phone = #{visitorPhone,jdbcType=VARCHAR},
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
       </if>
       <if test="reason != null" >
         reason = #{reason,jdbcType=VARCHAR},
       </if>
-      <if test="accessDate != null" >
-        access_date = #{accessDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="photoUrl != null" >
-        photo_url = #{photoUrl,jdbcType=VARCHAR},
+      <if test="outOffInto != null" >
+        out_off_into = #{outOffInto,jdbcType=CHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -101,11 +89,10 @@
   <update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.Stranger" >
     update tbl_stranger
     set name = #{name,jdbcType=VARCHAR},
-      id_number = #{idNumber,jdbcType=VARCHAR},
-      visitor_phone = #{visitorPhone,jdbcType=VARCHAR},
+      identify_card = #{identifyCard,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
       reason = #{reason,jdbcType=VARCHAR},
-      access_date = #{accessDate,jdbcType=TIMESTAMP},
-      photo_url = #{photoUrl,jdbcType=VARCHAR}
+      out_off_into = #{outOffInto,jdbcType=CHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
