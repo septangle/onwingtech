@@ -4,13 +4,15 @@
   <resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.Stranger" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
     <result column="identify_card" property="identifyCard" jdbcType="VARCHAR" />
     <result column="tel" property="tel" jdbcType="VARCHAR" />
     <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
     <result column="out_off_into" property="outOffInto" jdbcType="CHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, identify_card, tel, reason, out_off_into
+    id, name,sex, identify_card, tel, reason,remarks, out_off_into
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -23,16 +25,19 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.onwing.household.comm.dal.model.Stranger" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_stranger (name, identify_card, tel, 
-      reason, out_off_into)
-    values (#{name,jdbcType=VARCHAR}, #{identifyCard,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
-      #{reason,jdbcType=VARCHAR}, #{outOffInto,jdbcType=CHAR})
+    insert into tbl_stranger (name,sex, identify_card, tel, 
+      reason,remarks, out_off_into)
+    values (#{name,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR}, #{identifyCard,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{reason,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{outOffInto,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Stranger" useGeneratedKeys="true" keyProperty="id" >
     insert into tbl_stranger
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="name != null" >
         name,
+      </if>
+      <if test="sex != null" >
+        sex,
       </if>
       <if test="identifyCard != null" >
         identify_card,
@@ -43,6 +48,9 @@
       <if test="reason != null" >
         reason,
       </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
       <if test="outOffInto != null" >
         out_off_into,
       </if>
@@ -50,6 +58,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
       </if>
       <if test="identifyCard != null" >
         #{identifyCard,jdbcType=VARCHAR},
@@ -59,6 +70,9 @@
       </if>
       <if test="reason != null" >
         #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
       </if>
       <if test="outOffInto != null" >
         #{outOffInto,jdbcType=CHAR},
@@ -71,6 +85,9 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
       <if test="identifyCard != null" >
         identify_card = #{identifyCard,jdbcType=VARCHAR},
       </if>
@@ -79,6 +96,9 @@
       </if>
       <if test="reason != null" >
         reason = #{reason,jdbcType=VARCHAR},
+      </if>
+        <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
       </if>
       <if test="outOffInto != null" >
         out_off_into = #{outOffInto,jdbcType=CHAR},

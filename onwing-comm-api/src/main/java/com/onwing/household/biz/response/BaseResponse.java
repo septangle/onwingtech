@@ -11,8 +11,7 @@ public class BaseResponse implements Serializable {
 
 	private Error error = null;
 	
-	private String message;
-	
+	private String message;	
 	
 
 	public String getMessage() {

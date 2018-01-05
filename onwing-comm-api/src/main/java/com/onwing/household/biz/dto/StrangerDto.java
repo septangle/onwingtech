@@ -1,7 +1,8 @@
-package com.onwing.household.comm.dal.model;
+package com.onwing.household.biz.dto;
 
-public class Stranger {
-    private Long id;
+public class StrangerDto {
+	
+	private Long id;
 
     private String name;
     
@@ -16,6 +17,8 @@ public class Stranger {
     private String remarks;
 
     private String outOffInto;
+    
+    private String fileUrl;
 
     public Long getId() {
         return id;
@@ -32,9 +35,9 @@ public class Stranger {
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
     }
-    
-    
 
+    
+    
     public String getSex() {
 		return sex;
 	}
@@ -67,8 +70,6 @@ public class Stranger {
         this.reason = reason == null ? null : reason.trim();
     }
 
-    
-    
     public String getRemarks() {
 		return remarks;
 	}
@@ -84,4 +85,16 @@ public class Stranger {
     public void setOutOffInto(String outOffInto) {
         this.outOffInto = outOffInto == null ? null : outOffInto.trim();
     }
+
+	public String getFileUrl() {
+		return fileUrl;
+	}
+
+	public void setFileUrl(String fileUrl) {
+		this.fileUrl = fileUrl;
+	}
+    
+    
+    
+
 }
