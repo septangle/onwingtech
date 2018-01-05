@@ -7,6 +7,8 @@ public class Control {
 
     private String doorName;
 
+    private String port;
+
     public Long getId() {
         return id;
     }
@@ -29,5 +31,13 @@ public class Control {
 
     public void setDoorName(String doorName) {
         this.doorName = doorName == null ? null : doorName.trim();
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port == null ? null : port.trim();
     }
 }
