@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.onwing.household.biz.dto.HouseAccessRecordDto;
 import com.onwing.household.biz.logic.core.AccessRecordBiz;
 import com.onwing.household.biz.logic.facade.AccessRecordFacade;
@@ -18,11 +17,12 @@ public class AccessRecordFacadeimpl implements AccessRecordFacade {
 	
 	
 	@Override
-	public AccessRecordResponse findAllAccessRecord() throws Exception {
+	public AccessRecordResponse findAllAccessRecord(int page,int pageSize) throws Exception {
 		AccessRecordResponse accessRecordResponse= new AccessRecordResponse();
-		List<HouseAccessRecordDto> houseAccessRecordDtolist=accessRecordBiz.selectAccessRecord();
+		List<HouseAccessRecordDto> houseAccessRecordDtolist=accessRecordBiz.selectAccessRecord(page,pageSize);
 		accessRecordResponse.setHouseAccessRecordDtosList(houseAccessRecordDtolist);
 		return accessRecordResponse;
 	}
+
 
 }

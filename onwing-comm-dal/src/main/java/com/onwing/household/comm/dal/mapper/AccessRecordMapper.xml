@@ -7,10 +7,6 @@
 		<result column="household_id" property="householdId" jdbcType="BIGINT" />
 		<result column="out_off_time" property="outOffTime" jdbcType="TIMESTAMP" />
 		<result column="out_off" property="outOff" jdbcType="CHAR" />
-		<result column="stranger_photo_id" property="strangerPhotoId"
-			jdbcType="VARCHAR" />
-		<result column="stranger_id" property="strangerId"
-			jdbcType="VARCHAR" />
 	</resultMap>
 
 	<resultMap id="ResultMapAccess"
@@ -24,7 +20,7 @@
 			jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, household_id, out_off_time, out_off, stranger_photo_id,stranger_id
+		id, household_id, out_off_time, out_off
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
@@ -41,12 +37,10 @@
 	<insert id="insert" parameterType="com.onwing.household.comm.dal.model.AccessRecord"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into tbl_access_record
-		(household_id, out_off_time, out_off,
-		stranger_photo_id)
+		(household_id, out_off_time, out_off)
 		values
 		(#{householdId,jdbcType=BIGINT}, #{outOffTime,jdbcType=TIMESTAMP},
-		#{outOff,jdbcType=CHAR},
-		#{strangerPhotoId,jdbcType=VARCHAR})
+		#{outOff,jdbcType=CHAR})
 	</insert>
 	<insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.AccessRecord"
 		useGeneratedKeys="true" keyProperty="id">
@@ -61,9 +55,6 @@
 			<if test="outOff != null">
 				out_off,
 			</if>
-			<if test="strangerPhotoId != null">
-				stranger_photo_id,
-			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="householdId != null">
@@ -74,9 +65,6 @@
 			</if>
 			<if test="outOff != null">
 				#{outOff,jdbcType=CHAR},
-			</if>
-			<if test="strangerPhotoId != null">
-				#{strangerPhotoId,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -92,9 +80,6 @@
 			<if test="outOff != null">
 				out_off = #{outOff,jdbcType=CHAR},
 			</if>
-			<if test="strangerPhotoId != null">
-				stranger_photo_id = #{strangerPhotoId,jdbcType=VARCHAR},
-			</if>
 		</set>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
@@ -104,9 +89,7 @@
 		set household_id = #{householdId,jdbcType=BIGINT},
 		out_off_time = #{outOffTime,jdbcType=TIMESTAMP},
 		out_off =
-		#{outOff,jdbcType=CHAR},
-		stranger_photo_id =
-		#{strangerPhotoId,jdbcType=VARCHAR}
+		#{outOff,jdbcType=CHAR}
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 
@@ -115,6 +98,13 @@
 		parameterType="com.onwing.household.comm.dal.model.HouseAccessRecord">
 		select a.id,b.household_name,b.building_block_number,b.room_number,a.out_off_time
 		from tbl_access_record a,tbl_household b
-		where a.household_id=b.id order by a.id DESC
+		where a.household_id=b.id  LIMIT #{startRow}, #{pageSize}
+	</select>
+	
+	<!-- 总记录数 -->
+	<select id="getCountByHouseHold" resultType="int" parameterType="com.onwing.household.comm.dal.model.HouseAccessRecord">
+	    select count(*)
+		from tbl_access_record a,tbl_household b
+		where a.household_id=b.id 
 	</select>
 </mapper>

@@ -2,11 +2,8 @@ package com.onwing.household.biz.logic.core.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.onwing.household.biz.dto.AccessRecordDto;
 import com.onwing.household.biz.dto.HouseAccessRecordDto;
 import com.onwing.household.biz.logic.core.AccessRecordBiz;
 import com.onwing.household.comm.dal.dao.AccessRecordMapper;
@@ -21,11 +18,11 @@ public class AccessRecordimpl implements AccessRecordBiz {
 	private AccessRecordMapper accessRecordMapper;
 
 	@Override
-	public List<HouseAccessRecordDto> selectAccessRecord() {
+	public List<HouseAccessRecordDto> selectAccessRecord(int page,int pageSize) {
 		List<HouseAccessRecordDto> houseAccessRecordDtoList = new ArrayList<HouseAccessRecordDto>();
 		HouseAccessRecord houseAccessRecord = null;
 		try {
-			List<HouseAccessRecord> houseAccessRecordList = accessRecordMapper.selectAccessRecord(houseAccessRecord);
+			List<HouseAccessRecord> houseAccessRecordList = accessRecordMapper.selectAccessRecord(page,pageSize,houseAccessRecord);
 			if (houseAccessRecordList != null) {
 				for (HouseAccessRecord houseAccessRecordParam : houseAccessRecordList) {
 					houseAccessRecordDtoList
@@ -46,5 +43,10 @@ public class AccessRecordimpl implements AccessRecordBiz {
 			e.printStackTrace();
 		}
 	}
+
+
+	
+	
+	
 
 }

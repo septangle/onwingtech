@@ -1,8 +1,6 @@
 package com.onwing.household.biz.logic.core;
 
 import java.util.List;
-
-import com.onwing.household.biz.dto.AccessRecordDto;
 import com.onwing.household.biz.dto.HouseAccessRecordDto;
 import com.onwing.household.comm.dal.model.AccessRecord;
 
@@ -19,10 +17,10 @@ public interface AccessRecordBiz {
 	 * @return list<HouseAccessRecordDto>
 	 * @throws Exception
 	 */
-	public List<HouseAccessRecordDto> selectAccessRecord();
+	public List<HouseAccessRecordDto> selectAccessRecord(int page,int pageSize);
 	
 	public void addAccessRecord(AccessRecord accessRecord);
-
+	
 	
 
 }

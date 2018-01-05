@@ -1,6 +1,9 @@
 package com.onwing.household.comm.dal.dao;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.onwing.household.comm.dal.model.AccessRecord;
 import com.onwing.household.comm.dal.model.HouseAccessRecord;
 
@@ -19,5 +22,9 @@ public interface AccessRecordMapper {
     
    /*************自定义查询******************/
     
-    List<HouseAccessRecord> selectAccessRecord(HouseAccessRecord houseAccessRecord);
+    List<HouseAccessRecord> selectAccessRecord(@Param("startRow")int startRow,
+			@Param("pageSize")int pageSize,@Param("entity")HouseAccessRecord houseAccessRecord);
+    
+    //查询住户出入记录总数
+    int  getCountByHouseHold(AccessRecord accessRecord);
 }

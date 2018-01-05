@@ -1,5 +1,6 @@
 package com.onwing.household.base;
 
+
 import java.io.Serializable;
 
 @SuppressWarnings("serial")

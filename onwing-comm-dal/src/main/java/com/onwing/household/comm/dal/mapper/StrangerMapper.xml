@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.onwing.household.comm.dal.dao.StrangerMapper" >
+  <resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.Stranger" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="visitor_phone" property="visitorPhone" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="access_date" property="accessDate" jdbcType="TIMESTAMP" />
+    <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, id_number, visitor_phone, reason, access_date, photo_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_stranger
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tbl_stranger
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.onwing.household.comm.dal.model.Stranger" useGeneratedKeys="true" keyProperty="id" >
+    insert into tbl_stranger (name, id_number, visitor_phone, 
+      reason, access_date, photo_url
+      )
+    values (#{name,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, #{visitorPhone,jdbcType=VARCHAR}, 
+      #{reason,jdbcType=VARCHAR}, #{accessDate,jdbcType=TIMESTAMP}, #{photoUrl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Stranger" useGeneratedKeys="true" keyProperty="id" >
+    insert into tbl_stranger
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="idNumber != null" >
+        id_number,
+      </if>
+      <if test="visitorPhone != null" >
+        visitor_phone,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="accessDate != null" >
+        access_date,
+      </if>
+      <if test="photoUrl != null" >
+        photo_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null" >
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="visitorPhone != null" >
+        #{visitorPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="accessDate != null" >
+        #{accessDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="photoUrl != null" >
+        #{photoUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.onwing.household.comm.dal.model.Stranger" >
+    update tbl_stranger
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null" >
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="visitorPhone != null" >
+        visitor_phone = #{visitorPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="accessDate != null" >
+        access_date = #{accessDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="photoUrl != null" >
+        photo_url = #{photoUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.Stranger" >
+    update tbl_stranger
+    set name = #{name,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=VARCHAR},
+      visitor_phone = #{visitorPhone,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      access_date = #{accessDate,jdbcType=TIMESTAMP},
+      photo_url = #{photoUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

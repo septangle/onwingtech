@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.onwing.household.biz.logic.facade.AccessRecordFacade;
 import com.onwing.household.biz.response.AccessRecordResponse;
+import com.onwing.household.comm.dal.dao.AccessRecordMapper;
+import com.onwing.household.util.Page;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 /**
@@ -22,10 +24,16 @@ public class AccessRecordController extends BaseController<AccessRecordControlle
 	@Autowired
 	private AccessRecordFacade accessRecordFacade;
 	
+	@Autowired
+	private AccessRecordMapper accessRecordMapper;
+	
 	@ApiOperation(value = "查询业主出入记录", httpMethod = "GET", response = AccessRecordResponse.class)
 	@RequestMapping(value = "/findAllAccessRecord.do", method = RequestMethod.GET)
-	public @ResponseBody AccessRecordResponse findAllAccessRecord(HttpServletRequest servletRequest) throws Exception {
-		return accessRecordFacade.findAllAccessRecord();
+	public @ResponseBody AccessRecordResponse findAllAccessRecord(HttpServletRequest servletRequest) throws Exception {		
+		int count=accessRecordMapper.getCountByHouseHold(null);
+ 		Page pageTool=Page.getPageByRequest(servletRequest,count);
+ 		int start=(pageTool.getPage()-1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
+		return accessRecordFacade.findAllAccessRecord(start,pageTool.getPageSize());
 	}
 	
 	
