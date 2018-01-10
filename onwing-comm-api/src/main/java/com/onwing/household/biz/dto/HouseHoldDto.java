@@ -1,106 +1,114 @@
 package com.onwing.household.biz.dto;
 
 public class HouseHoldDto {
-	    private Long id;
+	private Long id;
 
-	    private String householdName;
+	private String householdName;
 
-	    private String gender;
+	private String gender;
 
-	    private String tel;
+	private String tel;
+	
+    private String identifyCard;
 
-	    private String buildingBlockNumber;
+	private String buildingBlockNumber;
 
-	    private String roomNumber;
+	private String roomNumber;
 
-	    private String photoId;
+	private String photoId;
 
-	    private String cardNumber;
+	private String cardNumber;
 
-	    private String remarks;
-	    
-	    private String photoUrl;
+	private String remarks;
 
-		public Long getId() {
-			return id;
-		}
+	private String photoUrl;
 
-		public void setId(Long id) {
-			this.id = id;
-		}
+	public Long getId() {
+		return id;
+	}
 
-		public String getHouseholdName() {
-			return householdName;
-		}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-		public void setHouseholdName(String householdName) {
-			this.householdName = householdName;
-		}
+	public String getHouseholdName() {
+		return householdName;
+	}
 
-		public String getGender() {
-			return gender;
-		}
+	public void setHouseholdName(String householdName) {
+		this.householdName = householdName;
+	}
 
-		public void setGender(String gender) {
-			this.gender = gender;
-		}
+	public String getGender() {
+		return gender;
+	}
 
-		public String getTel() {
-			return tel;
-		}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 
-		public void setTel(String tel) {
-			this.tel = tel;
-		}
+	public String getTel() {
+		return tel;
+	}
 
-		public String getBuildingBlockNumber() {
-			return buildingBlockNumber;
-		}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
 
-		public void setBuildingBlockNumber(String buildingBlockNumber) {
-			this.buildingBlockNumber = buildingBlockNumber;
-		}
+	public String getIdentifyCard() {
+		return identifyCard;
+	}
 
-		public String getRoomNumber() {
-			return roomNumber;
-		}
+	public void setIdentifyCard(String identifyCard) {
+		this.identifyCard = identifyCard;
+	}
 
-		public void setRoomNumber(String roomNumber) {
-			this.roomNumber = roomNumber;
-		}
+	public String getBuildingBlockNumber() {
+		return buildingBlockNumber;
+	}
 
-		public String getPhotoId() {
-			return photoId;
-		}
+	public void setBuildingBlockNumber(String buildingBlockNumber) {
+		this.buildingBlockNumber = buildingBlockNumber;
+	}
 
-		public void setPhotoId(String photoId) {
-			this.photoId = photoId;
-		}
+	public String getRoomNumber() {
+		return roomNumber;
+	}
 
-		public String getCardNumber() {
-			return cardNumber;
-		}
+	public void setRoomNumber(String roomNumber) {
+		this.roomNumber = roomNumber;
+	}
 
-		public void setCardNumber(String cardNumber) {
-			this.cardNumber = cardNumber;
-		}
+	public String getPhotoId() {
+		return photoId;
+	}
 
-		public String getRemarks() {
-			return remarks;
-		}
+	public void setPhotoId(String photoId) {
+		this.photoId = photoId;
+	}
 
-		public void setRemarks(String remarks) {
-			this.remarks = remarks;
-		}
+	public String getCardNumber() {
+		return cardNumber;
+	}
 
-		public String getPhotoUrl() {
-			return photoUrl;
-		}
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
 
-		public void setPhotoUrl(String photoUrl) {
-			this.photoUrl = photoUrl;
-		}
-	    
-	    
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public String getPhotoUrl() {
+		return photoUrl;
+	}
+
+	public void setPhotoUrl(String photoUrl) {
+		this.photoUrl = photoUrl;
+	}
 
 }

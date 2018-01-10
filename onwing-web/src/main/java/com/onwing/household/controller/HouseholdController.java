@@ -35,6 +35,7 @@ public class HouseholdController extends BaseController<HouseholdController> {
 			@ApiImplicitParam(name = "householdDto.householdName", value = "业主姓名", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "householdDto.gender", value = "性别", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "householdDto.tel", value = "联系电话", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.identifyCard", value = "身份证号", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "householdDto.buildingBlockNumber", value = "楼栋号", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "householdDto.roomNumber", value = "门牌号", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "householdDto.cardNumber", value = "卡号", required = true, dataType = "string"),

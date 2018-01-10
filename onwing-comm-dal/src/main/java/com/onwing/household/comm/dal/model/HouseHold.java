@@ -8,6 +8,8 @@ public class HouseHold {
     private String gender;
 
     private String tel;
+    
+    private String identifyCard;
 
     private String buildingBlockNumber;
 
@@ -50,8 +52,17 @@ public class HouseHold {
     public void setTel(String tel) {
         this.tel = tel == null ? null : tel.trim();
     }
+    
 
-    public String getBuildingBlockNumber() {
+    public String getIdentifyCard() {
+		return identifyCard;
+	}
+
+	public void setIdentifyCard(String identifyCard) {
+		this.identifyCard = identifyCard;
+	}
+
+	public String getBuildingBlockNumber() {
         return buildingBlockNumber;
     }
 
