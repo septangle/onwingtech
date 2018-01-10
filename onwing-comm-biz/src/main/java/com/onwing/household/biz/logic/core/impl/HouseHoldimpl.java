@@ -82,12 +82,11 @@ public class HouseHoldimpl implements HouseHoldBiz {
 	}
 
 	@Override
-	public List<HouseHoldDto> findHousehold(String strFile) throws BusinessException {
-		HouseHold houseHold = new HouseHold();
+	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String strFile) throws BusinessException {
 		List<HouseHoldDto> householdDtoList = null;
 		try {
 			householdDtoList = new ArrayList<HouseHoldDto>();
-			List<HouseHold> householdList = householdMapper.selectBySelective(houseHold);
+			List<HouseHold> householdList = householdMapper.getAllHouseHold(startRow, pageSize, null);
 			if (householdList != null) {
 				for (HouseHold houseHoldParam : householdList) {
 					householdDtoList.add(ModelUtil.modelToDto(houseHoldParam, HouseHoldDto.class));

@@ -13,6 +13,8 @@ public class BaseResponse implements Serializable {
 	
 	private String message;	
 	
+	private String code;
+	
 
 	public String getMessage() {
 		return message;
@@ -28,6 +30,14 @@ public class BaseResponse implements Serializable {
 
 	public void setError(Error error) {
 		this.error = error;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 

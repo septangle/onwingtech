@@ -11,6 +11,8 @@ import com.onwing.household.biz.logic.facade.HouseHoldFacade;
 import com.onwing.household.biz.request.HouseholdRequest;
 import com.onwing.household.biz.response.HouseholdResponse;
 import com.onwing.household.comm.AppConstants;
+import com.onwing.household.comm.dal.dao.HouseHoldMapper;
+import com.onwing.household.util.Page;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -21,6 +23,9 @@ public class HouseholdController extends BaseController<HouseholdController> {
 
 	@Autowired
 	private HouseHoldFacade householdfacade;
+	
+	@Autowired
+	private HouseHoldMapper householdMapper;
 
 	/**
 	 * 增加业主信息
@@ -75,8 +80,11 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@ApiOperation(value = "查询业主信息", httpMethod = "GET", response = HouseholdResponse.class)
 	@RequestMapping(value = "/findAllHouseHold.do", method = RequestMethod.GET)
 	public @ResponseBody HouseholdResponse findHouseHold(HttpServletRequest servletRequest) throws Exception {
+		int count = householdMapper.getCountByHousehold(null);
+		Page pageTool=Page.getPageByRequest(servletRequest,count);
+ 		int startRow=(pageTool.getPage()-1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
 		String fileStr = System.getProperty("onwing.root");
-		return householdfacade.findAllHouseHold(fileStr + AppConstants.FILE_PATH);
+		return householdfacade.findAllHouseHold(startRow,pageTool.getPageSize(),fileStr + AppConstants.FILE_PATH);
 	}
 
 	/**

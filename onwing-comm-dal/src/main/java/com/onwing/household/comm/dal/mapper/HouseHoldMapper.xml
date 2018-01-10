@@ -167,4 +167,17 @@
 			and remarks = #{remarks,jdbcType=VARCHAR} 
 		</if>
 	</select>
+	
+	<select id="getAllHouseHold" resultMap="BaseResultMap"
+		parameterType="com.onwing.household.comm.dal.model.HouseHold">
+	    select
+	     <include refid="Base_Column_List" />
+        from tbl_household LIMIT #{startRow}, #{pageSize}
+	</select>
+	
+	<select id="getCountByHousehold" resultType="int" 
+	    parameterType="com.onwing.household.comm.dal.model.HouseHold">
+	    select count(*)
+	    from  tbl_household 
+	</select>
 </mapper>

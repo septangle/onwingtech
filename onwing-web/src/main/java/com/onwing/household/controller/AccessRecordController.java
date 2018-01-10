@@ -32,8 +32,8 @@ public class AccessRecordController extends BaseController<AccessRecordControlle
 	public @ResponseBody AccessRecordResponse findAllAccessRecord(HttpServletRequest servletRequest) throws Exception {		
 		int count=accessRecordMapper.getCountByHouseHold(null);
  		Page pageTool=Page.getPageByRequest(servletRequest,count);
- 		int start=(pageTool.getPage()-1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
-		return accessRecordFacade.findAllAccessRecord(start,pageTool.getPageSize());
+ 		int startRow=(pageTool.getPage()-1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
+		return accessRecordFacade.findAllAccessRecord(startRow,pageTool.getPageSize());
 	}
 	
 	

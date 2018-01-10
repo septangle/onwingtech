@@ -1,87 +1,126 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.onwing.household.comm.dal.dao.StrangerAccessRecordMapper" >
-  <resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.StrangerAccessRecord" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="stranger_id" property="strangerId" jdbcType="BIGINT" />
-    <result column="time" property="time" jdbcType="TIMESTAMP" />
-    <result column="out_off_into" property="outOffInto" jdbcType="CHAR" />
-    <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, stranger_id, time, out_off_into, photo_url
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_stranger_access_record
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from tbl_stranger_access_record
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.onwing.household.comm.dal.model.StrangerAccessRecord" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_stranger_access_record (stranger_id, time, out_off_into, 
-      photo_url)
-    values (#{strangerId,jdbcType=BIGINT}, #{time,jdbcType=TIMESTAMP}, #{outOffInto,jdbcType=CHAR}, 
-      #{photoUrl,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.StrangerAccessRecord" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_stranger_access_record
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="strangerId != null" >
-        stranger_id,
-      </if>
-      <if test="time != null" >
-        time,
-      </if>
-      <if test="outOffInto != null" >
-        out_off_into,
-      </if>
-      <if test="photoUrl != null" >
-        photo_url,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="strangerId != null" >
-        #{strangerId,jdbcType=BIGINT},
-      </if>
-      <if test="time != null" >
-        #{time,jdbcType=TIMESTAMP},
-      </if>
-      <if test="outOffInto != null" >
-        #{outOffInto,jdbcType=CHAR},
-      </if>
-      <if test="photoUrl != null" >
-        #{photoUrl,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.onwing.household.comm.dal.model.StrangerAccessRecord" >
-    update tbl_stranger_access_record
-    <set >
-      <if test="strangerId != null" >
-        stranger_id = #{strangerId,jdbcType=BIGINT},
-      </if>
-      <if test="time != null" >
-        time = #{time,jdbcType=TIMESTAMP},
-      </if>
-      <if test="outOffInto != null" >
-        out_off_into = #{outOffInto,jdbcType=CHAR},
-      </if>
-      <if test="photoUrl != null" >
-        photo_url = #{photoUrl,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.StrangerAccessRecord" >
-    update tbl_stranger_access_record
-    set stranger_id = #{strangerId,jdbcType=BIGINT},
-      time = #{time,jdbcType=TIMESTAMP},
-      out_off_into = #{outOffInto,jdbcType=CHAR},
-      photo_url = #{photoUrl,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+<mapper namespace="com.onwing.household.comm.dal.dao.StrangerAccessRecordMapper">
+	<resultMap id="BaseResultMap"
+		type="com.onwing.household.comm.dal.model.StrangerAccessRecord">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="stranger_id" property="strangerId" jdbcType="BIGINT" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+		<result column="out_off_into" property="outOffInto" jdbcType="CHAR" />
+		<result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap
+		type="com.onwing.household.comm.dal.model.StrangerAccessRecordMap" id="ResultMapAccessRecord">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="out_off_into" property="outOffInto" jdbcType="CHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+		<result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, stranger_id, time, out_off_into, photo_url
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_stranger_access_record
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		tbl_stranger_access_record
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.onwing.household.comm.dal.model.StrangerAccessRecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tbl_stranger_access_record (stranger_id, time, out_off_into,
+		photo_url)
+		values (#{strangerId,jdbcType=BIGINT},
+		#{time,jdbcType=TIMESTAMP},
+		#{outOffInto,jdbcType=CHAR},
+		#{photoUrl,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.onwing.household.comm.dal.model.StrangerAccessRecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_stranger_access_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="strangerId != null">
+				stranger_id,
+			</if>
+			<if test="time != null">
+				time,
+			</if>
+			<if test="outOffInto != null">
+				out_off_into,
+			</if>
+			<if test="photoUrl != null">
+				photo_url,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="strangerId != null">
+				#{strangerId,jdbcType=BIGINT},
+			</if>
+			<if test="time != null">
+				#{time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="outOffInto != null">
+				#{outOffInto,jdbcType=CHAR},
+			</if>
+			<if test="photoUrl != null">
+				#{photoUrl,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.onwing.household.comm.dal.model.StrangerAccessRecord">
+		update tbl_stranger_access_record
+		<set>
+			<if test="strangerId != null">
+				stranger_id = #{strangerId,jdbcType=BIGINT},
+			</if>
+			<if test="time != null">
+				time = #{time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="outOffInto != null">
+				out_off_into = #{outOffInto,jdbcType=CHAR},
+			</if>
+			<if test="photoUrl != null">
+				photo_url = #{photoUrl,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.onwing.household.comm.dal.model.StrangerAccessRecord">
+		update tbl_stranger_access_record
+		set stranger_id =
+		#{strangerId,jdbcType=BIGINT},
+		time = #{time,jdbcType=TIMESTAMP},
+		out_off_into = #{outOffInto,jdbcType=CHAR},
+		photo_url =
+		#{photoUrl,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!--===============自定义sql =============== -->
+	<select id="getAllStrangerAccessRecord" resultMap="ResultMapAccessRecord"
+		parameterType="com.onwing.household.comm.dal.model.StrangerAccessRecordMap">
+		select b.id,a.`name`,b.out_off_into,b.time,b.photo_url
+		from tbl_stranger a,tbl_stranger_access_record b
+		where
+		a.id=b.stranger_id LIMIT #{startRow}, #{pageSize}
+	</select>
+
+	<select id="getCountByStrangerAcessRecord" resultType="int"
+		parameterType="com.onwing.household.comm.dal.model.StrangerAccessRecordMap">
+		select count(*)
+		from tbl_stranger a,tbl_stranger_access_record b
+		where a.id=b.stranger_id
+	</select>
 </mapper>

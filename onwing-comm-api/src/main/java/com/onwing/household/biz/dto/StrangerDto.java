@@ -18,8 +18,6 @@ public class StrangerDto {
 
     private String outOffInto;
     
-    private String fileUrl;
-
     public Long getId() {
         return id;
     }
@@ -85,14 +83,6 @@ public class StrangerDto {
     public void setOutOffInto(String outOffInto) {
         this.outOffInto = outOffInto == null ? null : outOffInto.trim();
     }
-
-	public String getFileUrl() {
-		return fileUrl;
-	}
-
-	public void setFileUrl(String fileUrl) {
-		this.fileUrl = fileUrl;
-	}
     
     
     

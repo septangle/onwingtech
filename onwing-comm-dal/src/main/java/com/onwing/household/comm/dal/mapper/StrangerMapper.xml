@@ -1,118 +1,170 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.onwing.household.comm.dal.dao.StrangerMapper" >
-  <resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.Stranger" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="sex" property="sex" jdbcType="VARCHAR" />
-    <result column="identify_card" property="identifyCard" jdbcType="VARCHAR" />
-    <result column="tel" property="tel" jdbcType="VARCHAR" />
-    <result column="reason" property="reason" jdbcType="VARCHAR" />
-    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
-    <result column="out_off_into" property="outOffInto" jdbcType="CHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, name,sex, identify_card, tel, reason,remarks, out_off_into
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_stranger
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from tbl_stranger
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.onwing.household.comm.dal.model.Stranger" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_stranger (name,sex, identify_card, tel, 
-      reason,remarks, out_off_into)
-    values (#{name,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR}, #{identifyCard,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
-      #{reason,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{outOffInto,jdbcType=CHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Stranger" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_stranger
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="sex != null" >
-        sex,
-      </if>
-      <if test="identifyCard != null" >
-        identify_card,
-      </if>
-      <if test="tel != null" >
-        tel,
-      </if>
-      <if test="reason != null" >
-        reason,
-      </if>
-      <if test="remarks != null" >
-        remarks,
-      </if>
-      <if test="outOffInto != null" >
-        out_off_into,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null" >
-        #{sex,jdbcType=VARCHAR},
-      </if>
-      <if test="identifyCard != null" >
-        #{identifyCard,jdbcType=VARCHAR},
-      </if>
-      <if test="tel != null" >
-        #{tel,jdbcType=VARCHAR},
-      </if>
-      <if test="reason != null" >
-        #{reason,jdbcType=VARCHAR},
-      </if>
-      <if test="remarks != null" >
-        #{remarks,jdbcType=VARCHAR},
-      </if>
-      <if test="outOffInto != null" >
-        #{outOffInto,jdbcType=CHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.onwing.household.comm.dal.model.Stranger" >
-    update tbl_stranger
-    <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null" >
-        sex = #{sex,jdbcType=VARCHAR},
-      </if>
-      <if test="identifyCard != null" >
-        identify_card = #{identifyCard,jdbcType=VARCHAR},
-      </if>
-      <if test="tel != null" >
-        tel = #{tel,jdbcType=VARCHAR},
-      </if>
-      <if test="reason != null" >
-        reason = #{reason,jdbcType=VARCHAR},
-      </if>
-        <if test="remarks != null" >
-        remarks = #{remarks,jdbcType=VARCHAR},
-      </if>
-      <if test="outOffInto != null" >
-        out_off_into = #{outOffInto,jdbcType=CHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.Stranger" >
-    update tbl_stranger
-    set name = #{name,jdbcType=VARCHAR},
-      identify_card = #{identifyCard,jdbcType=VARCHAR},
-      tel = #{tel,jdbcType=VARCHAR},
-      reason = #{reason,jdbcType=VARCHAR},
-      out_off_into = #{outOffInto,jdbcType=CHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+<mapper namespace="com.onwing.household.comm.dal.dao.StrangerMapper">
+	<resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.Stranger">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="identify_card" property="identifyCard"
+			jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="reason" property="reason" jdbcType="VARCHAR" />
+		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
+		<result column="out_off_into" property="outOffInto" jdbcType="CHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name,sex, identify_card, tel, reason,remarks, out_off_into
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_stranger
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from tbl_stranger
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.onwing.household.comm.dal.model.Stranger"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_stranger (name,sex, identify_card, tel,
+		reason,remarks, out_off_into)
+		values (#{name,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},
+		#{identifyCard,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR},
+		#{reason,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR},
+		#{outOffInto,jdbcType=CHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Stranger"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_stranger
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				name,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="identifyCard != null">
+				identify_card,
+			</if>
+			<if test="tel != null">
+				tel,
+			</if>
+			<if test="reason != null">
+				reason,
+			</if>
+			<if test="remarks != null">
+				remarks,
+			</if>
+			<if test="outOffInto != null">
+				out_off_into,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="identifyCard != null">
+				#{identifyCard,jdbcType=VARCHAR},
+			</if>
+			<if test="tel != null">
+				#{tel,jdbcType=VARCHAR},
+			</if>
+			<if test="reason != null">
+				#{reason,jdbcType=VARCHAR},
+			</if>
+			<if test="remarks != null">
+				#{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="outOffInto != null">
+				#{outOffInto,jdbcType=CHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.onwing.household.comm.dal.model.Stranger">
+		update tbl_stranger
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="identifyCard != null">
+				identify_card = #{identifyCard,jdbcType=VARCHAR},
+			</if>
+			<if test="tel != null">
+				tel = #{tel,jdbcType=VARCHAR},
+			</if>
+			<if test="reason != null">
+				reason = #{reason,jdbcType=VARCHAR},
+			</if>
+			<if test="remarks != null">
+				remarks = #{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="outOffInto != null">
+				out_off_into = #{outOffInto,jdbcType=CHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.Stranger">
+		update tbl_stranger
+		set name = #{name,jdbcType=VARCHAR},
+		identify_card = #{identifyCard,jdbcType=VARCHAR},
+		tel = #{tel,jdbcType=VARCHAR},
+		reason = #{reason,jdbcType=VARCHAR},
+		out_off_into = #{outOffInto,jdbcType=CHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!--===============自定义sql =============== -->
+	<select id="selectBySelective" resultMap="BaseResultMap"
+		parameterType="com.onwing.household.comm.dal.model.Stranger">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_stranger
+		where 1=1 
+		<if test="name != null">
+		   and name = #{name,jdbcType=VARCHAR}
+		</if>
+		<if test="sex != null">
+		   and sex = #{sex,jdbcType=VARCHAR}
+		</if>
+		<if test="identifyCard != null">
+		   and identify_card = #{identifyCard,jdbcType=VARCHAR}
+		</if>
+		<if test="tel != null">
+		   and tel = #{tel,jdbcType=VARCHAR}
+		</if>
+		<if test="reason != null">
+		   and reason = #{reason,jdbcType=VARCHAR}
+		</if>
+		<if test="remarks != null">
+		   and remarks = #{remarks,jdbcType=VARCHAR}
+		</if>
+		<if test="outOffInto != null">
+		   and out_off_into = #{outOffInto,jdbcType=CHAR}
+		</if>
+	</select>
+	
+	<update id="updateStrangerByIdentify" parameterType="com.onwing.household.comm.dal.model.Stranger">
+	  update tbl_stranger
+	  set out_off_into = 1
+	  where identify_card = #{identifyCard,jdbcType=VARCHAR}	  
+	</update>
+	
+	<select id="getAllStranger" resultMap="BaseResultMap" parameterType="com.onwing.household.comm.dal.model.Stranger">
+	  select 
+         <include refid="Base_Column_List" />
+	  from tbl_stranger where out_off_into=0 LIMIT #{startRow}, #{pageSize}
+	</select>
+	
+	<select id="getCountByStranger" resultType="int" parameterType="com.onwing.household.comm.dal.model.Stranger" >
+	  select count(*) from tbl_stranger where out_off_into=0
+	</select>
 </mapper>

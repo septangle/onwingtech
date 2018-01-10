@@ -2,6 +2,8 @@ package com.onwing.household.comm.dal.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.onwing.household.comm.dal.model.HouseHold;
 
 public interface HouseHoldMapper {
@@ -20,4 +22,9 @@ public interface HouseHoldMapper {
     /****************自定义查询*******************/
     
     List<HouseHold> selectBySelective(HouseHold record);
+    
+    List<HouseHold> getAllHouseHold(@Param("startRow")int startRow,
+			@Param("pageSize")int pageSize,@Param("entity")HouseHold houseHold);
+    
+    int getCountByHousehold(HouseHold record);
 }

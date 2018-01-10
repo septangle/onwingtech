@@ -39,6 +39,10 @@ public class AppConstants {
 	//addStranger
 	public final static String ADD_STRANGER_SUCCESS_MESSAGE="访客添加成功";
 	public final static String ADD_STRANGER_FAIL_MESSAGE="访客添加失败";
+	
+	//updateStranger
+	public final static String UPDATE_STRANGER_SUCCESS_MESSAGE="操作成功";
+	public final static String UPDATE_STRANGER_FAIL_MESSAGE="操作失败";
 
 	
 

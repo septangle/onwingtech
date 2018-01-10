@@ -18,11 +18,11 @@ public class AccessRecordimpl implements AccessRecordBiz {
 	private AccessRecordMapper accessRecordMapper;
 
 	@Override
-	public List<HouseAccessRecordDto> selectAccessRecord(int page,int pageSize) {
+	public List<HouseAccessRecordDto> selectAccessRecord(int startRow,int pageSize) {
 		List<HouseAccessRecordDto> houseAccessRecordDtoList = new ArrayList<HouseAccessRecordDto>();
 		HouseAccessRecord houseAccessRecord = null;
 		try {
-			List<HouseAccessRecord> houseAccessRecordList = accessRecordMapper.selectAccessRecord(page,pageSize,houseAccessRecord);
+			List<HouseAccessRecord> houseAccessRecordList = accessRecordMapper.selectAccessRecord(startRow,pageSize,houseAccessRecord);
 			if (houseAccessRecordList != null) {
 				for (HouseAccessRecord houseAccessRecordParam : houseAccessRecordList) {
 					houseAccessRecordDtoList
