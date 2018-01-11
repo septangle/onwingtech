@@ -27,15 +27,9 @@ public class Strangerimpl implements StrangerBiz {
 	public boolean addStranger(StrangerDto strangerDto, String fileUrl) throws BusinessException {
 		boolean flag = false;
 		Stranger stranger;
-		StrangerAccessRecord strangerAccessRecord = new StrangerAccessRecord();
 		try {
 			stranger = ModelUtil.dtoToModel(strangerDto, Stranger.class);
 			strangerMapper.insertSelective(stranger);
-			strangerAccessRecord.setOutOffInto("0");
-			strangerAccessRecord.setStrangerId(stranger.getId());
-			strangerAccessRecord.setTime(new Date());
-			strangerAccessRecord.setPhotoUrl(fileUrl);
-			strangerAccessRecordMapper.insertSelective(strangerAccessRecord);
 			flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
