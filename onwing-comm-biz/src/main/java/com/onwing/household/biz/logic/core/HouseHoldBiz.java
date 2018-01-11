@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.onwing.household.biz.dto.HouseHoldDto;
 import com.onwing.household.biz.exception.BusinessException;
+import com.onwing.household.comm.dal.model.HouseHold;
 
 /**
  * 住户信息
@@ -62,5 +63,15 @@ public interface HouseHoldBiz {
 	 * @throws BusineException
 	 */
 	public List<HouseHoldDto> queryHouseHold(HouseHoldDto houseHoldDto) throws BusinessException;
+	
+	/**
+	 * 根据身份证查询住户
+	 * @param identifyCard
+	 * @return
+	 * @throws BusinessException
+	 */
+	public HouseHold findHouseHoldByIdentifyCard(String identifyCard) throws BusinessException;
+	
+	
 
 }

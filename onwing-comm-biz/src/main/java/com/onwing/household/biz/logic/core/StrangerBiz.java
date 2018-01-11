@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.onwing.household.biz.dto.StrangerDto;
 import com.onwing.household.biz.exception.BusinessException;
+import com.onwing.household.comm.dal.model.Stranger;
 
 /**
  * 访客信息
@@ -35,5 +36,12 @@ public interface StrangerBiz {
 	 * @throws BusinessException
 	 */
 	public boolean updateStrangerByIdentify(StrangerDto strangerDto,String fileUrl) throws BusinessException;
-
+	
+	/**
+	 * 根据身份证查询访客
+	 * @param identifyCard
+	 * @return
+	 * @throws BusinessException
+	 */
+	public Stranger findStrangerByIdentifyCard(String identifyCard) throws BusinessException;
 }

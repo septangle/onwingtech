@@ -128,4 +128,16 @@ public class HouseHoldimpl implements HouseHoldBiz {
 		return householdDtoList;
 	}
 
+	@Override
+	public HouseHold findHouseHoldByIdentifyCard(String identifyCard) throws BusinessException {
+		HouseHold houseHold = new HouseHold();
+		houseHold.setIdentifyCard(identifyCard);
+		List<HouseHold> hList=householdMapper.selectBySelective(houseHold);
+        if (hList!=null) {
+        	houseHold=hList.get(0);
+			return houseHold;
+		}
+		return null;
+	}
+
 }
