@@ -1,17 +1,14 @@
 package com.onwing.household.biz.logic.core.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onwing.household.biz.dto.StrangerDto;
 import com.onwing.household.biz.exception.BusinessException;
 import com.onwing.household.biz.logic.core.StrangerBiz;
-import com.onwing.household.comm.dal.dao.StrangerAccessRecordMapper;
 import com.onwing.household.comm.dal.dao.StrangerMapper;
 import com.onwing.household.comm.dal.model.Stranger;
-import com.onwing.household.comm.dal.model.StrangerAccessRecord;
 import com.onwing.household.util.ModelUtil;
 
 @Service
@@ -20,11 +17,8 @@ public class Strangerimpl implements StrangerBiz {
 	@Autowired
 	private StrangerMapper strangerMapper;
 
-	@Autowired
-	private StrangerAccessRecordMapper strangerAccessRecordMapper;
-
 	@Override
-	public boolean addStranger(StrangerDto strangerDto, String fileUrl) throws BusinessException {
+	public boolean addStranger(StrangerDto strangerDto) throws BusinessException {
 		boolean flag = false;
 		Stranger stranger;
 		try {
@@ -57,21 +51,13 @@ public class Strangerimpl implements StrangerBiz {
 	}
 
 	@Override
-	public boolean updateStrangerByIdentify(StrangerDto strangerDto, String fileUrl) throws BusinessException {
+	public boolean updateStrangerByIdentify(StrangerDto strangerDto) throws BusinessException {
 		boolean flag=false;
 		Stranger stranger;
 		try {
 			stranger = ModelUtil.dtoToModel(strangerDto, Stranger.class);
 			//更新访客out_off_into
 			strangerMapper.updateStrangerByIdentify(stranger);
-			List<Stranger> strangerList = strangerMapper.selectBySelective(stranger);
-			//插入访客出入记录
-			StrangerAccessRecord accessRecord = new StrangerAccessRecord();
-			accessRecord.setOutOffInto("1");
-			accessRecord.setPhotoUrl(fileUrl);
-			accessRecord.setStrangerId(strangerList.get(0).getId());
-			accessRecord.setTime(new Date());
-			strangerAccessRecordMapper.insertSelective(accessRecord);
 			flag=true;
 		} catch (Exception e) {
 			e.printStackTrace();

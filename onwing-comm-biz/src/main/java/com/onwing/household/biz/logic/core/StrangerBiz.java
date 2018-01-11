@@ -19,7 +19,7 @@ public interface StrangerBiz {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public boolean addStranger(StrangerDto strangerDto,String fileUrl) throws BusinessException;
+	public boolean addStranger(StrangerDto strangerDto) throws BusinessException;
 	
 	/**
 	 * 查询stranger
@@ -35,7 +35,7 @@ public interface StrangerBiz {
 	 * @return boolean
 	 * @throws BusinessException
 	 */
-	public boolean updateStrangerByIdentify(StrangerDto strangerDto,String fileUrl) throws BusinessException;
+	public boolean updateStrangerByIdentify(StrangerDto strangerDto) throws BusinessException;
 	
 	/**
 	 * 根据身份证查询访客

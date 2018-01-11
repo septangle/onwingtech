@@ -66,7 +66,7 @@ public class StrangerController extends BaseController<StrangerController>{
 		strangerDto.setReason(reason);
 		strangerDto.setRemarks(remarks);
 		strangerRequest.setStrangerDto(strangerDto);
-		return strangerFacade.addStranger(strangerRequest,AppConstants.STRANGER_FILE_PATH+identifyCard+"/"+ nowFileName);
+		return strangerFacade.addStranger(strangerRequest);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class StrangerController extends BaseController<StrangerController>{
 		int count =strangerMapper.getCountByStranger(null);
  		Page pageTool=Page.getPageByRequest(servletRequest,count);
  		int startRow=(pageTool.getPage()-1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
-		return strangerFacade.findAllStranger(startRow,pageTool.getPageSize());
+		return strangerFacade.findAllStranger(startRow,pageTool.getPageSize(),count);
 
 	}
 
@@ -104,7 +104,7 @@ public class StrangerController extends BaseController<StrangerController>{
 		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path,nowFileName));
 		strangerDto.setIdentifyCard(identifyCard);
 		strangerRequest.setStrangerDto(strangerDto);
-		return strangerFacade.updateStrangerByIdentify(strangerRequest,AppConstants.STRANGER_FILE_PATH+identifyCard+"/"+nowFileName);
+		return strangerFacade.updateStrangerByIdentify(strangerRequest);
 
 	}
 

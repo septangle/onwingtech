@@ -17,7 +17,7 @@ public class AccessRecordFacadeimpl implements AccessRecordFacade {
 	
 	
 	@Override
-	public AccessRecordResponse findAllAccessRecord(int startRow,int pageSize) throws Exception {
+	public AccessRecordResponse findAllAccessRecord(int startRow,int pageSize,int count) throws Exception {
 		AccessRecordResponse accessRecordResponse= new AccessRecordResponse();
 		List<HouseAccessRecordDto> houseAccessRecordDtolist=accessRecordBiz.selectAccessRecord(startRow,pageSize);
 		accessRecordResponse.setHouseAccessRecordDtosList(houseAccessRecordDtolist);

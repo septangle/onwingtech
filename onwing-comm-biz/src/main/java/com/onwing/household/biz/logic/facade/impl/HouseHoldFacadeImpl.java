@@ -54,10 +54,11 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade {
 	}
 
 	@Override
-	public HouseholdResponse findAllHouseHold(int startRow,int pageSize,String fileStr) throws Exception {
+	public HouseholdResponse findAllHouseHold(int startRow,int pageSize,String fileStr,int count) throws Exception {
 		HouseholdResponse householdResponse = new HouseholdResponse();
 		List<HouseHoldDto> householdList = householdBiz.findHousehold(startRow,pageSize,fileStr);
 		householdResponse.setHouseholdlist(householdList);
+		householdResponse.setTotalNumber(count);
 		return householdResponse;
 	}
 

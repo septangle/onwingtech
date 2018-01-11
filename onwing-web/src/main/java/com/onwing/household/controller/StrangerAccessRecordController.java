@@ -32,7 +32,7 @@ public class StrangerAccessRecordController extends BaseController<StrangerAcces
 		int count = strangerAccessRecordMapper.getCountByStrangerAcessRecord(null);
 		Page pageTool=Page.getPageByRequest(servletRequest,count);
  		int startRow=(pageTool.getPage()-1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
-		return strangerAccessRecordFacade.findAllStrangerAccessRecord(startRow, pageTool.getPageSize());
+		return strangerAccessRecordFacade.findAllStrangerAccessRecord(startRow, pageTool.getPageSize(),count);
 	}
 
 }

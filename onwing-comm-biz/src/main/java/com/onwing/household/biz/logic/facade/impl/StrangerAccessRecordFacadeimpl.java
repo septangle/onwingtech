@@ -17,11 +17,12 @@ public class StrangerAccessRecordFacadeimpl implements StrangerAccessRecordFacad
 	private StrangerAccessRecordBiz strangerAccessRecordBiz;
 
 	@Override
-	public StrangerAccessRecordResponse findAllStrangerAccessRecord(int startRow, int pageSize) throws Exception {
+	public StrangerAccessRecordResponse findAllStrangerAccessRecord(int startRow, int pageSize,int count) throws Exception {
 		StrangerAccessRecordResponse accessRecordResponse= new StrangerAccessRecordResponse();
 		List<StrangerAccessRecordMapDto> accessRecordMapDtosList = strangerAccessRecordBiz
 				.findAllStrangerAccessRecord(startRow, pageSize);
 		accessRecordResponse.setAccessRecordMapDtosList(accessRecordMapDtosList);
+		accessRecordResponse.setTotalNumber(count);
 		return accessRecordResponse;
 	}
 

@@ -8,6 +8,7 @@ import com.onwing.household.biz.dto.StrangerDto;
 public class StrangerResponse extends BaseResponse{
 	
 	private List<StrangerDto> strangerDtoList;
+			
 
 	public List<StrangerDto> getStrangerDtoList() {
 		return strangerDtoList;
@@ -16,7 +17,7 @@ public class StrangerResponse extends BaseResponse{
 	public void setStrangerDtoList(List<StrangerDto> strangerDtoList) {
 		this.strangerDtoList = strangerDtoList;
 	}
-	
+
 	
 	
 	

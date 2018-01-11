@@ -6,6 +6,6 @@ public interface AccessRecordFacade {
 	/**
 	 * 出入记录
 	 */
-	public AccessRecordResponse findAllAccessRecord(int page,int pageSize)throws Exception;
+	public AccessRecordResponse findAllAccessRecord(int page,int pageSize,int count)throws Exception;
 
 }

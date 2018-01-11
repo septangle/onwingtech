@@ -18,9 +18,9 @@ public class StrangerFacadeImpl implements StrangerFacade{
 	@Autowired
 	private StrangerBiz strangerBiz;
 	@Override
-	public StrangerResponse addStranger(StrangerRequest strangerRequest,String fileUrl) throws Exception{
+	public StrangerResponse addStranger(StrangerRequest strangerRequest) throws Exception{
 		StrangerResponse strangerResponse = new StrangerResponse();
-		boolean flag=strangerBiz.addStranger(strangerRequest.getStrangerDto(),fileUrl);
+		boolean flag=strangerBiz.addStranger(strangerRequest.getStrangerDto());
 		String message = flag ? AppConstants.ADD_STRANGER_SUCCESS_MESSAGE : AppConstants.ADD_STRANGER_FAIL_MESSAGE;
 		String code=flag?AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;	
 		strangerResponse.setMessage(message);
@@ -28,16 +28,17 @@ public class StrangerFacadeImpl implements StrangerFacade{
 		return strangerResponse;
 	}
 	@Override
-	public StrangerResponse findAllStranger(int startRow,int pageSize) throws Exception {
+	public StrangerResponse findAllStranger(int startRow,int pageSize,int count) throws Exception {
 		StrangerResponse strangerResponse = new StrangerResponse();
       	List<StrangerDto> strangerList=	strangerBiz.findAllStranger(startRow,pageSize);
       	strangerResponse.setStrangerDtoList(strangerList);
+      	strangerResponse.setTotalNumber(count);
       	return strangerResponse;
 	}
 	@Override
-	public StrangerResponse updateStrangerByIdentify(StrangerRequest strangerRequest, String fileUrl) throws Exception {
+	public StrangerResponse updateStrangerByIdentify(StrangerRequest strangerRequest) throws Exception {
 		StrangerResponse strangerResponse = new StrangerResponse();
-		boolean flag=strangerBiz.updateStrangerByIdentify(strangerRequest.getStrangerDto(), fileUrl);
+		boolean flag=strangerBiz.updateStrangerByIdentify(strangerRequest.getStrangerDto());
 		String message = flag ? AppConstants.UPDATE_STRANGER_SUCCESS_MESSAGE : AppConstants.UPDATE_STRANGER_FAIL_MESSAGE;
 		String code=flag?AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;	
 		strangerResponse.setMessage(message);

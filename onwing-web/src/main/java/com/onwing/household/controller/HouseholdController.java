@@ -112,7 +112,7 @@ public class HouseholdController extends BaseController<HouseholdController> {
 		Page pageTool = Page.getPageByRequest(servletRequest, count);
 		int startRow = (pageTool.getPage() - 1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
 		String fileStr = System.getProperty("onwing.root");
-		return householdfacade.findAllHouseHold(startRow, pageTool.getPageSize(), fileStr + AppConstants.FILE_PATH);
+		return householdfacade.findAllHouseHold(startRow, pageTool.getPageSize(), fileStr + AppConstants.FILE_PATH,count);
 	}
 
 	/**

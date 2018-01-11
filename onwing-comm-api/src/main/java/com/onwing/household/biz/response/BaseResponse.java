@@ -15,6 +15,8 @@ public class BaseResponse implements Serializable {
 	
 	private String code;
 	
+	private int totalNumber;
+	
 
 	public String getMessage() {
 		return message;
@@ -38,6 +40,14 @@ public class BaseResponse implements Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public int getTotalNumber() {
+		return totalNumber;
+	}
+
+	public void setTotalNumber(int totalNumber) {
+		this.totalNumber = totalNumber;
 	}
 
 

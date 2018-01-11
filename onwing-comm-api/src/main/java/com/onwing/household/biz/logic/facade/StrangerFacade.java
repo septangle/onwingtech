@@ -12,18 +12,18 @@ public interface StrangerFacade {
 	 * @return
 	 * @throws Exception
 	 */
-	public StrangerResponse addStranger(StrangerRequest strangerRequest,String fileUrl) throws Exception;
+	public StrangerResponse addStranger(StrangerRequest strangerRequest) throws Exception;
 	
 	
 	/**
 	 * 查询访客列表
 	 */
-	public StrangerResponse findAllStranger(int page,int pageSize) throws Exception;
+	public StrangerResponse findAllStranger(int page,int pageSize,int count) throws Exception;
 	
 	/**
 	 * 更新访客出入
 	 */
-	public StrangerResponse updateStrangerByIdentify(StrangerRequest strangerRequest,String fileUrl) throws Exception;
+	public StrangerResponse updateStrangerByIdentify(StrangerRequest strangerRequest) throws Exception;
 	
 	
 
