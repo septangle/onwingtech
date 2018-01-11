@@ -23,6 +23,8 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade {
 		HouseholdResponse householdResponse = new HouseholdResponse();
 		boolean flag = householdBiz.addHousehold(householdRequest.getHouseholdDto());
 		String message = flag ? AppConstants.ADD_HOUSE_HOLD_SUCCESS_MESSAGE : AppConstants.ADD_HOUSE_HOLD_FAIL_MESSAGE;
+		String code=flag?AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;	
+		householdResponse.setCode(code);
 		householdResponse.setMessage(message);
 		return householdResponse;
 	}
@@ -33,6 +35,8 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade {
 		boolean flag = householdBiz.removeHousehold(householdRequest.getHouseholdDto());
 		String message = flag ? AppConstants.REMOVE_HOUSE_HOLD_SUCCESS_MESSAGE
 				: AppConstants.REMOVE_HOUSE_HOLD_FAIL_MESSAGE;
+		String code=flag?AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;	
+		householdResponse.setCode(code);
 		householdResponse.setMessage(message);
 		return householdResponse;
 	}
@@ -43,6 +47,8 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade {
 		boolean flag = householdBiz.updateHousehold(householdRequest.getHouseholdDto());
 		String message = flag ? AppConstants.UPDATE_HOUSE_HOLD_SUCCESS_MESSAGE
 				: AppConstants.UPDATE_HOUSE_HOLD_FAIL_MESSAGE;
+		String code=flag?AppConstants.SUCCESS_CODE:AppConstants.FAIL_CODE;	
+        householdResponse.setCode(code);
 		householdResponse.setMessage(message);
 		return householdResponse;
 	}

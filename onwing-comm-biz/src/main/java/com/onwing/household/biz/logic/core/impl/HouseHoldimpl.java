@@ -1,10 +1,7 @@
 package com.onwing.household.biz.logic.core.impl;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onwing.household.biz.dto.HouseHoldDto;
@@ -27,8 +24,6 @@ public class HouseHoldimpl implements HouseHoldBiz {
 		HouseHold household;
 		try {
 			household = ModelUtil.dtoToModel(householdDto, HouseHold.class);
-			household.setPhotoId(householdDto.getBuildingBlockNumber() + "-" + householdDto.getRoomNumber() + "-"
-					+ householdDto.getHouseholdName());
 			int i = householdMapper.insertSelective(household);
 			if (i == 0) {
 				throw new BusinessException(AppConstants.ADD_HOUSE_HOLD_FAIL_CODE,
@@ -87,34 +82,14 @@ public class HouseHoldimpl implements HouseHoldBiz {
 		try {
 			householdDtoList = new ArrayList<HouseHoldDto>();
 			List<HouseHold> householdList = householdMapper.getAllHouseHold(startRow, pageSize, null);
+			String path = System.getProperty("onwing.root");
 			if (householdList != null) {
 				for (HouseHold houseHoldParam : householdList) {
+					houseHoldParam.setPhotoId(path+houseHoldParam.getPhotoId());
 					householdDtoList.add(ModelUtil.modelToDto(houseHoldParam, HouseHoldDto.class));
 				}
 			}
-	    	HashMap<String, String> testMap =new HashMap<String, String>();
-	    	//查找指定路径
-	    	File root = new File(strFile); 
-	    	//存入集合
-	        File[] files = root.listFiles();
-	        //格式key=12-46-李四    value=12-46-李四.jpg
-	        if (files!=null) {
-	        	  for (File file : files) { 
-	  	        	String [] fileKey =file.getName().split("\\.");
-	  	        	testMap.put(fileKey[0], file.getName());
-	  	        }  
-	  	        //循环业主信息
-	  	        for (int i = 0; i < householdDtoList.size(); i++) {
-	  	        	HouseHoldDto houses =householdDtoList.get(i);
-	  	        	String photoId=houses.getPhotoId();
-	  	        	if (testMap.containsKey(photoId)) {
-	  	        		householdDtoList.get(i).setPhotoUrl(AppConstants.FILE_PATH+testMap.get(photoId));
-	  	        	}
-	  				
-	  			}
-			}
-	      
-
+	    	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

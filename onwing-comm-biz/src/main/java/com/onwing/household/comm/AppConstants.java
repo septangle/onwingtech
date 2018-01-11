@@ -33,8 +33,8 @@ public class AppConstants {
 	
 	//addphoto
 	public final static String ADD_PHOTO_SUCCESS="上传成功";
-	public final static String FILE_PATH="image/";
-	public final static String STRANGER_FILE_PATH="strangerImage/";
+	public final static String FILE_PATH="householdImage/";
+	public final static String STRANGER_FILE_PATH="accessRecord/visitor/";
 	
 	//addStranger
 	public final static String ADD_STRANGER_SUCCESS_MESSAGE="访客添加成功";

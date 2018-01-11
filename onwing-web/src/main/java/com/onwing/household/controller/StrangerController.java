@@ -47,8 +47,16 @@ public class StrangerController extends BaseController<StrangerController>{
 			@RequestParam("tel") String tel, @RequestParam("reason") String reason,
 			@RequestParam("remarks") String remarks, @RequestParam MultipartFile file,
 			HttpServletRequest servletRequest) throws Exception {
-		String path = System.getProperty("onwing.root") + AppConstants.STRANGER_FILE_PATH;
-		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path, file.getOriginalFilename()));
+		String strNowTime = new SimpleDateFormat("yyyyMMddhhmmssSSS").format(new Date());
+		String path = System.getProperty("onwing.root") + AppConstants.STRANGER_FILE_PATH+identifyCard;
+		File files = new File(path);
+		if (!files.exists() && !files.isDirectory()) {
+			files.mkdir();
+		}
+		String  tmpFileName=file.getOriginalFilename();//上传的文件名			
+		String extension = tmpFileName.substring(tmpFileName.lastIndexOf("."));
+		String nowFileName=strNowTime+extension;
+		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path,nowFileName));
 		StrangerDto strangerDto = new StrangerDto();
 		StrangerRequest strangerRequest = new StrangerRequest();
 		strangerDto.setName(name);
@@ -58,7 +66,7 @@ public class StrangerController extends BaseController<StrangerController>{
 		strangerDto.setReason(reason);
 		strangerDto.setRemarks(remarks);
 		strangerRequest.setStrangerDto(strangerDto);
-		return strangerFacade.addStranger(strangerRequest, file.getOriginalFilename());
+		return strangerFacade.addStranger(strangerRequest,AppConstants.STRANGER_FILE_PATH+identifyCard+"/"+ nowFileName);
 	}
 
 	/**
@@ -84,16 +92,19 @@ public class StrangerController extends BaseController<StrangerController>{
 		StrangerRequest strangerRequest = new StrangerRequest();
 		StrangerDto strangerDto = new StrangerDto();
 		String strNowTime = new SimpleDateFormat("yyyyMMddhhmmssSSS").format(new Date());
-		String path = System.getProperty("onwing.root") + AppConstants.STRANGER_FILE_PATH+strNowTime;
+		String path = System.getProperty("onwing.root") + AppConstants.STRANGER_FILE_PATH+identifyCard;
 		File files  = new File(path);
 		if  (!files .exists()  && !files .isDirectory())      
 		{       
 		    files .mkdir();    
 		}
-		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path, file.getOriginalFilename()));
+		String  tmpFileName=file.getOriginalFilename();//上传的文件名			
+		String extension = tmpFileName.substring(tmpFileName.lastIndexOf("."));
+		String nowFileName=strNowTime+extension;
+		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path,nowFileName));
 		strangerDto.setIdentifyCard(identifyCard);
 		strangerRequest.setStrangerDto(strangerDto);
-		return strangerFacade.updateStrangerByIdentify(strangerRequest, file.getOriginalFilename());
+		return strangerFacade.updateStrangerByIdentify(strangerRequest,AppConstants.STRANGER_FILE_PATH+identifyCard+"/"+nowFileName);
 
 	}
 
