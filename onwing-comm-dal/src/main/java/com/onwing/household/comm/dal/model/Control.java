@@ -9,6 +9,8 @@ public class Control {
 
     private String port;
 
+    private String ip;
+
     public Long getId() {
         return id;
     }
@@ -39,5 +41,13 @@ public class Control {
 
     public void setPort(String port) {
         this.port = port == null ? null : port.trim();
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip == null ? null : ip.trim();
     }
 }

@@ -6,9 +6,10 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="door_name" property="doorName" jdbcType="VARCHAR" />
     <result column="port" property="port" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, door_name, port
+    id, name, door_name, port, ip
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -21,10 +22,10 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.onwing.household.comm.dal.model.Control" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_control (name, door_name, port
-      )
-    values (#{name,jdbcType=VARCHAR}, #{doorName,jdbcType=VARCHAR}, #{port,jdbcType=VARCHAR}
-      )
+    insert into tbl_control (name, door_name, port, 
+      ip)
+    values (#{name,jdbcType=VARCHAR}, #{doorName,jdbcType=VARCHAR}, #{port,jdbcType=VARCHAR}, 
+      #{ip,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Control" useGeneratedKeys="true" keyProperty="id" >
     insert into tbl_control
@@ -38,6 +39,9 @@
       <if test="port != null" >
         port,
       </if>
+      <if test="ip != null" >
+        ip,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="name != null" >
@@ -48,6 +52,9 @@
       </if>
       <if test="port != null" >
         #{port,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -63,6 +70,9 @@
       <if test="port != null" >
         port = #{port,jdbcType=VARCHAR},
       </if>
+      <if test="ip != null" >
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -70,7 +80,8 @@
     update tbl_control
     set name = #{name,jdbcType=VARCHAR},
       door_name = #{doorName,jdbcType=VARCHAR},
-      port = #{port,jdbcType=VARCHAR}
+      port = #{port,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
