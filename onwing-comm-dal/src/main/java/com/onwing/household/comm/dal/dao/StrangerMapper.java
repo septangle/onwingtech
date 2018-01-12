@@ -28,6 +28,6 @@ public interface StrangerMapper {
     List<Stranger> getAllStranger(@Param("startRow")int startRow,
 			@Param("pageSize")int pageSize,@Param("entity")Stranger record);
     
-    int getCountByStranger(Stranger record);
+    int getCountByStranger();
     
 }

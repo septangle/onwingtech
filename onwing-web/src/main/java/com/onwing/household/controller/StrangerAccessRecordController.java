@@ -29,7 +29,7 @@ public class StrangerAccessRecordController extends BaseController<StrangerAcces
 	@ApiOperation(value = "查询访客出入记录", httpMethod = "GET", response = StrangerAccessRecordResponse.class)
 	@RequestMapping(value = "/findAllStrangerAccessRecord.do", method = RequestMethod.GET)
 	public @ResponseBody StrangerAccessRecordResponse findAllStrangerAccessRecord(HttpServletRequest servletRequest) throws Exception {
-		int count = strangerAccessRecordMapper.getCountByStrangerAcessRecord(null);
+		int count = strangerAccessRecordMapper.getCountByStrangerAcessRecord();
 		Page pageTool=Page.getPageByRequest(servletRequest,count);
  		int startRow=(pageTool.getPage()-1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
 		return strangerAccessRecordFacade.findAllStrangerAccessRecord(startRow, pageTool.getPageSize(),count);

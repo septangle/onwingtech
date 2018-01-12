@@ -103,7 +103,7 @@
 	</select>
 	
 	<!-- 总记录数 -->
-	<select id="getCountByHouseHold" resultType="int" parameterType="com.onwing.household.comm.dal.model.HouseAccessRecord">
+	<select id="getCountByHouseHold" resultType="int">
 	    select count(*)
 		from tbl_access_record a,tbl_household b
 		where a.household_id=b.id 

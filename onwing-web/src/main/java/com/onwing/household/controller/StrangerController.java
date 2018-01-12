@@ -75,7 +75,7 @@ public class StrangerController extends BaseController<StrangerController>{
 	@ApiOperation(value = "查询访客列表", httpMethod = "GET", response = StrangerResponse.class)
 	@RequestMapping(value = "/getAllStranger.do", method = RequestMethod.GET)
 	public @ResponseBody StrangerResponse findStranger(HttpServletRequest servletRequest) throws Exception {
-		int count =strangerMapper.getCountByStranger(null);
+		int count =strangerMapper.getCountByStranger();
  		Page pageTool=Page.getPageByRequest(servletRequest,count);
  		int startRow=(pageTool.getPage()-1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
 		return strangerFacade.findAllStranger(startRow,pageTool.getPageSize(),count);

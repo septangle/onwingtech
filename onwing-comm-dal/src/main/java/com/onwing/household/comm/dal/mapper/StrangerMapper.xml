@@ -164,7 +164,7 @@
 	  from tbl_stranger where out_off_into=0 LIMIT #{startRow}, #{pageSize}
 	</select>
 	
-	<select id="getCountByStranger" resultType="int" parameterType="com.onwing.household.comm.dal.model.Stranger" >
+	<select id="getCountByStranger" resultType="int">
 	  select count(*) from tbl_stranger where out_off_into=0
 	</select>
 </mapper>

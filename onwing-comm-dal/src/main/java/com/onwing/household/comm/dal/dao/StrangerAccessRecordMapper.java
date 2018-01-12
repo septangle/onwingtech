@@ -24,6 +24,6 @@ public interface StrangerAccessRecordMapper {
     List<StrangerAccessRecordMap> getAllStrangerAccessRecord(@Param("startRow")int startRow,
 			@Param("pageSize")int pageSize,@Param("entity")StrangerAccessRecordMap sAccessRecordMap);
     
-    int getCountByStrangerAcessRecord(StrangerAccessRecordMap record);
+    int getCountByStrangerAcessRecord();
 
 }

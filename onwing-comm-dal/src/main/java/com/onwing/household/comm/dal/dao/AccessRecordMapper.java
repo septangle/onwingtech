@@ -26,5 +26,5 @@ public interface AccessRecordMapper {
 			@Param("pageSize")int pageSize,@Param("entity")HouseAccessRecord houseAccessRecord);
     
     //查询住户出入记录总数
-    int  getCountByHouseHold(AccessRecord accessRecord);
+    int  getCountByHouseHold();
 }

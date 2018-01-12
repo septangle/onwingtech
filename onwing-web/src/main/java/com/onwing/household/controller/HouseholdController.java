@@ -108,7 +108,7 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@ApiOperation(value = "查询业主信息", httpMethod = "GET", response = HouseholdResponse.class)
 	@RequestMapping(value = "/findAllHouseHold.do", method = RequestMethod.GET)
 	public @ResponseBody HouseholdResponse findHouseHold(HttpServletRequest servletRequest) throws Exception {
-		int count = householdMapper.getCountByHousehold(null);
+		int count = householdMapper.getCountByHousehold();
 		Page pageTool = Page.getPageByRequest(servletRequest, count);
 		int startRow = (pageTool.getPage() - 1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
 		String fileStr = System.getProperty("onwing.root");

@@ -30,7 +30,7 @@ public class AccessRecordController extends BaseController<AccessRecordControlle
 	@ApiOperation(value = "查询业主出入记录", httpMethod = "GET", response = AccessRecordResponse.class)
 	@RequestMapping(value = "/findAllAccessRecord.do", method = RequestMethod.GET)
 	public @ResponseBody AccessRecordResponse findAllAccessRecord(HttpServletRequest servletRequest) throws Exception {		
-		int count=accessRecordMapper.getCountByHouseHold(null);
+		int count=accessRecordMapper.getCountByHouseHold();
  		Page pageTool=Page.getPageByRequest(servletRequest,count);
  		int startRow=(pageTool.getPage()-1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
 		return accessRecordFacade.findAllAccessRecord(startRow,pageTool.getPageSize(),count);

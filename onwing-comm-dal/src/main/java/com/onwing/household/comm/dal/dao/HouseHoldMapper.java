@@ -26,5 +26,5 @@ public interface HouseHoldMapper {
     List<HouseHold> getAllHouseHold(@Param("startRow")int startRow,
 			@Param("pageSize")int pageSize,@Param("entity")HouseHold houseHold);
     
-    int getCountByHousehold(HouseHold record);
+    int getCountByHousehold();
 }
