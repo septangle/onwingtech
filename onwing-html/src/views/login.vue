@@ -84,7 +84,7 @@ export default {
                         } else {
                             _this.$Message.error('用户名或密码错误！');
                         }
-                        //_this.respData.adminName = 
+                        //_this.respData.adminName =
                         /* if(response){
                             console.info(data.error.length);
                             let data = response.data;

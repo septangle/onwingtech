@@ -5,7 +5,7 @@
             <div>
                 <div style="position:relative;">
                     <!-- 表格开始 -->
-                    <Table stripe border height="auto" :columns="columns_title" :data="inout_page_data" ref="table"></Table>
+                    <Table stripe border height="auto" :columns="columns_title" :data="inout_data" ref="table"></Table>
                     <!-- 表格结束 -->
 
                     <!-- 表格内容加载提示蒙板开始 -->
@@ -16,17 +16,23 @@
                     <!-- 表格内容加载提示蒙板结束 -->
                 </div>
                 <div style="float:left;margin-top: 20px;">
-                <Button type="primary" size="large" @click="exportData(1)"><Icon type="ios-download-outline"></Icon> 导出原始数据</Button>
+                    <Button type="primary" size="large" @click="exportData(1)"><Icon type="ios-download-outline"></Icon>&nbsp;导出数据</Button>
                 </div>
                 <!-- 分页开始 -->
                 <div style="float:right;margin-top: -30px;">
-                <Page :total="datacount" :page-size="pagesize" show-total @on-change="changePage" style="text-align:right;margin-top:50px"></Page>
+                    <Page :total="datacount" :page-size="pagesize" show-total @on-change="changePage" style="text-align:right;margin-top:50px"></Page>
                 </div>
                 <!-- 分页结束 -->
             </div>
         </Col>
-        <Col :md="12"></Col>
     </Row>
+    <div class="dialog-showBigPhoto" v-show="showDialog">
+      <span class="close" @click="hideDialog">X</span>
+      <p>
+        <img :src="bigPhotoUrl" />
+      </p>
+    </div>
+    <div class="mask" v-show="showDialog"></div>
 </div>
 </template>
 
@@ -81,23 +87,63 @@ tr.ivu-table-row-hover td .ivu-tag-dot {
 td.ivu-table-expanded-cell {
     background-color: white!important;
 }
+
+.dialog-showBigPhoto {
+    position: absolute;
+    width: 70%;
+    left: 50%;
+    top: 10%;
+    margin-left: -35%;
+    padding: 30px 20px 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    line-height: 1;
+    z-index: 100;
+}
+
+.dialog-showBigPhoto .close {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    color: #999;
+    right: 2px;
+    top: 5px;
+    font-size: 20px;
+    line-height: 1;
+}
+.dialog-showBigPhoto img {
+    width: 100%;
+}
+
+.mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: rgba(0,0,0,.5);
+}
 </style>
 <script>
     import GlobalServer from '../../config.js';
     import axios from 'axios';
 
     export default {
-        name: 'inoutlist_index',
+        name: 'guestlist_inout_index',
         data () {
             return {
+                showDialog: false,
+                bigPhotoUrl:'',
                 progresshow:false,
                 progresscount:0,
                 progresstatus:'active',
                 progressspeed:0,
                 inout_data:[],
                 inout_page_data:[],
+                inout_thumb: [],
                 datacount: 0,
-                pageindex:1,
+                pageindex: 1,
                 pagesize: 20,
                 page_loading:false,
                 data_loading:false,
@@ -109,60 +155,80 @@ td.ivu-table-expanded-cell {
                         width: 80,
                         align: 'center'
                     },{
-                        title: '业主姓名',
-                        key: 'householdName',
-                        ellipsis:'true',
+                        title: '缩略图',
+                        key: 'miniPhoto',
+                        width: '100',
+                        align: 'center',
+                        render: (h,params) => {
+                            return h('img',{
+                              attrs: {
+                                src: this.inout_thumb[params.row._index],
+                                style: 'width: 80px'
+                              },
+                              on: {
+                                  click: (event) => {
+                                      this.bigPhotoUrl = event.target.src;
+                                      this.showDialog = true;
+                                      console.info(this);
+                                  }
+                              }
+                            })
+                        }
+                    },{
+                        title: '状态',
+                        key: 'outOffInto',
                         width: 110,
                         align: 'center'
                     },{
-                        title: '住址',
-                        key: 'addres',
+                        title: '姓名',
+                        key: 'name',
                         ellipsis:'true',
-                        width: 130,
+                        width: 200,
                         align: 'center'
                     },{
-                        title: '进入时间',
-                        key: 'outOffTime',
+                        title: '时间',
+                        key: 'time',
                         align: 'center'
                     }]
             }
         },
         methods: {
-            getInoutDate() {
+            getInoutDate(currentPage,pageSize) {
                 /* axios有自己的作用域,无法获取vue实例,所以要将vue实例的this传到一个变量中以便在axios中调用 */
                 var _this = this;
                 /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
                 _this.page_loading = true;
                 /* 获取所有住户信息并将值传入进inout_data数组 */
-                axios.get(GlobalServer.findAllAccessRecord)
+                axios.get(GlobalServer.findAllStrangerAccessRecord + '?page=' + currentPage + '&pageSize=' + pageSize)
                 .then(function(response){
                     let data = response.data;
                     if(data.error === null){
-                        /* 定义tempArr数组，临时存放返回的出入记录 */
-                        let tempArr = [];
-                        tempArr = data.houseAccessRecordDtosList;
-                        
                         /* 获取数据的条数,并将值赋给实例中的datacount */
-                        _this.datacount = tempArr.length;
+                        _this.datacount = data.totalNumber;
+
+                        /* 定义tempArr数组，临时存放返回的出入记录 */
+                        let tempArr = data.accessRecordMapDtosList;
 
                         /* 遍历tempArr数组，将数组中每一条出入记录对象中的单元号和房号进行拼接 */
                         _this.inout_data = tempArr.map(function(value){
-                            let tempObj = {}
-                            let tempDate = _this.setDate(value.outOffTime);
+                            let tempObj = {};
+                            // let tempDate = _this.setDate(value.time);
+
                             tempObj.id = value.id;
-                            tempObj.householdName = value.householdName;
-                            tempObj.addres = value.buildingBlockNumber + '单元' + value.roomNumber + '室';
-                            tempObj.outOffTime = tempDate;
+                            tempObj.name = value.name;
+                            tempObj.time = _this.setDate(value.time);
+                            tempObj.outOffInto = value.outOffInto == '0' ? '入' : '出';
+                            _this.inout_thumb.push(value.photoUrl);
                             return tempObj;
                         });
 
                         /* 如果数据条目数小于每页显示的条目数,则将所有数据传入分页数据对象,
                            如果数据条目数大于每页显示的条目数,则将第一页要显示的数据传入分页数据对象 */
-                        if(_this.datacount <= _this.pagesize) {
-                            _this.inout_page_data = _this.inout_data;
-                        } else {
-                            _this.inout_page_data = _this.inout_data.slice(0,_this.pagesize-1);
-                        }
+                        // if(_this.datacount <= _this.pagesize) {
+                        //     _this.inout_page_data = _this.inout_data;
+                        // } else {
+                        //     _this.inout_page_data = _this.inout_data.slice(0,_this.pagesize-1);
+                        // }
 
                         /* 将page_loading值设置为false,隐藏'下在加载数据'的蒙板 */
                         _this.page_loading = false;
@@ -170,15 +236,18 @@ td.ivu-table-expanded-cell {
                 })
                 .catch(function(error){
                     console.info('error=' + error);
-                })
+                });
+                //console.info(_this.inout_thumb);
             },
-            changePage(index){
-                /* start 每页的开始数据 */
-                let start = (index - 1) * this.pagesize;
-                /* end 每页的结束数据 */
-                let end = index * this.pagesize;
+            changePage(index){  //入参index <Page>组件中on-change事件的返回值，表示页码改变后的页码
+                // start 每页的开始数据
+                // let start = (index - 1) * this.pagesize;
+                // end 每页的结束数据
+                // let end = index * this.pagesize;
 
-                this.inout_page_data = this.inout_data.slice(start,end);
+                // this.inout_page_data = this.inout_data.slice(start,end);
+
+                this.getInoutDate(index,this.pagesize);
             },
             exportData (type) {
                 if (type === 1) {
@@ -192,7 +261,7 @@ td.ivu-table-expanded-cell {
                         filename: '排序和过滤后的数据',
                         original: false
                     });
-                } 
+                }
             },
             setDate (value) {
                 let temp = new Date(value);
@@ -204,11 +273,16 @@ td.ivu-table-expanded-cell {
                     second = temp.getSeconds() + '秒',
                     fullDate = '';
                 return fullDate = year + month + date + hours + minutes + second;
+            },
+            hideDialog () {
+                this.showDialog = false;
+                this.bigPhotoUrl = '';
             }
         },
         beforeCreate() {},
         created() {
-            this.getInoutDate();
+            this.getInoutDate(this.pageindex,this.pagesize);
+            console.info(this.inout_thumb);
         },
         beforeMount() {},
         mounted() {},

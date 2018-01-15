@@ -60,13 +60,19 @@ export const otherRouter = {
             path: 'home',
             title: '首页',
             name: 'home_index',
-            component: resolve => { require(['@/views/household/list.vue'], resolve); }
+            component: resolve => { require(['@/views/whitelist/list.vue'], resolve); }
         },
         {
-            path: 'household_info/:cardNumber',
-            title: '住户详情',
-            name: 'household_info',
-            component: resolve => { require(['@/views/household/info.vue'], resolve); }
+            path: 'whitelist_info/:cardNumber',
+            title: '员工详情',
+            name: 'whitelist_info_index',
+            component: resolve => { require(['@/views/whitelist/info.vue'], resolve); }
+        },
+        {
+            path: 'guestlist_info/:identifyCard',
+            title: '访客详情',
+            name: 'guestlist_info_index',
+            component: resolve => { require(['@/views/guestlist/guest_info.vue'], resolve); }
         }
     ]
 };
@@ -74,36 +80,66 @@ export const otherRouter = {
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
     {
-        path: '/household',
+        path: '/whitelist',
         icon: 'key',
-        name: 'household',
-        title: '住户列表',
+        name: 'whitelist_list',
+        title: '员工列表',
         component: Main,
         children: [
-            { path: 'index', title: '住户列表', name: 'household_index', component: resolve => { require(['@/views/household/list.vue'], resolve); } }
+            { path: 'whitelist_list', title: '员工列表', name: 'whitelist_list_index', component: resolve => { require(['@/views/whitelist/list.vue'], resolve); } }
         ]
     },
     {
-        path: '/household/',
+        path: '/whitelist',
         icon: 'key',
-        name: 'household_add',
-        title: '添加住户',
-        component: Main,
-        children: [
-            { path: 'add', title: '添加住户', name: 'household_add_index', component: resolve => { require(['@/views/household/add.vue'], resolve); } }
-        ]
-    },
-    {
-        path: '/inout',
-        icon: 'key',
-        name: 'inoutlist',
+        name: 'whitelist_inout',
         title: '出入记录',
         component: Main,
         children: [
-            { path: 'index', title: '出入记录', name: 'inoutlist_index', component: resolve => { require(['@/views/inout/list.vue'], resolve); } }
+            { path: 'whitelist_inout', title: '出入记录', name: 'whitelist_inout_index', component: resolve => { require(['@/views/whitelist/inout.vue'], resolve); } }
         ]
     },
     {
+        path: '/guestlist',
+        icon: 'key',
+        name: 'guestlist_list',
+        title: '访客列表',
+        component: Main,
+        children: [
+            {path:'guestlist_list', title: '访客列表', name: 'guestlist_list_index', component: resolve => {require(['@/views/guestlist/guest_list.vue'],resolve); } }
+        ]
+    },
+    {
+        path: '/guestlist',
+        icon: 'key',
+        name: 'guestlist_inout',
+        title: '访客记录',
+        component: Main,
+        children: [
+            { path: 'guestlist_inout', title: '访客记录', name: 'guestlist_inout_index', component: resolve => { require(['@/views/guestlist/guest_inout.vue'], resolve); } }
+        ]
+    },
+    {
+        path: '/guestlist',
+        icon: 'key',
+        name: 'guestlist_add',
+        title: '访客登记',
+        component: Main,
+        children: [
+            { path: 'guestlist_add', title: '访客登记', name: 'guestlist_add_index', component: resolve => { require(['@/views/guestlist/guest_add.vue'], resolve); } }
+        ]
+    },
+    {
+        path: '/whitelist/',
+        icon: 'key',
+        name: 'whitelist_add',
+        title: '添加员工',
+        component: Main,
+        children: [
+            { path: 'whitelist_add', title: '添加员工', name: 'whitelist_add_index', component: resolve => { require(['@/views/whitelist/add.vue'], resolve); } }
+        ]
+    }
+/*    {
         path: '/photoupload',
         icon: 'key',
         name: 'photoupload',
@@ -112,7 +148,7 @@ export const appRouter = [
         children: [
             { path: 'index', title: '照片上传', name: 'photoupload_index', component: resolve => { require(['@/views/photoup/photoup.vue'], resolve); } }
         ]
-    }
+    }*/
 ];
 
 // 所有上面定义的路由都要写在下面的routers里

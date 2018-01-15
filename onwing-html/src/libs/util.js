@@ -7,7 +7,7 @@ let util = {
 
 };
 util.title = function (title) {
-    title = title || 'iView admin';
+    title = title || 'Onwing Access Control System';
     window.document.title = title;
 };
 
@@ -251,7 +251,8 @@ util.fullscreenEvent = function (vm) {
     // 全屏相关
 };
 
-util.checkUpdate = function (vm) {
+//iView框架更新
+/*util.checkUpdate = function (vm) {
     axios.get('https://api.github.com/repos/iview/iview-admin/releases/latest').then(res => {
         let version = res.data.tag_name;
         vm.$Notice.config({
@@ -264,6 +265,6 @@ util.checkUpdate = function (vm) {
             });
         }
     });
-};
+};*/
 
 export default util;

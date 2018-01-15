@@ -5,7 +5,7 @@
             <div>
                 <div style="position:relative;">
                     <!-- 表格开始 -->
-                    <Table stripe border height="auto" :columns="columns_title" :data="household_page_data" ref="table"></Table>
+                    <Table stripe border height="auto" :columns="columns_title" :data="household_data" ref="table"></Table>
                     <!-- 表格结束 -->
                     <!-- 表格内容加载提示蒙板开始 -->
                     <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;align-items: center;justify-content: center;background: rgba(210, 216, 222, 0.5);" v-if="page_loading">
@@ -16,9 +16,9 @@
                 </div>
 
                 <div style="float:left;margin-top:20px">
-                <Button type="primary" size="large" @click="exportData(1)"><Icon type="ios-download-outline"></Icon> 导出原始数据</Button>
+                <Button type="primary" size="large" @click="exportData(1)"><Icon type="ios-download-outline"></Icon>&nbsp;导出数据</Button>
 
-                <Button type="primary" size="large" @click="exportData(2)"><Icon type="ios-download-outline"></Icon> 导出排序和过滤后的数据</Button>
+                <!-- <Button type="primary" size="large" @click="exportData(2)"><Icon type="ios-download-outline"></Icon>导出排序和过滤后的数据</Button> -->
                 </div>
                 <!-- 分页开始 -->
                 <div style="float:right;margin-top:-30px">
@@ -71,7 +71,6 @@ tr.ivu-table-row-hover td .ivu-tag-dot {
     top: -20px;
 }
 
-;
 .demo-i-circle-custom span i {
     font-style: normal;
     color: #3f414d;
@@ -92,7 +91,7 @@ td.ivu-table-expanded-cell {
     import GlobalServer from '../../config.js';
 
     export default {
-        name: 'household_index',
+        name: 'whitelist_list_index',
         data () {
             return {
                 dto:{
@@ -120,10 +119,9 @@ td.ivu-table-expanded-cell {
                         width: 80,
                         align: 'center'
                     },{
-                        title: '业主姓名',
+                        title: '姓名',
                         key: 'householdName',
                         ellipsis: true,
-                        sortable: true,
                         width: 110,
                         align: 'center'
                     },{
@@ -139,17 +137,16 @@ td.ivu-table-expanded-cell {
                         width: 120,
                         align: 'center'
                     },{
-                        title: '楼栋号',
+                        title: '科室',
                         key: 'buildingBlockNumber',
                         ellipsis: true,
-                        sortable: true,
                         width: 100,
                         align: 'center'
                     },{
-                        title: '门牌号',
+                        title: '办公室',
                         key: 'roomNumber',
                         ellipsis: true,
-                        width: 80,
+                        width: 100,
                         align: 'center'
                     },{
                         title: '门禁卡号',
@@ -181,22 +178,24 @@ td.ivu-table-expanded-cell {
                                     on: {
                                         click: () => {
                                             let rowIndex = params.row._index;
-                                            let photoUrl = this.household_page_data[rowIndex].photoUrl;
-                                            let photoId = this.household_page_data[rowIndex].photoId;
+                                            let photoUrl = this.household_data[rowIndex].photoUrl;
+                                            let photoId = this.household_data[rowIndex].photoId;
+                                            let identifyCard = this.household_data[rowIndex].identifyCard;
                                             let argu = {
                                                 id: params.row.id,
                                                 cardNumber: params.row.cardNumber,
                                                 householdName: params.row.householdName,
-                                                tel: params.row.tel,
                                                 gender: params.row.gender,
-                                                buildingblockNumber: params.row.buildingBlockNumber,
+                                                identifyCard : identifyCard,
+                                                tel: params.row.tel,
+                                                buildingBlockNumber: params.row.buildingBlockNumber,
                                                 roomNumber: params.row.roomNumber,
                                                 remarks: params.row.remarks,
                                                 photoId: photoId,
                                                 photoUrl: photoUrl
                                             };
                                             this.$router.push({
-                                                name: 'household_info',
+                                                name: 'whitelist_info_index',
                                                 params: argu
                                             });
                                         }
@@ -222,20 +221,21 @@ td.ivu-table-expanded-cell {
         },//data
         /* 这儿开始是定义所有函数的地方 */
         methods: {
-            getHouseholdDate() {
+            getHouseholdDate(currentPage,pageSize) {
                 /* axios有自己的作用域,无法获取vue实例,所以要将vue实例的this传到一个变量中以便在axios中调用 */
                 var _this = this;
                 /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
                 _this.page_loading = true;
                 /* 获取所有住户信息并将值传入进household_data数组 */
-                axios.get(GlobalServer.findAllHouseHold)
+                axios.get(GlobalServer.findAllHouseHold + '?page=' + currentPage + '&pageSize=' + pageSize)
                 .then(function(response){
                     let data = response.data;
                     if(data.householdlist){
                         /* 将获取到的住户信息数据存入household_data,用以缓存/分页 */
                         _this.household_data = data.householdlist;
 
-                        _this.datacount = _this.household_data.length;
+                        _this.datacount = data.totalNumber;
+
                         /* 执行分页函数将住户信息数据分页,函数的参数为需要显示内容的页数 */
                         _this.datacount < _this.pagesize ? _this.household_page_data = _this.household_data : _this.household_page_data = _this.household_data.slice(0,_this.pagesize);
                         /* 将page_loading值设置为false,隐藏'下在加载数据'的蒙板 */
@@ -269,12 +269,14 @@ td.ivu-table-expanded-cell {
                 })
             },
             changePage(index){
-                /* start 每页的开始数据 */
-                let start = (index - 1) * this.pagesize;
-                /* end 每页的结束数据 */
-                let end = index * this.pagesize;
+                // start 每页的开始数据
+                // let start = (index - 1) * this.pagesize;
+                // end 每页的结束数据
+                // let end = index * this.pagesize;
 
-                this.household_page_data = this.household_data.slice(start,end);
+                // this.household_page_data = this.household_data.slice(start,end);
+
+                this.getHouseholdDate(index,this.pagesize);
             },
             exportData (type) {
                 if (type === 1) {
@@ -288,13 +290,13 @@ td.ivu-table-expanded-cell {
                         filename: '排序和过滤后的数据',
                         original: false
                     });
-                } 
+                }
             }
         },
         /* 这儿开始是生命周期 */
         beforeCreate() {},
         created() {
-            this.getHouseholdDate();
+            this.getHouseholdDate(this.pageindex,this.pagesize);
         },
         beforeMount() {},
         mounted() {}

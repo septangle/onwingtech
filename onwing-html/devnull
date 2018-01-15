@@ -1,0 +1,5 @@
+[37;40mnpm[0m [0m[30;43mWARN[0m [0m[35minvalid config[0m depth="=1"
+[0m[37;40mnpm[0m [0m[30;43mWARN[0m [0m[35minvalid config[0m Must be a numeric value
+[0m[37;40mnpm[0m [0m[31;40mERR![0m[35m[0m peer dep missing: ajv@^5.0.0, required by ajv-keywords@2.1.1
+[0m[37;40mnpm[0m [0m[31;40mERR![0m[35m[0m peer dep missing: ajv@^5.0.0, required by ajv-keywords@2.1.1
+[0m

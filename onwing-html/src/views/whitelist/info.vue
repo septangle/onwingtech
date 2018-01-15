@@ -6,25 +6,28 @@
         <div class="validateView">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" class="formstyle">
                 <FormItem label="门禁卡号" prop="cardNumber">
-                    <Input v-model="formValidate.cardNumber" disabled></Input>
+                    <Input v-model="formValidate.cardNumber"></Input>
                 </FormItem>
-                <FormItem label="住户姓名" prop="householdName">
-                    <Input v-model="formValidate.householdName" placeholder="请输入住户姓名"></Input>
+                <FormItem label="姓名" prop="householdName">
+                    <Input v-model="formValidate.householdName" placeholder="请输入住户姓名" disabled></Input>
+                </FormItem>
+                <FormItem label="性别" prop="gender">
+                    <RadioGroup v-model="formValidate.gender">
+                        <Radio label="男" disabled>男</Radio>
+                        <Radio label="女" disabled>女</Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem label="身份证" prop="identifyCard">
+                    <Input v-model="formValidate.identifyCard" placeholder="请填写身份证号" disabled></Input>
                 </FormItem>
                 <FormItem label="联系电话" prop="tel">
                     <Input v-model="formValidate.tel" placeholder="请输入联系电话"></Input>
                 </FormItem>
-                <FormItem label="性别" prop="gender">
-                    <RadioGroup v-model="formValidate.gender">
-                        <Radio label="男">男</Radio>
-                        <Radio label="女">女</Radio>
-                    </RadioGroup>
+                <FormItem label="科室" prop="buildingblockNumber">
+                  <Input v-model="formValidate.buildingBlockNumber"></Input>
                 </FormItem>
-                <FormItem label="楼号/单元号" prop="buildingblockNumber">
-                  <Input v-model="formValidate.buildingblockNumber" disabled></Input>
-                </FormItem>
-                <FormItem label="房号" prop="roomNumber">
-                  <Input v-model="formValidate.roomNumber" disabled></Input>
+                <FormItem label="办公室号" prop="roomNumber">
+                  <Input v-model="formValidate.roomNumber"></Input>
                 </FormItem>
                 <FormItem label="备注" prop="remarks">
                     <Input v-model="formValidate.remarks" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="备注信息不要超过200字"></Input>
@@ -40,45 +43,49 @@
     import axios from 'axios';
     import GlobalServer from '../../config.js';
     export default {
-        name:'household_info',
+        name:'whitelist_info_index',
         data () {
             return {
                 formValidate: {
                     cardNumber: '',
                     householdName: '',
-                    tel: '',
                     gender: '',
-                    buildingblockNumber: '',
+                    identifyCard:'',
+                    tel: '',
+                    buildingBlockNumber: '',
                     roomNumber: '',
                     remarks: '',
                     photoId: '',
                     id: ''
                 },
                 photoUrl:'',
-                baseUrl:GlobalServer.ServerHost + 'onwing-web/',
                 ruleValidate: {
-                    cardnumber: [
-                        { required: false }
+                    cardNumber: [
+                        { required: false },
+                        { type:'string',min: 0,max: 20,message:'门禁卡格式错误', trigger: 'blur'}
                     ],
                     householdName: [
-                        { required: true, message: '请输入住户姓名', trigger: 'blur' },
+                        { required: true, message: '请填写姓名', trigger: 'blur' },
                         { type: 'string', min: 1, message: '姓名格式错误', trigger: 'blur' }
                     ],
+                    gender: [
+                       { required: true, message: '请选择性别', trigger: 'change' }
+                    ],
+                    identifyCard: [
+                        { required: true, message: '请填写访客身份证号', trigger: 'blur' },
+                        { type: 'string', min: 15, max: 18, message: '身份证号格式错误', trigger: 'blur' }
+                    ],
                     tel: [
-                        { required: true, message: '请输入联系电话', trigger: 'blur' },
+                        { required: true, message: '请填写联系电话', trigger: 'blur' },
                         { type: 'string', min: 7, message: '联系电话格式错误', trigger: 'blur' }
                     ],
-                    gender: [
-                        { required: true, message: 'Please select gender', trigger: 'change' }
-                    ],
-                    buildingblockNumber: [
-                        { required: true, message: '请输入楼号/单元号', trigger: 'blur' }
+                    buildingBlockNumber: [
+                        { required: true, message: '请填写科室', trigger: 'blur' }
                     ],
                     roomNumber: [
-                        { required: true, message: '请输入房号', trigger: 'blur' }
+                        { required: true, message: '请填写办公室', trigger: 'blur' }
                     ],
                     remarks: [
-                        { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
                         { type: 'string', min: 0, max: 200, message: '备注信息超过字数', trigger: 'blur' }
                     ]
                 }
@@ -90,13 +97,14 @@
 
                 this.formValidate = data;
                 this.formValidate.cardNumber= data.cardNumber;
-                this.formValidate.householdName= data.householdName
-                this.formValidate.tel= data.tel;
+                this.formValidate.householdName= data.householdName;
                 this.formValidate.gender= data.gender;
-                this.formValidate.buildingblockNumber= data.buildingblockNumber;
+                this.formValidate.identifyCard = data.identifyCard;
+                this.formValidate.tel= data.tel;
+                this.formValidate.buildingBlockNumber= data.buildingBlockNumber;
                 this.formValidate.roomNumber= data.roomNumber;
                 this.formValidate.remarks= data.remarks;
-                this.formValidate.photoId= data.photoId
+                this.formValidate.photoId= data.photoId;
                 this.formValidate.id= data.id;
 
                 if (data.photoUrl){
@@ -116,9 +124,10 @@
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         dto.householdDto.id = _this.formValidate.id;
-                        dto.householdDto.gender = _this.formValidate.gender;
+                        dto.householdDto.cardNumber = _this.formValidate.cardNumber;
                         dto.householdDto.tel = _this.formValidate.tel;
-                        dto.householdDto.householdName = _this.formValidate.householdName;
+                        dto.householdDto.buildingBlockNumber = _this.formValidate.buildingBlockNumber;
+                        dto.householdDto.roomNumber = _this.formValidate.roomNumber;
                         dto.householdDto.remarks = _this.formValidate.remarks;
                         /* 表单内容验证通过则开始提交修改 */
                         axios.post(GlobalServer.updateHouseHold,dto)
@@ -147,7 +156,7 @@
 </script>
 <style type="text/css" scoped>
   .validateMain {
-    
+
   }
   .validateMain:before,
   .validateMain::after {
