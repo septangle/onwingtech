@@ -43,5 +43,7 @@ public interface StrangerBiz {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public Stranger findStrangerByIdentifyCard(String identifyCard) throws BusinessException;
+	public Stranger findStrangerBySelective(Stranger stranger) throws BusinessException;
+	
+
 }

@@ -129,9 +129,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 	}
 
 	@Override
-	public HouseHold findHouseHoldByIdentifyCard(String identifyCard) throws BusinessException {
-		HouseHold houseHold = new HouseHold();
-		houseHold.setIdentifyCard(identifyCard);
+	public HouseHold findHouseHoldBySelective(HouseHold houseHold) throws BusinessException {
 		List<HouseHold> hList=householdMapper.selectBySelective(houseHold);
         if (hList!=null) {
         	houseHold=hList.get(0);
@@ -139,5 +137,6 @@ public class HouseHoldimpl implements HouseHoldBiz {
 		}
 		return null;
 	}
+
 
 }

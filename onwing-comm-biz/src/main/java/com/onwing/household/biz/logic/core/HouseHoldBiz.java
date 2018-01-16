@@ -70,7 +70,7 @@ public interface HouseHoldBiz {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public HouseHold findHouseHoldByIdentifyCard(String identifyCard) throws BusinessException;
+	public HouseHold findHouseHoldBySelective(HouseHold houseHold) throws BusinessException;
 	
 	
 

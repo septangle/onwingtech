@@ -66,9 +66,7 @@ public class Strangerimpl implements StrangerBiz {
 	}
 
 	@Override
-	public Stranger findStrangerByIdentifyCard(String identifyCard) throws BusinessException {
-        Stranger stranger = new Stranger();
-        stranger.setIdentifyCard(identifyCard);
+	public Stranger findStrangerBySelective(Stranger stranger) throws BusinessException {
         List<Stranger> slist=strangerMapper.selectBySelective(stranger);
         if (slist!=null) {
 			stranger=slist.get(0);
@@ -76,5 +74,9 @@ public class Strangerimpl implements StrangerBiz {
 		}
 		return null;
 	}
+
+  
+
+
 
 }
