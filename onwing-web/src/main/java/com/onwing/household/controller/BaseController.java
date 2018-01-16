@@ -1,10 +1,9 @@
 package com.onwing.household.controller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.onwing.household.biz.exception.BusinessException;
 import com.onwing.household.biz.response.BaseResponse;
 import com.onwing.household.biz.response.Error;
@@ -15,7 +14,7 @@ import java.lang.reflect.ParameterizedType;
 
 public class BaseController<T> {
 
-	protected Log logger;
+	protected Logger logger;
 
 	public BaseController() {
 		decideLogger();
@@ -27,9 +26,9 @@ public class BaseController<T> {
 		if (genType instanceof ParameterizedType) {
 			Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
 			Class<T> concreteClazz = (Class<T>) params[0];
-			logger = LogFactory.getLog(concreteClazz);
+			logger = LoggerFactory.getLogger(concreteClazz);
 		} else {
-			logger = LogFactory.getLog(this.getClass());
+			logger = LoggerFactory.getLogger(this.getClass());
 		}
 	}
 
@@ -47,7 +46,7 @@ public class BaseController<T> {
 			errMessage = e.getMessage();
 		}
 		response.setError(new Error(errCode, errMessage));
-		logger.error(e.getMessage(), e.getCause());
+		logger.error(e.getMessage(), e);
 		return response;
 	}
 }
