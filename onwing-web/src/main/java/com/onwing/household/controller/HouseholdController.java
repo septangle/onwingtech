@@ -92,9 +92,10 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@ApiOperation(value = "修改业主信息", httpMethod = "POST", response = HouseholdResponse.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "householdDto.id", value = "id", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "householdDto.householdName", value = "业主姓名", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "householdDto.gender", value = "性别", required = false, dataType = "string"),
-			@ApiImplicitParam(name = "householdDto.tel", value = "联系电话", required = false, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.tel", value = "联系电话", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.cardNumber", value = "卡号", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.buildingBlockNumber", value = "楼栋号", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "householdDto.roomNumber", value = "门牌号", required = true, dataType = "string"),
 			@ApiImplicitParam(name = "householdDto.remarks", value = "备注", required = false, dataType = "string") })
 	@RequestMapping(value = "/updateHouseHold.do", method = RequestMethod.POST)
 	public @ResponseBody HouseholdResponse updateHouseHold(HttpServletRequest servletRequest,

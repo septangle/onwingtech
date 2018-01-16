@@ -9,6 +9,8 @@ public class StrangerDto {
     private String sex;
 
     private String identifyCard;
+    
+    private String cardNumber;
 
     private String tel;
 
@@ -52,7 +54,17 @@ public class StrangerDto {
         this.identifyCard = identifyCard == null ? null : identifyCard.trim();
     }
 
-    public String getTel() {
+    
+    
+    public String getCardNumber() {
+		return cardNumber;
+	}
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+
+	public String getTel() {
         return tel;
     }
 

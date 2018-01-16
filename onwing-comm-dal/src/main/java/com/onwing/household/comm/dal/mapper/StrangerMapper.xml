@@ -7,13 +7,15 @@
 		<result column="sex" property="sex" jdbcType="VARCHAR" />
 		<result column="identify_card" property="identifyCard"
 			jdbcType="VARCHAR" />
+	    <result column="card_number" property="cardNumber"
+			jdbcType="VARCHAR" />
 		<result column="tel" property="tel" jdbcType="VARCHAR" />
 		<result column="reason" property="reason" jdbcType="VARCHAR" />
 		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
 		<result column="out_off_into" property="outOffInto" jdbcType="CHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, name,sex, identify_card, tel, reason,remarks, out_off_into
+		id, name,sex, identify_card,card_number, tel, reason,remarks, out_off_into
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
@@ -48,6 +50,9 @@
 			<if test="identifyCard != null">
 				identify_card,
 			</if>
+			<if test="cardNumber != null">
+				card_number,
+			</if>
 			<if test="tel != null">
 				tel,
 			</if>
@@ -70,6 +75,9 @@
 			</if>
 			<if test="identifyCard != null">
 				#{identifyCard,jdbcType=VARCHAR},
+			</if>
+			<if test="cardNumber != null">
+				#{cardNumber,jdbcType=VARCHAR},
 			</if>
 			<if test="tel != null">
 				#{tel,jdbcType=VARCHAR},

@@ -44,7 +44,8 @@ public class StrangerController extends BaseController<StrangerController>{
 	@RequestMapping(value = "/addStranger.do", method = RequestMethod.POST)
 	public @ResponseBody StrangerResponse addStranger(@RequestParam("name") String name,
 			@RequestParam("sex") String sex, @RequestParam("identifyCard") String identifyCard,
-			@RequestParam("tel") String tel, @RequestParam("reason") String reason,
+			@RequestParam("cardNumber") String cardNumber,
+			@RequestParam("tel") String tel, @RequestParam("reason") String reason,			
 			@RequestParam("remarks") String remarks, @RequestParam MultipartFile file,
 			HttpServletRequest servletRequest) throws Exception {
 		String strNowTime = new SimpleDateFormat("yyyyMMddhhmmssSSS").format(new Date());
@@ -62,6 +63,7 @@ public class StrangerController extends BaseController<StrangerController>{
 		strangerDto.setName(name);
 		strangerDto.setSex(sex);
 		strangerDto.setIdentifyCard(identifyCard);
+		strangerDto.setCardNumber(cardNumber);
 		strangerDto.setTel(tel);
 		strangerDto.setReason(reason);
 		strangerDto.setRemarks(remarks);

@@ -13,6 +13,8 @@ public class HouseAccessRecord {
     private String roomNumber;
     
     private Date outOffTime;
+    
+    private String photoUrl;
 
 	public Long getId() {
 		return id;
@@ -55,7 +57,16 @@ public class HouseAccessRecord {
 	public void setOutOffTime(Date outOffTime) {
 		this.outOffTime = outOffTime;
 	}
+
+	public String getPhotoUrl() {
+		return photoUrl;
+	}
+
+	public void setPhotoUrl(String photoUrl) {
+		this.photoUrl = photoUrl;
+	}
     
+	
     
 
 }
