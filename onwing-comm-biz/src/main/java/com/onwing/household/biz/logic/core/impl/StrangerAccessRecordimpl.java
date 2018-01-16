@@ -26,10 +26,8 @@ public class StrangerAccessRecordimpl implements StrangerAccessRecordBiz {
 			accessRecordMapDtosList = new ArrayList<StrangerAccessRecordMapDto>();
 			List<StrangerAccessRecordMap> accessRecordMaps = strangerAccessRecordMapper.getAllStrangerAccessRecord(startRow,
 					pageSize, null);
-			String path = System.getProperty("onwing.root");
 			if (accessRecordMaps!=null) {
 				for (StrangerAccessRecordMap strangerAccessRecordMap : accessRecordMaps) {
-					strangerAccessRecordMap.setPhotoUrl(path+strangerAccessRecordMap.getPhotoUrl());
 					accessRecordMapDtosList.add(ModelUtil.modelToDto(strangerAccessRecordMap, StrangerAccessRecordMapDto.class));
 				}
 			}

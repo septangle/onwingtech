@@ -82,10 +82,8 @@ public class HouseHoldimpl implements HouseHoldBiz {
 		try {
 			householdDtoList = new ArrayList<HouseHoldDto>();
 			List<HouseHold> householdList = householdMapper.getAllHouseHold(startRow, pageSize, null);
-			String path = System.getProperty("onwing.root");
 			if (householdList != null) {
 				for (HouseHold houseHoldParam : householdList) {
-					houseHoldParam.setPhotoId(path+houseHoldParam.getPhotoId());
 					householdDtoList.add(ModelUtil.modelToDto(houseHoldParam, HouseHoldDto.class));
 				}
 			}

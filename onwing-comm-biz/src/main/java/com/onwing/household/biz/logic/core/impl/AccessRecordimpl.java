@@ -23,10 +23,8 @@ public class AccessRecordimpl implements AccessRecordBiz {
 		HouseAccessRecord houseAccessRecord = null;
 		try {
 			List<HouseAccessRecord> houseAccessRecordList = accessRecordMapper.selectAccessRecord(startRow,pageSize,houseAccessRecord);
-			String path = System.getProperty("onwing.root");
 			if (houseAccessRecordList != null) {
 				for (HouseAccessRecord houseAccessRecordParam : houseAccessRecordList) {
-					houseAccessRecordParam.setPhotoUrl(path+houseAccessRecordParam.getPhotoUrl());
 					houseAccessRecordDtoList
 							.add(ModelUtil.modelToDto(houseAccessRecordParam, HouseAccessRecordDto.class));
 				}
