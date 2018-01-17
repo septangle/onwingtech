@@ -43,7 +43,7 @@
 		(household_id, out_off_time, out_off,photo_url)
 		values
 		(#{householdId,jdbcType=BIGINT}, #{outOffTime,jdbcType=TIMESTAMP},
-		#{outOff,jdbcType=CHAR})
+		#{outOff,jdbcType=CHAR},#{photo_url,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.AccessRecord"
 		useGeneratedKeys="true" keyProperty="id">
@@ -58,6 +58,9 @@
 			<if test="outOff != null">
 				out_off,
 			</if>
+			<if test="photoUrl != null">
+				photo_url,
+			</if>			
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="householdId != null">
@@ -68,6 +71,9 @@
 			</if>
 			<if test="outOff != null">
 				#{outOff,jdbcType=CHAR},
+			</if>
+			<if test="photoUrl != null">
+				#{photoUrl,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>

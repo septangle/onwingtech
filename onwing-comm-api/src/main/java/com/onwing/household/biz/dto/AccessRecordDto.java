@@ -11,6 +11,9 @@ public class AccessRecordDto {
 	private Date outOffTime;
 
 	private String outOff;
+	
+    private String photoUrl;
+
 
 
 	public Long getId() {
@@ -44,6 +47,15 @@ public class AccessRecordDto {
 	public void setOutOff(String outOff) {
 		this.outOff = outOff == null ? null : outOff.trim();
 	}
+
+	public String getPhotoUrl() {
+		return photoUrl;
+	}
+
+	public void setPhotoUrl(String photoUrl) {
+		this.photoUrl = photoUrl;
+	}
+	
 	
 	
 

@@ -10,6 +10,8 @@ public class AccessRecord {
     private Date outOffTime;
 
     private String outOff;
+    
+    private String photoUrl;
 
     public Long getId() {
         return id;
@@ -43,6 +45,15 @@ public class AccessRecord {
         this.outOff = outOff == null ? null : outOff.trim();
     }
 
+	public String getPhotoUrl() {
+		return photoUrl;
+	}
+
+	public void setPhotoUrl(String photoUrl) {
+		this.photoUrl = photoUrl;
+	}
+
+    
     
     
 }
