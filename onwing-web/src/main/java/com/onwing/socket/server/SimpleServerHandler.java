@@ -82,7 +82,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 		String cameraName = request.getCameraId();
 		String photoName = request.getPhotoName();
 		String time = request.getTime(); // 2018-01-04 13:16:54
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy_MM_dd-HH_mm_ss");
 		Date timeDate = sdf.parse(time);
 		request.getPhotoSize();
@@ -90,6 +90,9 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 		// 识别结果是否陌生人
 		if (photoName.equals("0-0-0")) { // 陌生人
 			String cardInfo = initCameraLock.cameraLockMap.get(cameraName);
+			if (cardInfo == null) {// 没有人刷卡，直接return
+				return;
+			}
 			String[] cardInfoSplitList = cardInfo.split(":");
 			String cardNumber = cardInfoSplitList[0];
 			String direction = cardInfoSplitList[1];
@@ -98,6 +101,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 				household.setCardNumber(cardNumber);
 				List<HouseHold> householdList = householdMapper.selectBySelective(household);
 				if (householdList != null && householdList.size() == 1) { // 白名单刷卡
+					logger.info("household use card: {} to open the door, we must save the catched photo", cardNumber);
 					// 保存抓拍图片到白名单目录
 					String identifyCard = householdList.get(0).getIdentifyCard();
 					if (identifyCard == null || identifyCard.isEmpty()) {
@@ -125,6 +129,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 				stranger.setCardNumber(cardNumber);
 				List<Stranger> strangerList = strangerMapper.selectBySelective(stranger);
 				if (strangerList != null && strangerList.size() == 1) { // 访客刷卡
+					logger.info("stranger use card: {} to open the door, we must save the catched photo", cardNumber);
 					// 保存抓拍图片到访客目录
 					String identifyCard = strangerList.get(0).getIdentifyCard();
 					if (identifyCard == null || identifyCard.isEmpty()) {
@@ -170,7 +175,8 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 					.parseInt(lockControlProperties.get("timeDeltaInSecond")))) { // 住户连续刷脸，时间间隔小于设定值，则忽略，并不开门
 				return;
 			}
-			String[] photoNameSplitList = photoName.split(".");
+			logger.info("household use face: {} to open the door", photoName);
+			String[] photoNameSplitList = photoName.split("\\.");
 			String identifyCard = photoNameSplitList[0];// 身份证号
 
 			// save photo
@@ -232,7 +238,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 	 */
 	private void addHouseHoldAccessRecord(long householdId, String direction, String time, String identifyCard)
 			throws Exception {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy_MM_dd-HH_mm_ss");
 		Date timeDate = sdf.parse(time);
 		AccessRecord accessRecord = new AccessRecord();

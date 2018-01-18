@@ -98,14 +98,14 @@ public abstract class MessageV2 {
 		this.header.unmarshall(buf);
 	}
 
-	public void unmarshall(ByteBuf buf) {
+	public boolean unmarshall(ByteBuf buf) {
 		unmarshallMessageHeaderV2(buf);
-		unmarshallMessageBody(buf);
+		return unmarshallMessageBody(buf);
 	}
 
 	public abstract void marshallMessageBody(ByteBuf byteBuffer);
 
-	public abstract void unmarshallMessageBody(ByteBuf byteBuf);
+	public abstract boolean unmarshallMessageBody(ByteBuf byteBuf);
 
 	public MessageHeaderV2 getHeader() {
 		return header;
