@@ -39,7 +39,7 @@
         </form>
         <p class="tips" style="margin-top: 10px;height: 16px;color:#ff0000;">{{message}}</p>
         <p style="text-align: center;margin-top: 10px;">
-            <Button type="primary" @click="handleFileUp()">提交</Button>
+            <Button type="primary" @click="handleSubmit()">提交</Button>
         </p>
     </div>
     <div class="mask" v-show="showDialog"></div>
@@ -297,9 +297,10 @@ td.ivu-table-expanded-cell {
                 reader.readAsDataURL(file);
                 reader.onload = function(event){
                     _this.outFacePhoto = event.target.result;
+                    console.info(_this.outFacePhoto);
                 };
             },
-            handleFileUp() {
+            handleSubmit() {
                 if(this.outFacePhoto.length == 0){
                     this.message = '请上传访客离开时拍摄的照片！';
                     return false;
@@ -315,9 +316,8 @@ td.ivu-table-expanded-cell {
                     formdata.append('identifyCard',_this.identifyCard);
                     axios.post(GlobalServer.getStrangerLevel,formdata,config)
                     .then(function(response){
-                        console.info(response);
+                        //console.info(response);
                         let data = response.data;
-                        debugger;
                         if(data.code == 1) {
                             _this.stranger_data.splice(_this.paramsIndex,1);
                             _this.message = data.message + '点击右上角关闭';
@@ -335,7 +335,7 @@ td.ivu-table-expanded-cell {
                 this.showDialog = false;
                 this.outFacePhoto = '';
                 this.message = '';
-                this.file = '';
+                this.file = null;
             }
         },
         /* 这儿开始是生命周期 */

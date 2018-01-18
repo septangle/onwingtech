@@ -1,7 +1,7 @@
 <template>
     <div class="validateMain">
         <div class="photoView">
-          <img :src="baseUrl + photoUrl">
+          <img :src="photoUrl">
         </div>
         <div class="validateView">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" class="formstyle">
@@ -107,13 +107,13 @@
                 this.formValidate.photoId= data.photoId;
                 this.formValidate.id= data.id;
 
-                if (data.photoUrl){
-                    this.photoUrl = data.photoUrl;
-                } else if (!data.photoUrl) {
+                if (data.photoId){
+                    this.photoUrl = GlobalServer.ServerHost + 'onwing-web/' + data.photoId;
+                } else if (!data.photoId) {
                     if (data.gender == '男'){
-                        this.photoUrl = 'image/avatars-man.png';
+                        this.photoUrl = GlobalServer.ServerHost + 'onwing-web/' + 'image/avatars-man.png';
                     } else if (data.gender == '女') {
-                        this.photoUrl = 'image/avatars-woman.png';
+                        this.photoUrl = GlobalServer.ServerHost + 'onwing-web/' + 'image/avatars-woman.png';
                     }
                 }
             },
@@ -151,7 +151,12 @@
         created(){
             this.init();
         },
-        activated () {}
+        activated () {},
+        watch: {
+            '$route' () {
+                this.init();
+            }
+        }
     }
 </script>
 <style type="text/css" scoped>

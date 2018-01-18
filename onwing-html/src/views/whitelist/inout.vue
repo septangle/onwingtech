@@ -215,7 +215,7 @@ td.ivu-table-expanded-cell {
                             tempObj.householdName = value.householdName;
                             tempObj.addres = value.buildingBlockNumber + value.roomNumber + '室';
                             tempObj.outOffTime = tempDate;
-                            _this.inout_thumb.push(value.photoUrl);
+                            _this.inout_thumb.push(GlobalServer.ServerHost + 'onwing-web/' + value.photoUrl);
                             return tempObj;
                         });
 

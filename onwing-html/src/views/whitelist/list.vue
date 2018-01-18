@@ -178,7 +178,7 @@ td.ivu-table-expanded-cell {
                                     on: {
                                         click: () => {
                                             let rowIndex = params.row._index;
-                                            let photoUrl = this.household_data[rowIndex].photoUrl;
+                                            //let photoUrl = this.household_data[rowIndex].photoUrl;
                                             let photoId = this.household_data[rowIndex].photoId;
                                             let identifyCard = this.household_data[rowIndex].identifyCard;
                                             let argu = {
@@ -192,7 +192,6 @@ td.ivu-table-expanded-cell {
                                                 roomNumber: params.row.roomNumber,
                                                 remarks: params.row.remarks,
                                                 photoId: photoId,
-                                                photoUrl: photoUrl
                                             };
                                             this.$router.push({
                                                 name: 'whitelist_info_index',
@@ -237,7 +236,7 @@ td.ivu-table-expanded-cell {
                         _this.datacount = data.totalNumber;
 
                         /* 执行分页函数将住户信息数据分页,函数的参数为需要显示内容的页数 */
-                        _this.datacount < _this.pagesize ? _this.household_page_data = _this.household_data : _this.household_page_data = _this.household_data.slice(0,_this.pagesize);
+                        //_this.datacount < _this.pagesize ? _this.household_page_data = _this.household_data : _this.household_page_data = _this.household_data.slice(0,_this.pagesize);
                         /* 将page_loading值设置为false,隐藏'下在加载数据'的蒙板 */
                         _this.page_loading = false;
                     }
@@ -259,8 +258,8 @@ td.ivu-table-expanded-cell {
                 .then(function(response){
                     // 如果返回值中的error为null，表示删除成功，并将household_data数组中对应的值删除
                     if(response.data.error == null){
-                        _this.household_page_data.splice(index, 1);
-                        _this.household_data.splice(indexInHouseholdData, 1);
+                        _this.household_data.splice(index, 1);
+                        //_this.household_data.splice(indexInHouseholdData, 1);
                         _this.$Message.success('删除成功！');
                     }
                 })

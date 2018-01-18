@@ -9,7 +9,7 @@
                 <img :src="photoUrl" ref="img">
             </template>
             <form style="display:none">
-                <input id="household_photoup" type="file" name="photoUrl" @change="handleFilechange()" ref="photoup">
+                <input id="household_photoup" type="file" name="photoUrl" @change="handleFileChange()" ref="photoup">
             </form>
         </div>
 
@@ -70,22 +70,22 @@
                 ruleValidate: {
                     cardNumber: [
                         { required: true, message:'请填写门禁卡号', trigger: 'blur' },
-                        { type: 'string', min:8, message: '门禁卡号格式错误', trigger: 'blur'}
+                        { type: 'string', pattern: /^[1-9a-zA-Z]*$/g, message: '门禁卡号格式错误', trigger: 'blur'}
                     ],
                     name: [
                         { required: true, message: '请填写访客姓名', trigger: 'blur' },
-                        { type: 'string', min: 1, message: '姓名格式错误', trigger: 'blur' }
+                        { type: 'string', pattern: /^[^1-9a-zA-Z\~\!\@\#\$\%\^\&\*\(\)\_\+\`\-\=\{\}\[\]\|\\\:\"\;\'\<\>\?\,\.\/\先生\女士]{2,}$/g, message: '姓名格式错误', trigger: 'blur' }
                     ],
                     sex: [
                         { required: true, message: '请选择性别', trigger: 'change' }
                     ],
                     identifyCard: [
                         { required: true, message: '请填写访客身份证号', trigger: 'blur' },
-                        { type: 'string', min: 15, max: 18, message: '身份证号格式错误', trigger: 'blur' }
+                        { type: 'string', pattern: /^[1-9](\d{14}|\d{17})$/g, message: '身份证号格式错误', trigger: 'blur' }
                     ],
                     tel: [
                         { required: true, message: '请填写联系电话', trigger: 'blur' },
-                        { type: 'string', min: 7, message: '联系电话格式错误', trigger: 'blur' }
+                        { type: 'string', pattern:/^\d{7,12}$/g, message: '联系电话格式错误', trigger: 'blur' }
                     ],
                     reason: [
                         { required: true, message: '请填写来访事由', trigger: 'blur' }
@@ -105,7 +105,7 @@
               //点击删除照片后将照片还原成默认图片
               this.photoUrl = "/images/avatars-man.png";
             },
-            handleFilechange() {
+            handleFileChange() {
                 var file = this.$refs.photoup.files[0];
                 var reader = new FileReader();
                 var _this = this;

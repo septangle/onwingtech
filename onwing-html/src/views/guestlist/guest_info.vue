@@ -139,7 +139,12 @@
         created(){
             this.init();
         },
-        activated () {}
+        activated () {},
+        watch: {
+            '$route' () {
+                this.init();
+            }
+        }
     }
 </script>
 <style type="text/css" scoped>

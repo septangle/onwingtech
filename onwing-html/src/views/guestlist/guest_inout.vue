@@ -218,7 +218,7 @@ td.ivu-table-expanded-cell {
                             tempObj.name = value.name;
                             tempObj.time = _this.setDate(value.time);
                             tempObj.outOffInto = value.outOffInto == '0' ? '入' : '出';
-                            _this.inout_thumb.push(value.photoUrl);
+                            _this.inout_thumb.push(GlobalServer.ServerHost + 'onwing-web/' + value.photoUrl);
                             return tempObj;
                         });
 
@@ -282,7 +282,7 @@ td.ivu-table-expanded-cell {
         beforeCreate() {},
         created() {
             this.getInoutDate(this.pageindex,this.pagesize);
-            console.info(this.inout_thumb);
+            //console.info(this.inout_thumb);
         },
         beforeMount() {},
         mounted() {},
