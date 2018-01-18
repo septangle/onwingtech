@@ -34,6 +34,10 @@
           class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="location" value="classpath:spring/lockControl.properties"/>
     </bean>
+    <bean id="cplusClientProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:spring/cplusClient.properties"/>
+    </bean>
 
 	<!-- swagger configuration Bean -->
 	<bean class="com.onwing.household.swagger.CustomSwaggerConfig" />
@@ -84,6 +88,10 @@
 	
 	<!-- start netty server -->
 	<bean class="com.onwing.socket.server.SocketServerThread" init-method="start" destroy-method="closeSocketServer">
+	</bean>
+	<bean class="com.onwing.socket.client.QueryCardRecordsThreadMain" init-method="start">
+	</bean>
+	<bean class="com.onwing.socket.client.InitCameraLock" init-method="init">
 	</bean>
 	<bean class="com.onwing.socket.server.OnwingChannelInitializer">
 	</bean>

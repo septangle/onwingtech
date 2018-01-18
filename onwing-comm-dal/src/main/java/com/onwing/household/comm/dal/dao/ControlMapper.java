@@ -1,5 +1,6 @@
 package com.onwing.household.comm.dal.dao;
 
+import java.util.List;
 import com.onwing.household.comm.dal.model.Control;
 
 public interface ControlMapper {
@@ -14,4 +15,6 @@ public interface ControlMapper {
     int updateByPrimaryKeySelective(Control record);
 
     int updateByPrimaryKey(Control record);
+    
+    List<Control> getAllControl();
 }

@@ -15,11 +15,21 @@ public class DoorLockimpl implements DoorLockBiz {
 	private Socket socket = null;
 	private InputStream input;
 	private OutputStream out;
+	
+	public boolean isConnected() {
+		try {
+			socket.sendUrgentData(0xFF);
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
+	}
 
 	@Override
 	public void connect(String ip, int port) throws Exception {
 		// 创建一个流套接字并将其连接到指定主机上的指定端口号
-		if (socket == null || !socket.isConnected()) {
+		if (socket == null || !isConnected()) {
+			logger.info("re-connect to lock control socket server");
 			socket = new Socket();
 			socket.connect(new InetSocketAddress(ip, port), 2000);//设置连接请求超时时间2 s
 		}

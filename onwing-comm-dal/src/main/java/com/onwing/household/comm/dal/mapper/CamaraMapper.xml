@@ -13,21 +13,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from tbl_camara
+    from tbl_camera
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from tbl_camara
+    delete from tbl_camera
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.onwing.household.comm.dal.model.Camara" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_camara (name, control_id, direction
+    insert into tbl_camera (name, control_id, direction
       )
     values (#{name,jdbcType=VARCHAR}, #{controlId,jdbcType=BIGINT}, #{direction,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Camara" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_camara
+    insert into tbl_camera
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="name != null" >
         name,
@@ -52,7 +52,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.onwing.household.comm.dal.model.Camara" >
-    update tbl_camara
+    update tbl_camera
     <set >
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
@@ -67,10 +67,37 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.Camara" >
-    update tbl_camara
+    update tbl_camera
     set name = #{name,jdbcType=VARCHAR},
       control_id = #{controlId,jdbcType=BIGINT},
       direction = #{direction,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <!-- 自定义查询 -->
+  <select id="getAllCamara" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_camera
+  </select>
+  
+  <select id="selectBySelective" resultMap="BaseResultMap"
+	parameterType="com.onwing.household.comm.dal.model.Camara">
+	select
+	<include refid="Base_Column_List" />
+	from tbl_camera
+	where 1=1
+	<if test="id != null">
+		and id = #{id,jdbcType=BIGINT}
+	</if>
+	<if test="name != null">
+		and name = #{name,jdbcType=VARCHAR}
+	</if>
+	<if test="controlId != null">
+		and control_id = #{controlId,jdbcType=BIGINT}
+	</if>
+	<if test="direction != null">
+		and direction = #{direction,jdbcType=VARCHAR}
+	</if>
+  </select>
 </mapper>

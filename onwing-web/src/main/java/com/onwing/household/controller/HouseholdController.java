@@ -1,7 +1,9 @@
 package com.onwing.household.controller;
 
 import java.io.File;
+import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
@@ -21,13 +23,16 @@ import com.onwing.household.biz.response.HouseholdResponse;
 import com.onwing.household.comm.AppConstants;
 import com.onwing.household.comm.dal.dao.HouseHoldMapper;
 import com.onwing.household.util.Page;
+import com.onwing.socket.client.CplusClient;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 @Controller
 @RequestMapping("/household")
 public class HouseholdController extends BaseController<HouseholdController> {
-
+	@Resource
+	private Map<String, String> cplusClientProperties;
+	
 	@Autowired
 	private HouseHoldFacade householdfacade;
 
@@ -69,6 +74,11 @@ public class HouseholdController extends BaseController<HouseholdController> {
         holdDto.setPhotoId(AppConstants.FILE_PATH+nowFileName);
         
         householdRequest.setHouseholdDto(holdDto);
+        
+        // 发送消息给c++，让其重新加载白名单图片库
+        CplusClient cplusClient = new CplusClient(cplusClientProperties); 
+        cplusClient.sendReloadPictureMsgMain(nowFileName);
+        // end
 		
 		return householdfacade.addHouseHold(householdRequest);
 	}

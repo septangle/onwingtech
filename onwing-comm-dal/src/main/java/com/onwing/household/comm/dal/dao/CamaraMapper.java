@@ -1,6 +1,9 @@
 package com.onwing.household.comm.dal.dao;
 
+import java.util.List;
+
 import com.onwing.household.comm.dal.model.Camara;
+import com.onwing.household.comm.dal.model.HouseHold;
 
 public interface CamaraMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,8 @@ public interface CamaraMapper {
     int updateByPrimaryKeySelective(Camara record);
 
     int updateByPrimaryKey(Camara record);
+    
+    /****************自定义查询*******************/
+    List<Camara> selectBySelective(Camara camara);
+    List<Camara> getAllCamara();
 }
