@@ -3,5 +3,6 @@ dist/
 .tmp/
 testdate/
 images/
-.idea/*
+.idea/
 github-gif/
+.idea
