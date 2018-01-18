@@ -1,8 +1,7 @@
 node_modules/
 dist/
-.tmp/
 testdate/
 images/
-.idea/
 github-gif/
+.tmp/
 .idea
