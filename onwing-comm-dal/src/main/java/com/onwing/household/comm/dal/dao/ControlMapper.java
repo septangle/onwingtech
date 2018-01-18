@@ -17,4 +17,6 @@ public interface ControlMapper {
     int updateByPrimaryKey(Control record);
     
     List<Control> getAllControl();
+    
+    List<Control> selectBySelective(Control record);
 }

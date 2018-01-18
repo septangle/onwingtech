@@ -1,94 +1,118 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.onwing.household.comm.dal.dao.ControlMapper" >
-  <resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.Control" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="door_name" property="doorName" jdbcType="VARCHAR" />
-    <result column="port" property="port" jdbcType="VARCHAR" />
-    <result column="ip" property="ip" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, name, door_name, port, ip
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_control
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from tbl_control
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.onwing.household.comm.dal.model.Control" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_control (name, door_name, port, 
-      ip)
-    values (#{name,jdbcType=VARCHAR}, #{doorName,jdbcType=VARCHAR}, #{port,jdbcType=VARCHAR}, 
-      #{ip,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Control" useGeneratedKeys="true" keyProperty="id" >
-    insert into tbl_control
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="doorName != null" >
-        door_name,
-      </if>
-      <if test="port != null" >
-        port,
-      </if>
-      <if test="ip != null" >
-        ip,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="doorName != null" >
-        #{doorName,jdbcType=VARCHAR},
-      </if>
-      <if test="port != null" >
-        #{port,jdbcType=VARCHAR},
-      </if>
-      <if test="ip != null" >
-        #{ip,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.onwing.household.comm.dal.model.Control" >
-    update tbl_control
-    <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="doorName != null" >
-        door_name = #{doorName,jdbcType=VARCHAR},
-      </if>
-      <if test="port != null" >
-        port = #{port,jdbcType=VARCHAR},
-      </if>
-      <if test="ip != null" >
-        ip = #{ip,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.Control" >
-    update tbl_control
-    set name = #{name,jdbcType=VARCHAR},
-      door_name = #{doorName,jdbcType=VARCHAR},
-      port = #{port,jdbcType=VARCHAR},
-      ip = #{ip,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  
-  <!-- 自定义查询 -->
-  <select id="getAllControl" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_control
-  </select>
+<mapper namespace="com.onwing.household.comm.dal.dao.ControlMapper">
+	<resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.Control">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="door_name" property="doorName" jdbcType="VARCHAR" />
+		<result column="port" property="port" jdbcType="VARCHAR" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, door_name, port, ip
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_control
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from tbl_control
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.onwing.household.comm.dal.model.Control"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_control (name, door_name, port,
+		ip)
+		values (#{name,jdbcType=VARCHAR}, #{doorName,jdbcType=VARCHAR},
+		#{port,jdbcType=VARCHAR},
+		#{ip,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Control"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_control
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				name,
+			</if>
+			<if test="doorName != null">
+				door_name,
+			</if>
+			<if test="port != null">
+				port,
+			</if>
+			<if test="ip != null">
+				ip,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="doorName != null">
+				#{doorName,jdbcType=VARCHAR},
+			</if>
+			<if test="port != null">
+				#{port,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				#{ip,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.onwing.household.comm.dal.model.Control">
+		update tbl_control
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="doorName != null">
+				door_name = #{doorName,jdbcType=VARCHAR},
+			</if>
+			<if test="port != null">
+				port = #{port,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.Control">
+		update tbl_control
+		set name = #{name,jdbcType=VARCHAR},
+		door_name = #{doorName,jdbcType=VARCHAR},
+		port = #{port,jdbcType=VARCHAR},
+		ip = #{ip,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- 自定义查询 -->
+	<select id="getAllControl" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_control
+	</select>
+
+	<select id="selectBySelective" resultMap="BaseResultMap"
+		parameterType="com.onwing.household.comm.dal.model.Control">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_control
+		where 1=1
+		<if test="name != null">
+			and name = #{name,jdbcType=VARCHAR}
+		</if>
+		<if test="doorName != null">
+			and door_name = #{doorName,jdbcType=VARCHAR}
+		</if>
+		<if test="port != null">
+			and port = #{port,jdbcType=VARCHAR}
+		</if>
+		<if test="ip != null">
+			and ip = #{ip,jdbcType=VARCHAR}
+		</if>
+	</select>
 </mapper>
