@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.onwing.household.biz.logic.core.AccessRecordBiz;
 import com.onwing.household.biz.logic.core.StrangerAccessRecordBiz;
 import com.onwing.household.biz.logic.core.impl.DoorLockMap;
+import com.onwing.household.comm.dal.dao.CamaraMapper;
 import com.onwing.household.comm.dal.dao.ControlMapper;
 import com.onwing.household.comm.dal.dao.HouseHoldMapper;
 import com.onwing.household.comm.dal.dao.StrangerAccessRecordMapper;
@@ -44,13 +45,16 @@ public class OnwingChannelInitializer extends ChannelInitializer<SocketChannel> 
 	
 	@Autowired
 	private ControlMapper controlMapper;
+	
+	@Autowired
+	private CamaraMapper camaraMapper;
 
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {
 		// 注册handler
 		ch.pipeline().addLast(new CameraRecognitionMsgDecoderV2(),
 				new SimpleServerHandler(initCameraLock, lockControlProperties, doorLockMap, accessRecordBiz,
-						strangerAccessRecordMapper, householdMapper, strangerMapper, controlMapper));
+						strangerAccessRecordMapper, householdMapper, strangerMapper, controlMapper, camaraMapper));
 
 	}
 

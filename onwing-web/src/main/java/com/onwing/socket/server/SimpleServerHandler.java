@@ -19,11 +19,14 @@ import com.onwing.household.biz.logic.core.AccessRecordBiz;
 import com.onwing.household.biz.logic.core.DoorLockBiz;
 import com.onwing.household.biz.logic.core.impl.DoorLockMap;
 import com.onwing.household.biz.logic.core.impl.DoorLockimpl;
+import com.onwing.household.comm.dal.dao.CamaraMapper;
 import com.onwing.household.comm.dal.dao.ControlMapper;
 import com.onwing.household.comm.dal.dao.HouseHoldMapper;
 import com.onwing.household.comm.dal.dao.StrangerAccessRecordMapper;
 import com.onwing.household.comm.dal.dao.StrangerMapper;
 import com.onwing.household.comm.dal.model.AccessRecord;
+import com.onwing.household.comm.dal.model.Camara;
+import com.onwing.household.comm.dal.model.Control;
 import com.onwing.household.comm.dal.model.HouseHold;
 import com.onwing.household.comm.dal.model.Stranger;
 import com.onwing.household.comm.dal.model.StrangerAccessRecord;
@@ -44,13 +47,14 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 	private StrangerMapper strangerMapper;
 	private InitCameraLock initCameraLock;
 	private ControlMapper controlMapper;
+	private CamaraMapper camaraMapper;
 
 	private Map<String, Date> personEnterTimeMap = new HashMap<String, Date>();
 
 	public SimpleServerHandler(InitCameraLock initCameraLock, Map<String, String> lockControlProperties,
 			DoorLockMap doorLockMap, AccessRecordBiz accessRecordBiz,
 			StrangerAccessRecordMapper strangerAccessRecordMapper, HouseHoldMapper householdMapper,
-			StrangerMapper strangerMapper, ControlMapper controlMapper) {
+			StrangerMapper strangerMapper, ControlMapper controlMapper, CamaraMapper camaraMapper) {
 		this.initCameraLock = initCameraLock;
 		this.lockControlProperties = lockControlProperties;
 		this.doorLockMap = doorLockMap;
@@ -59,6 +63,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 		this.householdMapper = householdMapper;
 		this.strangerMapper = strangerMapper;
 		this.controlMapper = controlMapper;
+		this.camaraMapper = camaraMapper;
 	}
 
 	private void savePhoto(String photoFullPath, byte[] photoBytes) {
@@ -109,18 +114,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 					savePhoto(photoFullPath, photoBytes);
 					// end
 					// 记录到白名单出入记录
-					AccessRecord accessRecord = new AccessRecord();
-					accessRecord.setHouseholdId(householdList.get(0).getId());
-					if (direction.equals("IN")) {// 0 入 1出
-						accessRecord.setOutOff("0");
-					} else {
-						accessRecord.setOutOff("1");
-					}
-					Date outOffTime = sdf.parse(time);
-					accessRecord.setOutOffTime(outOffTime);
-					String photoUrl = "accessRecord/household/" + identifyCard + "/" + sdf2.format(timeDate) + ".jpg";
-					accessRecord.setPhotoUrl(photoUrl);
-					accessRecordBiz.addAccessRecord(accessRecord);
+					addHouseHoldAccessRecord(householdList.get(0).getId(), direction, time, identifyCard);
 					// end
 					// 重新上锁
 					initCameraLock.cameraLockMap.put(cameraName, null);
@@ -168,171 +162,130 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			}
 		} else {
 			// 人脸匹配正确,即白名单
+			Date enterTime = personEnterTimeMap.get(photoName); // 上一次成功进入时间
+			Date currentTime = sdf.parse(time);
+			// long timeDeltaInSecond = (currentTime.getTime() -
+			// enterTime.getTime()) / 1000L;
+			if (enterTime != null && (((currentTime.getTime() - enterTime.getTime()) / 1000L) < Integer
+					.parseInt(lockControlProperties.get("timeDeltaInSecond")))) { // 住户连续刷脸，时间间隔小于设定值，则忽略，并不开门
+				return;
+			}
+			String[] photoNameSplitList = photoName.split(".");
+			String identifyCard = photoNameSplitList[0];// 身份证号
 
+			// save photo
+			String pathPrefix = System.getProperty("onwing.root") + "accessRecord/household/" + identifyCard;
+			File pathPrefixFile = new File(pathPrefix);
+
+			if (!pathPrefixFile.exists()) {
+				pathPrefixFile.mkdirs();
+			}
+			String photoFullPath = pathPrefix + "/" + sdf2.format(timeDate) + ".jpg";
+			savePhoto(photoFullPath, photoBytes);
+			// end
+
+			// open lock
+			if (!openControlLock(cameraName, photoName)) {
+				return;
+			}
+			// open lock end
+
+			// 记录白名单出入记录
+			HouseHold houseHold = new HouseHold();
+			houseHold.setIdentifyCard(identifyCard);
+			List<HouseHold> houseHoldList = householdMapper.selectBySelective(houseHold);
+			if (houseHoldList == null || houseHoldList.size() != 1) {
+				// 日志记录错误，查找无人或不止一个人
+				logger.error("no houseHold or not single household found in DB with photoName: {}", photoName);
+				return;
+			} else {
+				// 根据cameraName，获取direction
+				Camara camera = new Camara();
+				camera.setName(cameraName);
+				List<Camara> cameraList = camaraMapper.selectBySelective(camera);
+				if (cameraList == null || cameraList.size() != 1) {
+					logger.error("camera from DB with name: {} is null or not only", cameraName);
+					return;
+				}
+				String direction = cameraList.get(0).getDirection();
+				HouseHold selHouseHold = houseHoldList.get(0);
+				addHouseHoldAccessRecord(selHouseHold.getId(), direction, time, identifyCard);
+			}
+			// 记录出入记录end
+			// 更新住户进入时间
+			personEnterTimeMap.put(photoName, currentTime);
 		}
+	}
 
-		Date enterTime = personEnterTimeMap.get(photoName); // 上一次成功进入时间
-		Date currentTime = sdf.parse(time);
-		// long timeDeltaInSecond = (currentTime.getTime() -
-		// enterTime.getTime()) / 1000L;
-		if (enterTime != null && (((currentTime.getTime() - enterTime.getTime()) / 1000L) < Integer
-				.parseInt(lockControlProperties.get("timeDeltaInSecond")))) { // 住户连续刷脸，时间间隔小于设定值，则忽略，并不开门
-			return;
+	/**
+	 * 增加一条白名单出入记录
+	 * 
+	 * @param householdId
+	 *            白名单id
+	 * @param direction
+	 *            出入方向
+	 * @param time
+	 *            出入时间
+	 * @param identifyCard
+	 *            白名单身份证号
+	 * @throws Exception
+	 */
+	private void addHouseHoldAccessRecord(long householdId, String direction, String time, String identifyCard)
+			throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy_MM_dd-HH_mm_ss");
+		Date timeDate = sdf.parse(time);
+		AccessRecord accessRecord = new AccessRecord();
+		accessRecord.setHouseholdId(householdId);
+		if (direction.equals("IN")) {// 0 入 1出
+			accessRecord.setOutOff("0");
+		} else {
+			accessRecord.setOutOff("1");
 		}
-		String[] photoNameSplitList = photoName.split(".");
-		String identifyCard = photoNameSplitList[0];// 身份证号
+		Date outOffTime = sdf.parse(time);
+		accessRecord.setOutOffTime(outOffTime);
+		String photoUrl = "accessRecord/household/" + identifyCard + "/" + sdf2.format(timeDate) + ".jpg";
+		accessRecord.setPhotoUrl(photoUrl);
+		accessRecordBiz.addAccessRecord(accessRecord);
+	}
 
-		// save photo
-		String pathPrefix = System.getProperty("onwing.root") + "accessRecord/household/" + identifyCard;
-		File pathPrefixFile = new File(pathPrefix);
-
-		if (!pathPrefixFile.exists()) {
-			pathPrefixFile.mkdirs();
-		}
-		String photoFullPath = pathPrefix + "/" + sdf2.format(timeDate) + ".jpg";
-		savePhoto(photoFullPath, photoBytes);
-		// end
-
-		// open lock
+	public boolean openControlLock(String cameraName, String photoName) {
 		String control_relay_map = lockControlProperties.get(cameraName);
 		String[] control_relay_map_split = control_relay_map.split("-");
-		String lockControlId = control_relay_map_split[0];
-		String relayNumber = control_relay_map_split[1]; //继电器号 
+		String lockControlId = control_relay_map_split[0]; // 控制器name,
+															// control1
+		String relayNumber = control_relay_map_split[1]; // 继电器号 02
 		DoorLockBiz doorLockimpl = doorLockMap.getLockSocketMap().get(lockControlId);
 		if (doorLockimpl == null) {
 			doorLockimpl = new DoorLockimpl();
 			doorLockMap.getLockSocketMap().put(lockControlId, doorLockimpl);
 		}
 
-		String connectInfo = lockControlProperties.get(lockControlId);
-		controlMapper//根据lockControlId向数据库查找control，进而获取ip和port
-		String[] connectInfoList = connectInfo.split(":");
+		// 根据lockControlId向数据库查找control，进而获取ip和port
+		Control control = new Control();
+		control.setName(lockControlId);
+		List<Control> controlList = controlMapper.selectBySelective(control);
+		if (controlList == null || controlList.size() != 1) {
+			logger.error("control from DB with name: {} is null or not only", lockControlId);
+			return false;
+		}
+		Control selControl = controlList.get(0);
+		String selControlIp = selControl.getIp();
+		String selControlPort = selControl.getPort();
 		logger.info("start to open lock with photoName: {}", photoName);
 		try {
-			doorLockimpl.connect(connectInfoList[0], Integer.parseInt(connectInfoList[1]));
-			doorLockimpl.openBigDoorLock();
+			doorLockimpl.connect(selControlIp, Integer.parseInt(selControlPort));
+			doorLockimpl.openBigDoorLock(relayNumber);
 			// 延时若干秒关闭大门
 			// Thread.sleep(1000 *
 			// Integer.parseInt(lockControlProperties.get("closeDelayInSecond")));
-			doorLockimpl.closeBigDoorLock();
+			doorLockimpl.closeBigDoorLock(relayNumber);
 		} catch (Exception ex) {
-			logger.error("cannot connect to lock control {}:{}", connectInfoList[0],
-					Integer.parseInt(connectInfoList[1]), ex);
+			logger.error("cannot connect to lock control {}:{}", selControlIp, Integer.parseInt(selControlPort), ex);
 			doorLockimpl.closeSocket();
+			return false;
 		}
-		// open lock end
-
-		// 记录出入记录
-		// 根据上述三个字段向数据库查找householdId
-		HouseHold houseHold = new HouseHold();
-		houseHold.setBuildingBlockNumber(buildingBlockNumber);
-		houseHold.setRoomNumber(roomNumber);
-		houseHold.setHouseholdName(householdName);
-		List<HouseHold> houseHoldList = householdMapper.selectBySelective(houseHold);
-		if (houseHoldList.size() != 1) {
-			// 日志记录错误，查找无人或不止一个人
-			logger.error("no houseHold or not single household found in DB with photoName: {}", photoName);
-		} else {
-			HouseHold selHouseHold = houseHoldList.get(0);
-			AccessRecord accessRecord = new AccessRecord();
-			accessRecord.setHouseholdId(selHouseHold.getId());
-			accessRecord.setOutOff("0");
-			accessRecord.setOutOffTime(new Date());
-			accessRecordBiz.addAccessRecord(accessRecord);
-		}
-		// 记录出入记录end
-
-		// 更新住户进入时间
-		personEnterTimeMap.put(photoName, currentTime);
-
-	}
-
-	public void channelRead2(ChannelHandlerContext ctx, Object msg) throws Exception {
-		// logger.debug("complete json msg received");
-		String result = (String) msg;
-
-		// 接收并打印客户端的信息
-		// String remote = ctx.channel().remoteAddress().toString();
-		// logger.debug(remote + " said:" + result);
-
-		ObjectMapper mapper = new ObjectMapper();
-		FaceRecognitionMsg faceRecognitionMsg = mapper.readValue(result, FaceRecognitionMsg.class);
-		String photoName = faceRecognitionMsg.getPhotoName();// 11-1131-俞小洋
-		Date enterTime = personEnterTimeMap.get(photoName); // 上一次成功进入时间
-		Date currentTime = new Date();
-		// long timeDeltaInSecond = (currentTime.getTime() -
-		// enterTime.getTime()) / 1000L;
-		if (enterTime != null && (((currentTime.getTime() - enterTime.getTime()) / 1000L) < Integer
-				.parseInt(lockControlProperties.get("timeDeltaInSecond")))) { // 住户连续刷脸，时间间隔小于设定值，则忽略，并不开门
-			return;
-		}
-		logger.info(result);
-
-		String[] photoKeyWords = photoName.split("-");
-		String buildingBlockNumber = photoKeyWords[0];
-		String roomNumber = photoKeyWords[1];
-		String householdName = photoKeyWords[2];
-
-		if (buildingBlockNumber.equals("0") && roomNumber.equals("0") && householdName.equals("0")) {
-			// 判断为陌生人，do nothing
-			logger.info("stranger 0-0-0 catched, do nothing");
-		} else {
-			// open lock
-			String lockControlId = "control0"; // 0号 锁控制器
-			DoorLockBiz doorLockimpl = doorLockMap.getLockSocketMap().get(lockControlId);
-			if (doorLockimpl == null) {
-				doorLockimpl = new DoorLockimpl();
-				doorLockMap.getLockSocketMap().put(lockControlId, doorLockimpl);
-			}
-
-			String connectInfo = lockControlProperties.get(lockControlId);
-			String[] connectInfoList = connectInfo.split(":");
-			logger.info("start to open lock with photoName: {}", photoName);
-			try {
-				doorLockimpl.connect(connectInfoList[0], Integer.parseInt(connectInfoList[1]));
-				doorLockimpl.openBigDoorLock();
-				// 延时若干秒关闭大门
-				// Thread.sleep(1000 *
-				// Integer.parseInt(lockControlProperties.get("closeDelayInSecond")));
-				doorLockimpl.closeBigDoorLock();
-			} catch (Exception ex) {
-				logger.error("cannot connect to lock control {}:{}", connectInfoList[0],
-						Integer.parseInt(connectInfoList[1]), ex);
-				doorLockimpl.closeSocket();
-			}
-			// open lock end
-		}
-
-		// 记录出入记录
-		// 根据上述三个字段向数据库查找householdId
-		HouseHold houseHold = new HouseHold();
-		houseHold.setBuildingBlockNumber(buildingBlockNumber);
-		houseHold.setRoomNumber(roomNumber);
-		houseHold.setHouseholdName(householdName);
-		List<HouseHold> houseHoldList = householdMapper.selectBySelective(houseHold);
-		if (houseHoldList.size() != 1) {
-			// 日志记录错误，查找无人或不止一个人
-			logger.error("no houseHold or not single household found in DB with photoName: {}", photoName);
-		} else {
-			HouseHold selHouseHold = houseHoldList.get(0);
-			AccessRecord accessRecord = new AccessRecord();
-			accessRecord.setHouseholdId(selHouseHold.getId());
-			accessRecord.setOutOff("0");
-			accessRecord.setOutOffTime(new Date());
-			accessRecordBiz.addAccessRecord(accessRecord);
-		}
-		// 记录出入记录end
-
-		// 更新住户进入时间
-		personEnterTimeMap.put(photoName, currentTime);
-
-		// 向客户端发送消息
-		/*
-		 * String response = "hello client!"; ByteBuf encoded =
-		 * ctx.alloc().buffer(4 * response.length());//
-		 * 在当前场景下，发送的数据必须转换成ByteBuf数组 encoded.writeBytes(response.getBytes());
-		 * ctx.write(encoded); ctx.flush();
-		 */
+		return true;
 	}
 
 	@Override

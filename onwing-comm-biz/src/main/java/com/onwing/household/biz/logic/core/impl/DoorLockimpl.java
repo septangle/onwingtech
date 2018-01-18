@@ -50,9 +50,9 @@ public class DoorLockimpl implements DoorLockBiz {
 			}
 		}
 	}
-
+	
 	@Override
-	public void openBigDoorLock() throws Exception {
+	public void openBigDoorLock(String relayNumber) throws Exception {
 		byte[] cmd = new byte[256];
 		cmd[0] = (int) 'K';
 		cmd[1] = (int) '0';
@@ -66,8 +66,8 @@ public class DoorLockimpl implements DoorLockBiz {
 		cmd[7] = (int) '0';
 		cmd[8] = (int) '2';
 
-		cmd[9] = (int) '0';
-		cmd[10] = (int) '1';
+		cmd[9] = (byte) relayNumber.charAt(0);
+		cmd[10] = (byte) relayNumber.charAt(1);
 		// 异或校验
 		int j = cmd[0];
 		for (int i = 1; i <= 10; i++) {
@@ -89,7 +89,7 @@ public class DoorLockimpl implements DoorLockBiz {
 	}
 
 	@Override
-	public void closeBigDoorLock() throws Exception {
+	public void closeBigDoorLock(String relayNumber) throws Exception {
 		byte[] cmd = new byte[256];
 		cmd[0] = (int) 'K';
 		cmd[1] = (int) '0';
@@ -103,8 +103,8 @@ public class DoorLockimpl implements DoorLockBiz {
 		cmd[7] = (int) '0';
 		cmd[8] = (int) '2';
 
-		cmd[9] = (int) '0';
-		cmd[10] = (int) '1';
+		cmd[9] = (byte) relayNumber.charAt(0);
+		cmd[10] = (byte) relayNumber.charAt(1);
 		// 异或校验
 		int j = cmd[0];
 		for (int i = 1; i <= 10; i++) {
