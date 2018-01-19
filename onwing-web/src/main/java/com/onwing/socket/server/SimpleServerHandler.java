@@ -71,6 +71,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			FileOutputStream fos = new FileOutputStream(photoFullPath);
 			fos.write(photoBytes);
 			fos.close();
+			logger.info("savePhoto: {} successfully!", photoFullPath);
 		} catch (Exception e) {
 			logger.error("savePhoto error", e);
 		}
@@ -163,6 +164,10 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 					initCameraLock.cameraLockMap.put(cameraName, null);
 					return;
 				}
+				// 重新上锁
+				logger.warn("cardNumber {} isnot belong to household or stranger, do nothing", cardNumber);
+				initCameraLock.cameraLockMap.put(cameraName, null);
+				return;
 
 			}
 		} else {

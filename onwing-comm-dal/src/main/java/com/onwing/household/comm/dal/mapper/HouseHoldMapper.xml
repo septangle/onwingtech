@@ -170,7 +170,7 @@
 			and tel = #{tel,jdbcType=VARCHAR}
 		</if>
 		<if test="identifyCard != null">
-			and	identifyCard = #{identifyCard,jdbcType=VARCHAR}
+			and	identify_card = #{identifyCard,jdbcType=VARCHAR}
 		</if>
 		<if test="buildingBlockNumber != null">
 			and building_block_number =
