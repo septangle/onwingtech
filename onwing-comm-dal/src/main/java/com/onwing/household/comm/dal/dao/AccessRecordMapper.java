@@ -27,4 +27,8 @@ public interface AccessRecordMapper {
     
     //查询住户出入记录总数
     int  getCountByHouseHold();
+    
+    List<AccessRecord> getAccessRecordByDate(@Param("numberDay")int numberDay);
+    
+    int delAccessRecordByDate(@Param("numberDay")int numberDay);
 }

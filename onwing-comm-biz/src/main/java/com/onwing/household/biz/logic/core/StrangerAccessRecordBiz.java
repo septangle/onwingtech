@@ -14,5 +14,7 @@ public interface StrangerAccessRecordBiz {
 
 	public List<StrangerAccessRecordMapDto> findAllStrangerAccessRecord(int startRow, int pageSize)
 			throws BusinessException;
+	
+	public void startCleanUpAccessRecord(int numberDay);
 
 }

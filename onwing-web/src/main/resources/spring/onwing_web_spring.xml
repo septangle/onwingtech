@@ -38,6 +38,11 @@
           class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="location" value="classpath:spring/cplusClient.properties"/>
     </bean>
+    
+    <bean id="accessRecordProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:spring/accessRecord.properties"/>
+    </bean>
 
 	<!-- swagger configuration Bean -->
 	<bean class="com.onwing.household.swagger.CustomSwaggerConfig" />
@@ -99,6 +104,7 @@
 
 	<import resource="classpath:spring/dao_spring.xml" />
 	<import resource="classpath*:onwing_biz_spring.xml" />
+	<import resource="classpath:spring/household_job.xml"/>
     
 
 	

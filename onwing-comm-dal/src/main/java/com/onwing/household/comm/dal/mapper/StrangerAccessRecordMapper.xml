@@ -118,8 +118,21 @@
 	</select>
 
 	<select id="getCountByStrangerAcessRecord" resultType="int">
-		select count(*)
+		select
+		count(*)
 		from tbl_stranger a,tbl_stranger_access_record b
-		where a.id=b.stranger_id
+		where
+		a.id=b.stranger_id
 	</select>
+	<select id="getAccessRecordByDate" resultMap="BaseResultMap">
+		select photo_url
+		from tbl_stranger_access_record
+		where DATE(DATE_SUB(NOW(),INTERVAL #{numberDay} day))>=DATE(time)
+	</select>
+	
+	<delete id="delAccessRecordByDate" >
+	   delete  
+	    from tbl_stranger_access_record
+		where DATE(DATE_SUB(NOW(),INTERVAL #{numberDay} day))>=DATE(time)
+	</delete>
 </mapper>

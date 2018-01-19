@@ -25,5 +25,9 @@ public interface StrangerAccessRecordMapper {
 			@Param("pageSize")int pageSize,@Param("entity")StrangerAccessRecordMap sAccessRecordMap);
     
     int getCountByStrangerAcessRecord();
+    
+    List<StrangerAccessRecord> getAccessRecordByDate(@Param("numberDay")int numberDay);
+    
+    int delAccessRecordByDate(@Param("numberDay")int numberDay);
 
 }
