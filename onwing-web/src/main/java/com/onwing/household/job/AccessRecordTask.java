@@ -19,16 +19,16 @@ public class AccessRecordTask {
 
 	@Autowired
 	StrangerAccessRecordBiz stRecordBiz;
-	
+
 	@Resource
-	private Map<String, String> accessRecordProperties;	
-	
+	private Map<String, String> accessRecordProperties;
+
 	public void startAccessRecordTask() {
 		logger.info("清理acessRecord数据开始...");
 		try {
-			Collection<String> list = accessRecordProperties.values();
-			//执行业务方法
-			stRecordBiz.startCleanUpAccessRecord(Integer.parseInt((String)list.toArray()[0]));
+			int numberDay = Integer.parseInt(accessRecordProperties.get("numberDay"));
+			// 执行业务方法
+			stRecordBiz.startCleanUpAccessRecord(numberDay);
 		} catch (Exception e) {
 			logger.error("清理数据失败", e);
 		}

@@ -52,30 +52,30 @@ public class StrangerAccessRecordimpl implements StrangerAccessRecordBiz {
 	@Override
 	public void startCleanUpAccessRecord(int numberDay) {
 		try {
-			//删除访客出入图片
-			List<StrangerAccessRecord> slist = strangerAccessRecordMapper.getAccessRecordByDate(numberDay);
-			if (slist == null) {
-				return;
-			}
-			String path = System.getProperty("onwing.root");
-			for (StrangerAccessRecord strangerAccessRecord : slist) {
-				File file = new File(path + strangerAccessRecord.getPhotoUrl());
-				file.delete();
-			}
-			//删除住户出入图片
-			List<AccessRecord> alist = accessRecordMapper.getAccessRecordByDate(numberDay);
-			if (alist == null) {
-				return;
-			}
-			for (AccessRecord accessRecord : alist) {
-				File file = new File(path + accessRecord.getPhotoUrl());
-				file.delete();
-			}
-			//删除访客出入记录
-			strangerAccessRecordMapper.delAccessRecordByDate(numberDay);
+			String rootPath = System.getProperty("onwing.root");
 
-			//删除住户出入记录
-			accessRecordMapper.delAccessRecordByDate(numberDay);
+			List<StrangerAccessRecord> slist = strangerAccessRecordMapper.getAccessRecordByDate(numberDay);
+			if (slist != null && slist.size() > 0) {
+				// 删除访客出入图片
+				for (StrangerAccessRecord strangerAccessRecord : slist) {
+					File file = new File(rootPath + strangerAccessRecord.getPhotoUrl());
+					file.delete();
+				}
+				// 删除访客出入记录
+				strangerAccessRecordMapper.delAccessRecordByDate(numberDay);
+			}
+
+			List<AccessRecord> alist = accessRecordMapper.getAccessRecordByDate(numberDay);
+			if (alist != null && alist.size() > 0) {
+				// 删除住户出入图片
+				for (AccessRecord accessRecord : alist) {
+					File file = new File(rootPath + accessRecord.getPhotoUrl());
+					file.delete();
+				}
+				// 删除住户出入记录
+				accessRecordMapper.delAccessRecordByDate(numberDay);
+			}
+
 		} catch (Exception e) {
 			logger.error("start CleanUp AccessRecord faild", e);
 		}
