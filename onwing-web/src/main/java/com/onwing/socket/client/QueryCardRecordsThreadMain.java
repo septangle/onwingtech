@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.onwing.household.biz.logic.core.impl.DoorLockMap;
 import com.onwing.household.comm.dal.dao.CamaraMapper;
 import com.onwing.household.comm.dal.dao.ControlMapper;
 import com.onwing.household.comm.dal.model.Control;
@@ -27,6 +28,9 @@ public class QueryCardRecordsThreadMain extends Thread {
 
 	@Autowired
 	private CamaraMapper camaraMapper;
+	
+	@Autowired
+	private DoorLockMap doorLockMap;
 
 	@Override
 	public void run() {
@@ -38,7 +42,7 @@ public class QueryCardRecordsThreadMain extends Thread {
 		}
 		for (Control control : controlList) {
 			QueryCardRecordsThread thread = new QueryCardRecordsThread(camaraMapper, lockControlProperties,
-					initCameraLock, control);
+					initCameraLock, control, doorLockMap);
 			thread.start();
 		}
 	}

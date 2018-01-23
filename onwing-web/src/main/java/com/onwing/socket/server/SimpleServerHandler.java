@@ -268,8 +268,8 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 		String relayNumber = control_relay_map_split[1]; // 继电器号 02
 		DoorLockBiz doorLockimpl = doorLockMap.getLockSocketMap().get(lockControlId);
 		if (doorLockimpl == null) {
-			doorLockimpl = new DoorLockimpl();
-			doorLockMap.getLockSocketMap().put(lockControlId, doorLockimpl);
+			logger.error("doorLockimpl is null");
+			return false;
 		}
 
 		// 根据lockControlId向数据库查找control，进而获取ip和port

@@ -12,5 +12,9 @@ public interface DoorLockBiz {
 
 	public void closeBigDoorLock(String relayNumber) throws Exception;
 	
+	public String[] getOneRecord(String recordIndex) throws Exception;
+	
+	public String getRecordCount() throws Exception;
+	
 	public void closeSocket();
 }
