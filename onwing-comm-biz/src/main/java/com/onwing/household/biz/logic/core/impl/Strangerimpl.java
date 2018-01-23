@@ -2,6 +2,9 @@ package com.onwing.household.biz.logic.core.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onwing.household.biz.dto.StrangerDto;
@@ -13,6 +16,8 @@ import com.onwing.household.util.ModelUtil;
 
 @Service
 public class Strangerimpl implements StrangerBiz {
+	
+	private final static Logger logger = LoggerFactory.getLogger(Strangerimpl.class);
 
 	@Autowired
 	private StrangerMapper strangerMapper;
@@ -26,7 +31,7 @@ public class Strangerimpl implements StrangerBiz {
 			strangerMapper.insertSelective(stranger);
 			flag = true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("add stranger fail", e);
 		}
 		return flag;
 	}
@@ -44,7 +49,7 @@ public class Strangerimpl implements StrangerBiz {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+         logger.error("find All Stranger Error", e);
 		}
 
 		return strangerDtolist;
@@ -60,7 +65,7 @@ public class Strangerimpl implements StrangerBiz {
 			strangerMapper.updateStrangerByIdentify(stranger);
 			flag=true;
 		} catch (Exception e) {
-			e.printStackTrace();
+          logger.error("update stranger By Idengtify", e);
 		}
 		return flag;
 	}

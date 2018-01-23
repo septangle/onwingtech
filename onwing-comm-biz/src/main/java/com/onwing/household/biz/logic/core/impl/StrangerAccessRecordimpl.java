@@ -44,7 +44,7 @@ public class StrangerAccessRecordimpl implements StrangerAccessRecordBiz {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+           logger.error("find All StrangerAccessRecord", e);			
 		}
 		return accessRecordMapDtosList;
 	}
