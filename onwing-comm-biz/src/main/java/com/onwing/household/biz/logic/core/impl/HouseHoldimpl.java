@@ -2,6 +2,9 @@ package com.onwing.household.biz.logic.core.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onwing.household.biz.dto.HouseHoldDto;
@@ -14,6 +17,8 @@ import com.onwing.household.util.ModelUtil;
 
 @Service
 public class HouseHoldimpl implements HouseHoldBiz {
+	
+	private final Logger logger = LoggerFactory.getLogger(HouseHoldimpl.class);
 
 	@Autowired
 	private HouseHoldMapper householdMapper;
@@ -31,7 +36,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 			}
 			flag = true;
 		} catch (BusinessException e) {
-			e.printStackTrace();
+            logger.error("add household error", e);
 			throw new BusinessException(AppConstants.ADD_HOUSE_HOLD_FAIL_CODE,
 					AppConstants.ADD_HOUSE_HOLD_FAIL_MESSAGE);
 		}
@@ -49,7 +54,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 			}
 			flag = true;
 		} catch (BusinessException e) {
-			e.printStackTrace();
+            logger.error("remove household error", e);
 			throw new BusinessException(AppConstants.REMOVE_HOUSE_HOLD_FAIL_CODE,
 					AppConstants.REMOVE_HOUSE_HOLD_FAIL_MESSAGE);
 		}
@@ -69,7 +74,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 			}
 			flag = true;
 		} catch (BusinessException e) {
-			e.printStackTrace();
+            logger.error("update household error", e);
 			throw new BusinessException(AppConstants.UPDATE_HOUSE_HOLD_FAIL_CODE,
 					AppConstants.UPDATE_HOUSE_HOLD_FAIL_MESSAGE);
 		}
@@ -89,7 +94,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 			}
 	    	
 		} catch (Exception e) {
-			e.printStackTrace();
+          logger.error("find household error", e);
 		}
 		return householdDtoList;
 	}
@@ -102,7 +107,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 			System.out.println(houseHold.getGender());
 			houseHoldDto = ModelUtil.modelToDto(houseHold, HouseHoldDto.class);
 		} catch (Exception e) {
-			e.printStackTrace();
+          logger.error("find household by Id error", e);
 		}
 		return houseHoldDto;
 	}
@@ -121,7 +126,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+            logger.error("query household error", e);
 		}
 		return householdDtoList;
 	}

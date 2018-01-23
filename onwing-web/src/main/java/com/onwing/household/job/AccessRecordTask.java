@@ -1,10 +1,7 @@
 package com.onwing.household.job;
 
-import java.util.Collection;
 import java.util.Map;
-
 import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
