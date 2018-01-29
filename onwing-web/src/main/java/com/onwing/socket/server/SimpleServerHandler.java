@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.PatternSyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,6 +172,22 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 
 			}
 		} else {
+			String identifyCard = null;
+			try {
+				String[] photoNameSplitList = photoName.split("\\.");
+				identifyCard = photoNameSplitList[0];// 身份证号
+			} catch (PatternSyntaxException ex) {
+				logger.error("photoName: {} invalid", photoName, ex);
+				return;
+			}
+			HouseHold houseHold = new HouseHold();
+			houseHold.setIdentifyCard(identifyCard);
+			List<HouseHold> houseHoldList = householdMapper.selectBySelective(houseHold);
+			if (houseHoldList == null || houseHoldList.size() != 1) {
+				// 日志记录错误，查找无人或不止一个人
+				logger.error("no houseHold or not single household found in DB with photoName: {}", photoName);
+				return;
+			}
 			// 人脸匹配正确,即白名单
 			Date enterTime = personEnterTimeMap.get(photoName); // 上一次成功进入时间
 			Date currentTime = sdf.parse(time);
@@ -180,9 +197,6 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 					.parseInt(lockControlProperties.get("timeDeltaInSecond")))) { // 住户连续刷脸，时间间隔小于设定值，则忽略，并不开门
 				return;
 			}
-			logger.info("household use face: {} to open the door", photoName);
-			String[] photoNameSplitList = photoName.split("\\.");
-			String identifyCard = photoNameSplitList[0];// 身份证号
 
 			// save photo
 			String pathPrefix = System.getProperty("onwing.root") + "accessRecord/household/" + identifyCard;
@@ -196,32 +210,24 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			// end
 
 			// open lock
+			logger.info("household use face: {} to open the door", photoName);
 			if (!openControlLock(cameraName, photoName)) {
 				return;
 			}
 			// open lock end
 
 			// 记录白名单出入记录
-			HouseHold houseHold = new HouseHold();
-			houseHold.setIdentifyCard(identifyCard);
-			List<HouseHold> houseHoldList = householdMapper.selectBySelective(houseHold);
-			if (houseHoldList == null || houseHoldList.size() != 1) {
-				// 日志记录错误，查找无人或不止一个人
-				logger.error("no houseHold or not single household found in DB with photoName: {}", photoName);
+			// 根据cameraName，获取direction
+			Camara camera = new Camara();
+			camera.setName(cameraName);
+			List<Camara> cameraList = camaraMapper.selectBySelective(camera);
+			if (cameraList == null || cameraList.size() != 1) {
+				logger.error("camera from DB with name: {} is null or not only", cameraName);
 				return;
-			} else {
-				// 根据cameraName，获取direction
-				Camara camera = new Camara();
-				camera.setName(cameraName);
-				List<Camara> cameraList = camaraMapper.selectBySelective(camera);
-				if (cameraList == null || cameraList.size() != 1) {
-					logger.error("camera from DB with name: {} is null or not only", cameraName);
-					return;
-				}
-				String direction = cameraList.get(0).getDirection();
-				HouseHold selHouseHold = houseHoldList.get(0);
-				addHouseHoldAccessRecord(selHouseHold.getId(), direction, time, identifyCard);
 			}
+			String direction = cameraList.get(0).getDirection();
+			HouseHold selHouseHold = houseHoldList.get(0);
+			addHouseHoldAccessRecord(selHouseHold.getId(), direction, time, identifyCard);
 			// 记录出入记录end
 			// 更新住户进入时间
 			personEnterTimeMap.put(photoName, currentTime);
