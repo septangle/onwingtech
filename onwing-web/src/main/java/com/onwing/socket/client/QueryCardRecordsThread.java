@@ -43,6 +43,7 @@ public class QueryCardRecordsThread extends Thread {
 		try {
 			doorLockBiz.connect(control.getIp(), Integer.parseInt(control.getPort()));
 			currentRecordCount = doorLockBiz.getRecordCount();
+			Thread.sleep(1000);
 		} catch (Exception e) {
 			logger.error("getInitialRecordCount from lock control error", e);
 		}
@@ -86,7 +87,7 @@ public class QueryCardRecordsThread extends Thread {
 				logger.error("getRecordCount from lock control error", e);
 			}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(1500);
 			} catch (InterruptedException e) {
 				logger.error("", e);
 			}

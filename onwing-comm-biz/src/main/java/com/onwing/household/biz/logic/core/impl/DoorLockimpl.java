@@ -172,6 +172,7 @@ public class DoorLockimpl implements DoorLockBiz {
 		// 66, 85, 48, 48, 48, 48, 83, 66, 48, 48, 48, 48, 82, 68, 48, 48,
 		// 48, 50, 48, 82, 70, 48, 48, 48, 48, 51, 56, 13]
 		String result2 = OutputFormatter.nullTerminatedCharsToString(result);
+		//System.out.println(result2);
 		int recordIndex = result2.indexOf("RD") + 2;
 		String recordCount = result2.substring(recordIndex, recordIndex + 5);
 		// 一旦记录总数超出阈值，则清空记录总数

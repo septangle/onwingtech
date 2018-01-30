@@ -21,6 +21,7 @@ public class AccessRecordFacadeimpl implements AccessRecordFacade {
 		AccessRecordResponse accessRecordResponse= new AccessRecordResponse();
 		List<HouseAccessRecordDto> houseAccessRecordDtolist=accessRecordBiz.selectAccessRecord(startRow,pageSize);
 		accessRecordResponse.setHouseAccessRecordDtosList(houseAccessRecordDtolist);
+		accessRecordResponse.setTotalNumber(count);
 		return accessRecordResponse;
 	}
 
