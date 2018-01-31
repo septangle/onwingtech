@@ -26,13 +26,6 @@
             </div>
         </Col>
     </Row>
-    <div class="dialog-showBigPhoto" v-show="showDialog">
-      <span class="close" @click="hideDialog">X</span>
-      <p>
-        <img :src="bigPhotoUrl" />
-      </p>
-    </div>
-    <div class="mask" v-show="showDialog"></div>
 </div>
 </template>
 
@@ -87,42 +80,49 @@ tr.ivu-table-row-hover td .ivu-tag-dot {
 td.ivu-table-expanded-cell {
     background-color: white!important;
 }
-
+</style>
+<style type="text/css">
 .dialog-showBigPhoto {
-    position: absolute;
-    width: 70%;
-    left: 50%;
-    top: 10%;
-    margin-left: -35%;
-    padding: 30px 20px 20px;
-    border-radius: 10px;
-    background-color: #fff;
-    line-height: 1;
-    z-index: 100;
+  position: absolute;
+  width: 300px;
+  left: 50%;
+  top: 10%;
+  margin-left: -150px;
+  padding: 30px 20px 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  line-height: 1;
+  z-index: 101;
 }
 
 .dialog-showBigPhoto .close {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    color: #999;
-    right: 2px;
-    top: 5px;
-    font-size: 20px;
-    line-height: 1;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  color: #999;
+  right: 2px;
+  top: 5px;
+  font-size: 20px;
+  line-height: 1;
 }
 .dialog-showBigPhoto img {
-    width: 100%;
+  width: 100%;
 }
 
 .mask {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background-color: rgba(0,0,0,.5);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0,0,0,.5);
+  z-index: 100;
+}
+.hide {
+  display: none;
 }
 </style>
 <script>
@@ -133,7 +133,6 @@ td.ivu-table-expanded-cell {
         name: 'guestlist_inout_index',
         data () {
             return {
-                showDialog: false,
                 bigPhotoUrl:'',
                 progresshow:false,
                 progresscount:0,
@@ -167,9 +166,12 @@ td.ivu-table-expanded-cell {
                               },
                               on: {
                                   click: (event) => {
-                                      this.bigPhotoUrl = event.target.src;
-                                      this.showDialog = true;
-                                      console.info(this);
+                                        //this.showDialog = true;
+                                        //console.info(this);
+                                        this.bigPhotoUrl = event.target.src;
+                                        this.changeBigPhoto();
+                                        this.showDialog();
+                                        this.showMask();
                                   }
                               }
                             })
@@ -274,9 +276,53 @@ td.ivu-table-expanded-cell {
                     fullDate = '';
                 return fullDate = year + month + date + hours + minutes + second;
             },
-            hideDialog () {
-                this.showDialog = false;
-                this.bigPhotoUrl = '';
+            hideMask () {
+                //this.showDialog = false;
+                //this.bigPhotoUrl = '';
+                var mask = document.getElementById('mask');
+                mask.classList.add('hide');
+            },
+            showDialog () {
+                var dialog = document.getElementById('dialog');
+                dialog.classList.remove('hide');
+            },
+            showMask () {
+                var mask = document.getElementById('mask');
+                mask.classList.remove('hide');
+            },
+            changeBigPhoto () {
+                var bigImg = document.getElementById('bigImg');
+                bigImg.setAttribute('src',this.bigPhotoUrl);
+            },
+            createDialog (body) {
+                //body = document.querySelector('body');
+                var _this = this;
+                var dialog = document.createElement('div'),
+                    close = document.createElement('span'),
+                    p = document.createElement('p'),
+                    img = document.createElement('img');
+
+                dialog.className = 'dialog-showBigPhoto hide';
+                dialog.id = 'dialog';
+                close.className = 'close';
+                close.id = 'close';
+                close.textContent = 'X';
+                img.id = 'bigImg';
+                close.addEventListener('click',function(){
+                    dialog.classList.add('hide');
+                    _this.hideMask();
+                    _this.bigPhotoUrl = '';
+                })
+                p.appendChild(img);
+                dialog.appendChild(p);
+                dialog.appendChild(close);
+                body.appendChild(dialog);
+            },
+            createMask (body) {
+                var mask = document.createElement('div');
+                mask.className = 'mask hide';
+                mask.id = 'mask';
+                body.appendChild(mask);
             }
         },
         beforeCreate() {},
@@ -285,7 +331,11 @@ td.ivu-table-expanded-cell {
             //console.info(this.inout_thumb);
         },
         beforeMount() {},
-        mounted() {},
+        mounted() {
+            var body = document.querySelector('body');
+            this.createDialog(body);
+            this.createMask(body);
+        },
         activated() {}
     }
 </script>

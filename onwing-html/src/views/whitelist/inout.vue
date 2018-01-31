@@ -26,13 +26,15 @@
             </div>
         </Col>
     </Row>
-    <div class="dialog-showBigPhoto" v-show="showDialog">
+    <!--
+    <div class="dialog-showBigPhoto">
         <span class="close" @click="hideDialog">X</span>
         <p>
             <img :src="bigPhotoUrl" />
         </p>
     </div>
     <div class="mask" v-show="showDialog"></div>
+    -->
 </div>
 </template>
 
@@ -87,17 +89,19 @@ tr.ivu-table-row-hover td .ivu-tag-dot {
 td.ivu-table-expanded-cell {
     background-color: white!important;
 }
+</style>
+<style type="text/css">
 .dialog-showBigPhoto {
   position: absolute;
-  width: 70%;
+  width: 300px;
   left: 50%;
   top: 10%;
-  margin-left: -35%;
+  margin-left: -150px;
   padding: 30px 20px 20px;
   border-radius: 10px;
   background-color: #fff;
   line-height: 1;
-  z-index: 100;
+  z-index: 101;
 }
 
 .dialog-showBigPhoto .close {
@@ -121,7 +125,13 @@ td.ivu-table-expanded-cell {
   height: 100%;
   left: 0;
   top: 0;
+  bottom: 0;
+  right: 0;
   background-color: rgba(0,0,0,.5);
+  z-index: 100;
+}
+.hide {
+  display: none;
 }
 </style>
 <script>
@@ -132,8 +142,7 @@ td.ivu-table-expanded-cell {
         name: 'whitelist_inout_index',
         data () {
             return {
-                showDialog: false,
-                bigPhotoUrl:'1.jpg',
+                bigPhotoUrl:'',
                 progresshow:false,
                 progresscount:0,
                 progresstatus:'active',
@@ -155,7 +164,7 @@ td.ivu-table-expanded-cell {
                         align: 'center'
                     },{
                     title: '缩略图',
-                    key: 'miniPhoto',
+                    key: 'photoUrl',
                     width: '100',
                     align: 'center',
                     render: (h,params) => {
@@ -166,8 +175,12 @@ td.ivu-table-expanded-cell {
                         },
                         on: {
                           click: (event) => {
+                            //this.showDialog = true;
+                            //console.info(this);
                             this.bigPhotoUrl = event.target.src;
-                            this.showDialog = true;
+                            this.changeBigPhoto();
+                            this.showDialog();
+                            this.showMask();
                           }
                         }
                       })
@@ -261,7 +274,7 @@ td.ivu-table-expanded-cell {
             setDate (value) {
                 let temp = new Date(value);
                 let year = temp.getFullYear() + '年',
-                    month = temp.getMonth() + '月',
+                    month = temp.getMonth() + 1 + '月',
                     date = temp.getDate() + '日',
                     hours = temp.getHours() + '点',
                     minutes = temp.getMinutes() + '分',
@@ -269,9 +282,53 @@ td.ivu-table-expanded-cell {
                     fullDate = '';
                 return fullDate = year + month + date + hours + minutes + second;
             },
-            hideDialog () {
-                this.showDialog = false;
-                this.bigPhotoUrl = '';
+            hideMask () {
+                //this.showDialog = false;
+                //this.bigPhotoUrl = '';
+                var mask = document.getElementById('mask');
+                mask.classList.add('hide');
+            },
+            showDialog () {
+                var dialog = document.getElementById('dialog');
+                dialog.classList.remove('hide');
+            },
+            showMask () {
+                var mask = document.getElementById('mask');
+                mask.classList.remove('hide');
+            },
+            changeBigPhoto () {
+                var bigImg = document.getElementById('bigImg');
+                bigImg.setAttribute('src',this.bigPhotoUrl);
+            },
+            createDialog (body) {
+                //body = document.querySelector('body');
+                var _this = this;
+                var dialog = document.createElement('div'),
+                    close = document.createElement('span'),
+                    p = document.createElement('p'),
+                    img = document.createElement('img');
+
+                dialog.className = 'dialog-showBigPhoto hide';
+                dialog.id = 'dialog';
+                close.className = 'close';
+                close.id = 'close';
+                close.textContent = 'X';
+                img.id = 'bigImg';
+                close.addEventListener('click',function(){
+                    dialog.classList.add('hide');
+                    _this.hideMask();
+                    _this.bigPhotoUrl = '';
+                })
+                p.appendChild(img);
+                dialog.appendChild(p);
+                dialog.appendChild(close);
+                body.appendChild(dialog);
+            },
+            createMask (body) {
+                var mask = document.createElement('div');
+                mask.className = 'mask hide';
+                mask.id = 'mask';
+                body.appendChild(mask);
             }
         },
         beforeCreate() {},
@@ -279,7 +336,11 @@ td.ivu-table-expanded-cell {
             this.getInoutDate(1,this.pagesize);
         },
         beforeMount() {},
-        mounted() {},
+        mounted() {
+            var body = document.querySelector('body');
+            this.createDialog(body);
+            this.createMask(body);
+        },
         activated() {}
     }
 </script>

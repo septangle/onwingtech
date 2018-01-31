@@ -56,7 +56,8 @@
         name:'guestlist_add_index',
         data () {
             return {
-                photoUrl:"/images/avatars-man.png",
+                defaultPhotoUrl:require('../../images/avatars-man.png'),
+                photoUrl:require('../../images/avatars-man.png'),
                 file:'',
                 formValidate: {
                     cardNumber: '',
@@ -81,7 +82,7 @@
                     ],
                     identifyCard: [
                         { required: true, message: '请填写访客身份证号', trigger: 'blur' },
-                        { type: 'string', pattern: /^[1-9](\d{14}|\d{17})$/g, message: '身份证号格式错误', trigger: 'blur' }
+                        { type: 'string', pattern: /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$|^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/g, message: '身份证号格式错误', trigger: 'blur' }
                     ],
                     tel: [
                         { required: true, message: '请填写联系电话', trigger: 'blur' },
@@ -103,7 +104,7 @@
             },
             handlePhotoRemove() {
               //点击删除照片后将照片还原成默认图片
-              this.photoUrl = "/images/avatars-man.png";
+              this.photoUrl = this.defaultPhotoUrl;
             },
             handleFileChange() {
                 var file = this.$refs.photoup.files[0];
@@ -149,7 +150,7 @@
             },
             handleReset(name) {
                 this.$refs[name].resetFields();
-                this.photoUrl = '/images/avatars-man.png';
+                this.photoUrl = this.defaultPhotoUrl;
             }
         },
         created() {},
