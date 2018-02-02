@@ -84,10 +84,10 @@ td.ivu-table-expanded-cell {
 <style type="text/css">
 .dialog-showBigPhoto {
   position: absolute;
-  width: 300px;
+  width: 600px;
   left: 50%;
-  top: 10%;
-  margin-left: -150px;
+  top: 15%;
+  margin-left: -300px;
   padding: 30px 20px 20px;
   border-radius: 10px;
   background-color: #fff;
@@ -152,17 +152,18 @@ td.ivu-table-expanded-cell {
                         key: 'id',
                         ellipsis:'true',
                         width: 80,
-                        align: 'center'
+                        align: 'center',
+                        sortType: 'desc'
                     },{
                         title: '缩略图',
                         key: 'miniPhoto',
-                        width: '100',
+                        width: 120,
                         align: 'center',
                         render: (h,params) => {
                             return h('img',{
                               attrs: {
                                 src: this.inout_thumb[params.row._index],
-                                style: 'width: 80px'
+                                style: 'width:100%;height:auto;margin-top:4px;'
                               },
                               on: {
                                   click: (event) => {

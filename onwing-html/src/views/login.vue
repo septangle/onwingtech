@@ -55,7 +55,8 @@ export default {
                 password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' }
                 ]
-            }
+            },
+            avatorImgUrl: require('../images/avatars-admin.png')
         };
     },
     methods: {
@@ -101,7 +102,7 @@ export default {
 
                     });
 
-                    _this.$store.commit('setAvator', '../images/avatars-admin.png');
+                    _this.$store.commit('setAvator', _this.avatorImgUrl);
 
 
                 }

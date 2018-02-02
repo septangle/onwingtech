@@ -37,7 +37,7 @@
         <form style="display: none">
             <input id="photoUp" type="file" accept="image/*" ref="photoUp" @change="handleFileChange()"/>
         </form>
-        <p class="tips" style="margin-top: 10px;height: 16px;color:#ff0000;">{{message}}</p>
+        <p class="tips" style="margin-top: 10px;height: 16px;color:#ff0000;text-align:center;">{{message}}</p>
         <p style="text-align: center;margin-top: 10px;">
             <Button type="primary" @click="handleSubmit()">提交</Button>
         </p>
@@ -111,7 +111,7 @@ td.ivu-table-expanded-cell {
     border-radius: 10px;
     background-color: #fff;
     line-height: 1;
-    z-index: 100;
+    z-index: 101;
 }
 
 .dialog-outFace .close {
@@ -133,14 +133,6 @@ td.ivu-table-expanded-cell {
 .dialog-outFace .submit {
 
 }
-.mask {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background-color: rgba(0,0,0,.5);
-}
 </style>
 <script>
     import axios from 'axios';
@@ -153,7 +145,8 @@ td.ivu-table-expanded-cell {
                 showDialog: false,
                 tipsShow: false,
                 identifyCard: '',
-                outFacePhoto:'',
+                outFacePhoto:require('../../images/outface-demo.jpg'),
+                defaultOutFacePhoto: require('../../images/outface-demo.jpg'),
                 message:'',
                 file:'',
                 progresshow:false,
@@ -176,10 +169,16 @@ td.ivu-table-expanded-cell {
                         width: 80,
                         align: 'center'
                     },{
+                        title: '卡号',
+                        key: 'cardNumber',
+                        ellipsis: true,
+                        width: 110,
+                        align: 'center'
+                    },{
                         title: '姓名',
                         key: 'name',
                         ellipsis: true,
-                        width: 110,
+                        width: 100,
                         align: 'center'
                     },{
                         title: '性别',
@@ -189,7 +188,7 @@ td.ivu-table-expanded-cell {
                     },{
                         title: '身份证',
                         key: 'identifyCard',
-                        width: 120,
+                        width: 170,
                         align: 'center'
                     },
                     {
@@ -301,7 +300,7 @@ td.ivu-table-expanded-cell {
                 };
             },
             handleSubmit() {
-                if(this.outFacePhoto.length == 0){
+                if(this.outFacePhoto.match(/outface-demo/g)){
                     this.message = '请上传访客离开时拍摄的照片！';
                     return false;
                 } else {
@@ -333,7 +332,7 @@ td.ivu-table-expanded-cell {
             },
             hideDialog () {
                 this.showDialog = false;
-                this.outFacePhoto = '';
+                this.outFacePhoto = this.defaultOutFacePhoto;
                 this.message = '';
                 this.file = null;
             }
