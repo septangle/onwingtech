@@ -64,7 +64,7 @@ export const otherRouter = {
         },
         {
             path: 'whitelist_info/:cardNumber',
-            title: '员工详情',
+            title: '住户详情',
             name: 'whitelist_info_index',
             component: resolve => { require(['@/views/whitelist/info.vue'], resolve); }
         }
@@ -88,7 +88,7 @@ export const appRouter = [
         title: '住户列表',
         component: Main,
         children: [
-            { path: 'whitelist_list', title: '员工列表', name: 'whitelist_list_index', component: resolve => { require(['@/views/whitelist/list.vue'], resolve); } }
+            { path: 'whitelist_list', title: '住户列表', name: 'whitelist_list_index', component: resolve => { require(['@/views/whitelist/list.vue'], resolve); } }
         ]
     },
     {
@@ -140,7 +140,7 @@ export const appRouter = [
         title: '添加住户',
         component: Main,
         children: [
-            { path: 'whitelist_add', title: '添加员工', name: 'whitelist_add_index', component: resolve => { require(['@/views/whitelist/add.vue'], resolve); } }
+            { path: 'whitelist_add', title: '添加住户', name: 'whitelist_add_index', component: resolve => { require(['@/views/whitelist/add.vue'], resolve); } }
         ]
     }
 /*    {
