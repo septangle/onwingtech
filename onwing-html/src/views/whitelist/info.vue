@@ -134,7 +134,7 @@
                         .then(function(response){
                         let data = response.data;
                             if(data.error == null) {
-                                _this.$Message.success('住户信息更新成功!');
+                                _this.$Message.success('员工信息更新成功!');
                             } else {
                                 _this.$Message.error(data.error.message);
                             }
