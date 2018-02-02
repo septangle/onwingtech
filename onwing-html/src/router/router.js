@@ -67,13 +67,15 @@ export const otherRouter = {
             title: '员工详情',
             name: 'whitelist_info_index',
             component: resolve => { require(['@/views/whitelist/info.vue'], resolve); }
-        },
+        }
+        /*
         {
             path: 'guestlist_info/:identifyCard',
             title: '访客详情',
             name: 'guestlist_info_index',
             component: resolve => { require(['@/views/guestlist/guest_info.vue'], resolve); }
         }
+        */
     ]
 };
 
@@ -83,7 +85,7 @@ export const appRouter = [
         path: '/whitelist',
         icon: 'key',
         name: 'whitelist_list',
-        title: '员工列表',
+        title: '住户列表',
         component: Main,
         children: [
             { path: 'whitelist_list', title: '员工列表', name: 'whitelist_list_index', component: resolve => { require(['@/views/whitelist/list.vue'], resolve); } }
@@ -99,6 +101,7 @@ export const appRouter = [
             { path: 'whitelist_inout', title: '出入记录', name: 'whitelist_inout_index', component: resolve => { require(['@/views/whitelist/inout.vue'], resolve); } }
         ]
     },
+    /*
     {
         path: '/guestlist',
         icon: 'key',
@@ -129,11 +132,12 @@ export const appRouter = [
             { path: 'guestlist_add', title: '访客登记', name: 'guestlist_add_index', component: resolve => { require(['@/views/guestlist/guest_add.vue'], resolve); } }
         ]
     },
+    */
     {
         path: '/whitelist/',
         icon: 'key',
         name: 'whitelist_add',
-        title: '添加员工',
+        title: '添加住户',
         component: Main,
         children: [
             { path: 'whitelist_add', title: '添加员工', name: 'whitelist_add_index', component: resolve => { require(['@/views/whitelist/add.vue'], resolve); } }

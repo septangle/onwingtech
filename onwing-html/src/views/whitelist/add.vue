@@ -33,10 +33,10 @@
                 <FormItem label="联系电话" prop="tel">
                     <Input v-model="formValidate.tel" placeholder="请填写联系电话"></Input>
                 </FormItem>
-                <FormItem label="科室" prop="buildingBlockNumber">
+                <FormItem label="楼号/单元号" prop="buildingBlockNumber">
                   <Input v-model="formValidate.buildingBlockNumber"></Input>
                 </FormItem>
-                <FormItem label="办公室" prop="roomNumber">
+                <FormItem label="房号" prop="roomNumber">
                   <Input v-model="formValidate.roomNumber"></Input>
                 </FormItem>
                 <FormItem label="备注" prop="remarks">
@@ -93,10 +93,10 @@
                         { type: 'string', pattern:/^\d{7,12}$/g, message: '联系电话格式错误', trigger: 'blur' }
                     ],
                     buildingBlockNumber: [
-                        { required: true, message: '请填写科室', trigger: 'blur' }
+                        { required: true, message: '请填写楼号/单元号', trigger: 'blur' }
                     ],
                     roomNumber: [
-                        { required: true, message: '请填写办公室', trigger: 'blur' }
+                        { required: true, message: '请填写房号', trigger: 'blur' }
                     ],
                     remarks: [
                         { type: 'string', min: 0, max: 200, message: '备注信息超过字数', trigger: 'blur' }

@@ -193,7 +193,7 @@ td.ivu-table-expanded-cell {
                         width: 110,
                         align: 'center'
                     },{
-                        title: '隶属',
+                        title: '住址',
                         key: 'addres',
                         ellipsis:'true',
                         width: 170,

@@ -137,13 +137,13 @@ td.ivu-table-expanded-cell {
                         width: 120,
                         align: 'center'
                     },{
-                        title: '科室',
+                        title: '楼号/单元号',
                         key: 'buildingBlockNumber',
                         ellipsis: true,
-                        width: 100,
+                        width: 120,
                         align: 'center'
                     },{
-                        title: '办公室',
+                        title: '房号',
                         key: 'roomNumber',
                         ellipsis: true,
                         width: 100,
