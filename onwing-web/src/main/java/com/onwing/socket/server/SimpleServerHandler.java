@@ -127,9 +127,10 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 					return;
 				}
 				// 是否访客刷卡
-				Stranger stranger = new Stranger();
-				stranger.setCardNumber(cardNumber);
-				List<Stranger> strangerList = strangerMapper.selectBySelective(stranger);
+				//Stranger stranger = new Stranger();
+				//stranger.setCardNumber(cardNumber);
+				//List<Stranger> strangerList = strangerMapper.selectBySelective(stranger);
+				List<Stranger> strangerList = strangerMapper.selectByCardNumber(cardNumber);
 				if (strangerList != null && strangerList.size() == 1) { // 访客刷卡
 					logger.info("stranger use card: {} to open the door, we must save the catched photo", cardNumber);
 					// 保存抓拍图片到访客目录
@@ -166,7 +167,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 					return;
 				}
 				// 重新上锁
-				logger.warn("cardNumber {} isnot belong to household or stranger, do nothing", cardNumber);
+				logger.warn("cardNumber {} is not existed or existed twice in DB, do nothing", cardNumber);
 				initCameraLock.cameraLockMap.put(cameraName, null);
 				return;
 

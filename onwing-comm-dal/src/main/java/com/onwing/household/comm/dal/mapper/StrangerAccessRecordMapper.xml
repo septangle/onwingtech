@@ -114,7 +114,8 @@
 		select b.id,a.`name`,b.out_off_into,b.time,b.photo_url
 		from tbl_stranger a,tbl_stranger_access_record b
 		where
-		a.id=b.stranger_id LIMIT #{startRow}, #{pageSize}
+		a.id=b.stranger_id ORDER BY b.id desc 
+		LIMIT #{startRow}, #{pageSize}
 	</select>
 
 	<select id="getCountByStrangerAcessRecord" resultType="int">

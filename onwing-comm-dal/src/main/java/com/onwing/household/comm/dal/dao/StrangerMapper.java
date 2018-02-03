@@ -23,6 +23,8 @@ public interface StrangerMapper {
     
     List<Stranger> selectBySelective(Stranger record);
     
+    List<Stranger> selectByCardNumber(String cardNumber);
+    
     int updateStrangerByIdentify(Stranger record);
     
     List<Stranger> getAllStranger(@Param("startRow")int startRow,
