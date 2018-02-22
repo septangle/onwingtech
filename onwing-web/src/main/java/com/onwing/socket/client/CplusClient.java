@@ -25,12 +25,12 @@ public class CplusClient {
 	public CplusClient(Map<String, String> cplusClientProperties) {
 		this.cplusClientProperties = cplusClientProperties;
 	}
-	
+
 	public boolean isConnected() {
 		try {
 			socket.sendUrgentData(0xFF);
 			return true;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
@@ -48,7 +48,7 @@ public class CplusClient {
 		// 向服务器端发送数据
 		out = socket.getOutputStream();
 	}
-	
+
 	public void close() throws Exception {
 		input.close();
 		out.close();
@@ -75,16 +75,21 @@ public class CplusClient {
 		buf.readBytes(msgBytes);
 		out.write(msgBytes);
 	}
-	
+
 	public void sendReloadPictureMsgMain(String pictureName) throws Exception {
 		Collection<String> list = cplusClientProperties.values();
-		for(String connectInfo: list) {
+		for (String connectInfo : list) {
 			String[] connectInfoList = connectInfo.split(":");
-			this.connect(connectInfoList[0], connectInfoList[1]);
-			this.sendReloadPictureMsg(pictureName);
-			this.close();
+			try {
+				this.connect(connectInfoList[0], connectInfoList[1]);
+				this.sendReloadPictureMsg(pictureName);
+				this.close();
+			} catch (Exception ex) {
+				logger.error("cannot sendReloadPictureMsg to {}", connectInfoList[0], ex);
+				continue;
+			}
 		}
-		
+
 	}
 
 }
