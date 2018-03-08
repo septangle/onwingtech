@@ -72,6 +72,14 @@ public interface HouseHoldBiz {
 	 */
 	public HouseHold findHouseHoldBySelective(HouseHold houseHold) throws BusinessException;
 	
+	/**
+	 * 模糊查询住户
+	 * @param household
+	 * @return HouseHoldDto
+	 * @throws BusinessException
+	 */
+	public List<HouseHoldDto> getFuzzyQuery(int startRow,int pageSize,String searchContent) throws BusinessException;
+	
 	
 
 }

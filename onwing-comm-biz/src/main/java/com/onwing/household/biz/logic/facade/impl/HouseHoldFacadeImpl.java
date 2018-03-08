@@ -78,4 +78,14 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade {
 		return householdResponse;
 	}
 
+	@Override
+	public HouseholdResponse getFuzzyQuery(int startRow, int pageSize, String searchContent, int count)
+			throws Exception {
+		HouseholdResponse householdResponse = new HouseholdResponse();
+		List<HouseHoldDto> householdList = householdBiz.getFuzzyQuery(startRow, pageSize, searchContent);
+		householdResponse.setHouseholdlist(householdList);
+		householdResponse.setTotalNumber(count);
+		return householdResponse;
+	}
+
 }

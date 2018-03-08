@@ -5,7 +5,7 @@ public class Control {
 
     private String name;
 
-    private String doorName;
+    private Door door;
 
     private String port;
 
@@ -27,15 +27,16 @@ public class Control {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getDoorName() {
-        return doorName;
-    }
 
-    public void setDoorName(String doorName) {
-        this.doorName = doorName == null ? null : doorName.trim();
-    }
+    public Door getDoor() {
+		return door;
+	}
 
-    public String getPort() {
+	public void setDoor(Door door) {
+		this.door = door;
+	}
+
+	public String getPort() {
         return port;
     }
 

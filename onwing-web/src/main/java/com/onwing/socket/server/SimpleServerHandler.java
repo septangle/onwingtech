@@ -120,7 +120,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 					savePhoto(photoFullPath, photoBytes);
 					// end
 					// 记录到白名单出入记录
-					addHouseHoldAccessRecord(householdList.get(0).getId(), direction, time, identifyCard);
+					addHouseHoldAccessRecord(householdList.get(0), direction, time, identifyCard);
 					// end
 					// 重新上锁
 					initCameraLock.cameraLockMap.put(cameraName, null);
@@ -228,7 +228,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			}
 			String direction = cameraList.get(0).getDirection();
 			HouseHold selHouseHold = houseHoldList.get(0);
-			addHouseHoldAccessRecord(selHouseHold.getId(), direction, time, identifyCard);
+			addHouseHoldAccessRecord(selHouseHold, direction, time, identifyCard);
 			// 记录出入记录end
 			// 更新住户进入时间
 			personEnterTimeMap.put(photoName, currentTime);
@@ -248,13 +248,13 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 	 *            白名单身份证号
 	 * @throws Exception
 	 */
-	private void addHouseHoldAccessRecord(long householdId, String direction, String time, String identifyCard)
+	private void addHouseHoldAccessRecord(HouseHold household, String direction, String time, String identifyCard)
 			throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy_MM_dd-HH_mm_ss");
 		Date timeDate = sdf.parse(time);
 		AccessRecord accessRecord = new AccessRecord();
-		accessRecord.setHouseholdId(householdId);
+		accessRecord.setHouseHold(household);
 		if (direction.equals("IN")) {// 0 入 1出
 			accessRecord.setOutOff("0");
 		} else {

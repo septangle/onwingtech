@@ -43,13 +43,6 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public @ResponseBody AdminiStratorResponse login(@RequestBody AdminiStratorRequest request,
 			HttpServletRequest servletRequest) throws Exception {
-		HttpSession session = servletRequest.getSession();
-		AdminiStratorDto adminiStratorDto = (AdminiStratorDto) session.getAttribute("adminiStratorDto");
-        if (adminiStratorDto!=null) {
-        	throw new BusinessException(AppConstants.QUERY_LOGIN_USERLOING_ERROR_CODE,
-					AppConstants.QUERY_LOGIN_USERLOING_ERROR_MESSAGE);
-		}
-        
 		//MD5加密
 		request.getAdminiStratorDto().setPassword(MD5Util.encodeMD5String(request.getAdminiStratorDto().getPassword()));
 		AdminiStratorResponse adminiStratorResponse = adminiStratorFacade.login(request);		

@@ -2,6 +2,10 @@ package com.onwing.household.biz.dto;
 
 public class HouseHoldDto {
 	private Long id;
+	
+    private Long communityId;
+    
+    private String communityName;
 
 	private String householdName;
 
@@ -18,6 +22,8 @@ public class HouseHoldDto {
 	private String photoId;
 
 	private String cardNumber;
+	
+    private String householdType;
 
 	private String remarks;
 
@@ -110,5 +116,32 @@ public class HouseHoldDto {
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
 	}
+
+	public Long getCommunityId() {
+		return communityId;
+	}
+
+	public void setCommunityId(Long communityId) {
+		this.communityId = communityId;
+	}
+
+
+	public String getHouseholdType() {
+		return householdType;
+	}
+
+	public void setHouseholdType(String householdType) {
+		this.householdType = householdType;
+	}
+
+	public String getCommunityName() {
+		return communityName;
+	}
+
+	public void setCommunityName(String communityName) {
+		this.communityName = communityName;
+	}
+	
+	
 
 }

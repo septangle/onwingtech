@@ -5,7 +5,7 @@ import java.util.Date;
 public class AccessRecord {
     private Long id;
 
-    private Long householdId;
+    private HouseHold houseHold;
 
     private Date outOffTime;
 
@@ -20,16 +20,17 @@ public class AccessRecord {
     public void setId(Long id) {
         this.id = id;
     }
+   
 
-    public Long getHouseholdId() {
-        return householdId;
-    }
+    public HouseHold getHouseHold() {
+		return houseHold;
+	}
 
-    public void setHouseholdId(Long householdId) {
-        this.householdId = householdId;
-    }
+	public void setHouseHold(HouseHold houseHold) {
+		this.houseHold = houseHold;
+	}
 
-    public Date getOutOffTime() {
+	public Date getOutOffTime() {
         return outOffTime;
     }
 

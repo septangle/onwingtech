@@ -2,6 +2,10 @@ package com.onwing.household.comm.dal.model;
 
 public class HouseHold {
     private Long id;
+    
+    private Community community;
+    
+    private String communityName;
 
     private String householdName;
 
@@ -18,6 +22,8 @@ public class HouseHold {
     private String photoId;
 
     private String cardNumber;
+    
+    private String householdType;
 
     private String remarks;
 
@@ -28,8 +34,25 @@ public class HouseHold {
     public void setId(Long id) {
         this.id = id;
     }
+	
+	
+	public Community getCommunity() {
+		return community;
+	}
 
-    public String getHouseholdName() {
+	public void setCommunity(Community community) {
+		this.community = community;
+	}
+
+	public String getCommunityName() {
+		return communityName;
+	}
+
+	public void setCommunityName(String communityName) {
+		this.communityName = communityName;
+	}
+
+	public String getHouseholdName() {
         return householdName;
     }
 
@@ -94,6 +117,14 @@ public class HouseHold {
         this.cardNumber = cardNumber == null ? null : cardNumber.trim();
     }
 
+    public String getHouseholdType() {
+        return householdType;
+    }
+
+    public void setHouseholdType(String householdType) {
+        this.householdType = householdType == null ? null : householdType.trim();
+    }
+    
     public String getRemarks() {
         return remarks;
     }

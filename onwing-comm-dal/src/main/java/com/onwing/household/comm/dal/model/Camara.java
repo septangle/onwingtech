@@ -5,9 +5,13 @@ public class Camara {
 
     private String name;
 
-    private Long controlId;
+    private Control control;
 
     private String direction;
+    
+    private String ip;
+    
+    private String replayId;
 
     public Long getId() {
         return id;
@@ -25,19 +29,38 @@ public class Camara {
         this.name = name == null ? null : name.trim();
     }
 
-    public Long getControlId() {
-        return controlId;
-    }
 
-    public void setControlId(Long controlId) {
-        this.controlId = controlId;
-    }
+    public Control getControl() {
+		return control;
+	}
 
-    public String getDirection() {
+	public void setControl(Control control) {
+		this.control = control;
+	}
+
+	public String getDirection() {
         return direction;
     }
 
     public void setDirection(String direction) {
         this.direction = direction == null ? null : direction.trim();
     }
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public String getReplayId() {
+		return replayId;
+	}
+
+	public void setReplayId(String replayId) {
+		this.replayId = replayId;
+	}
+    
+    
 }

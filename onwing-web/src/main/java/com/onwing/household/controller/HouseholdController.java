@@ -44,11 +44,13 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	 */
 	@ApiOperation(value = "录入业主信息", httpMethod = "POST", response = HouseholdResponse.class)
 	@RequestMapping(value = "/addHouseHold.do", method = RequestMethod.POST)
-	public @ResponseBody HouseholdResponse addHouseHold(@RequestParam("householdName") String householdName,
+	public @ResponseBody HouseholdResponse addHouseHold(@RequestParam("communityName") String communityName,
+            @RequestParam("householdName") String householdName,
 			@RequestParam("gender") String gender, @RequestParam("tel") String tel,
 			@RequestParam("identifyCard") String identifyCard,
 			@RequestParam("buildingBlockNumber") String buildingBlockNumber,
 			@RequestParam("roomNumber") String roomNumber, @RequestParam("cardNumber") String cardNumber,
+			@RequestParam("householdType") String householdType,
 			@RequestParam("remarks") String remarks, @RequestParam MultipartFile file,
 			HttpServletRequest servletRequest) throws Exception {
 		String path = System.getProperty("onwing.root") + AppConstants.FILE_PATH;
@@ -63,6 +65,7 @@ public class HouseholdController extends BaseController<HouseholdController> {
 		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path,nowFileName));
         HouseholdRequest householdRequest = new HouseholdRequest();
         HouseHoldDto holdDto = new HouseHoldDto();
+        holdDto.setCommunityName(communityName);
         holdDto.setHouseholdName(householdName);
         holdDto.setGender(gender);
         holdDto.setTel(tel);
@@ -70,6 +73,7 @@ public class HouseholdController extends BaseController<HouseholdController> {
         holdDto.setBuildingBlockNumber(buildingBlockNumber);
         holdDto.setRoomNumber(roomNumber);
         holdDto.setCardNumber(cardNumber);
+        holdDto.setHouseholdType(householdType);
         holdDto.setRemarks(remarks);
         holdDto.setPhotoId(AppConstants.FILE_PATH+nowFileName);
         
@@ -123,7 +127,12 @@ public class HouseholdController extends BaseController<HouseholdController> {
 		Page pageTool = Page.getPageByRequest(servletRequest, count);
 		int startRow = (pageTool.getPage() - 1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
 		String fileStr = System.getProperty("onwing.root");
-		return householdfacade.findAllHouseHold(startRow, pageTool.getPageSize(), fileStr + AppConstants.FILE_PATH,count);
+		String searchContent=servletRequest.getParameter("searchContent");
+		if (searchContent.equals("")) {
+			return householdfacade.findAllHouseHold(startRow, pageTool.getPageSize(), fileStr + AppConstants.FILE_PATH,count);
+		}else{			
+			return householdfacade.getFuzzyQuery(startRow, pageTool.getPageSize(), searchContent, count);
+		}
 	}
 
 	/**

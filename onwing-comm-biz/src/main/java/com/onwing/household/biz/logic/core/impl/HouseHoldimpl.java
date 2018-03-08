@@ -141,5 +141,22 @@ public class HouseHoldimpl implements HouseHoldBiz {
 		return null;
 	}
 
+	@Override
+	public List<HouseHoldDto> getFuzzyQuery(int startRow, int pageSize, String searchContent) throws BusinessException {
+		List<HouseHoldDto> householdDtoList = null;
+		try {
+			householdDtoList = new ArrayList<HouseHoldDto>();
+			List<HouseHold> householdList=householdMapper.getFuzzyQuery(startRow, pageSize, searchContent, null);
+			if (householdList != null) {
+				for (HouseHold houseHoldParam : householdList) {
+					householdDtoList.add(ModelUtil.modelToDto(houseHoldParam, HouseHoldDto.class));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return householdDtoList;
+	}
+
 
 }

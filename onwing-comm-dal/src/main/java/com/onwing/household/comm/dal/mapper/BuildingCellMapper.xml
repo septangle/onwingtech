@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.onwing.household.comm.dal.dao.BuildingCellMapper">
+	<resultMap id="BaseResultMap"
+		type="com.onwing.household.comm.dal.model.BuildingCell">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<association property="building"
+			javaType="com.onwing.household.comm.dal.model.Building">
+			<id property="id" column="id" />
+		</association>
+	</resultMap>
+</mapper>

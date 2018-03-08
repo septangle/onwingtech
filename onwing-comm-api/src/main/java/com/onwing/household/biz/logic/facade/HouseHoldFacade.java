@@ -55,4 +55,12 @@ public interface HouseHoldFacade {
      * @throws Exception
      */
     public HouseholdResponse queryHouseHold(HouseholdRequest householdRequest) throws Exception;
+    
+    /**
+     * 模糊查询用户信息
+     * @param
+     * @return
+     * @throws Exception
+     */
+    public HouseholdResponse getFuzzyQuery(int startRow,int pageSize,String searchContent,int count) throws Exception;
 }

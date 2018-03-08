@@ -27,4 +27,7 @@ public interface HouseHoldMapper {
 			@Param("pageSize")int pageSize,@Param("entity")HouseHold houseHold);
     
     int getCountByHousehold();
+    
+    List<HouseHold> getFuzzyQuery(@Param("startRow")int startRow,
+			@Param("pageSize")int pageSize,@Param("searchContent")String searchContent,@Param("entity")HouseHold houseHold);
 }

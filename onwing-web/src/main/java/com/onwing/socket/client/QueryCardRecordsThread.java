@@ -70,7 +70,7 @@ public class QueryCardRecordsThread extends Thread {
 					}
 
 					Camara camara = new Camara();
-					camara.setControlId(control.getId());
+					camara.setControl(control);
 					camara.setDirection(in_out);
 					List<Camara> cameraList = camaraMapper.selectBySelective(camara);
 					if (cameraList == null || cameraList.size() != 1) {
