@@ -1,24 +1,18 @@
 package com.onwing.household.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.onwing.household.biz.dto.AdminiStratorDto;
-import com.onwing.household.biz.exception.BusinessException;
 import com.onwing.household.biz.logic.facade.AdminiStratorFacade;
 import com.onwing.household.biz.request.AdminiStratorRequest;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.onwing.household.biz.response.AdminiStratorResponse;
-import com.onwing.household.comm.AppConstants;
 import com.onwing.household.util.MD5Util;
 
 /**
@@ -46,11 +40,7 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 		//MD5加密
 		request.getAdminiStratorDto().setPassword(MD5Util.encodeMD5String(request.getAdminiStratorDto().getPassword()));
 		AdminiStratorResponse adminiStratorResponse = adminiStratorFacade.login(request);		
-		//存入session
-		if (adminiStratorResponse.getAdminiStratorDto()!=null) {
-			servletRequest.getSession().setAttribute("adminiStratorDto", adminiStratorResponse.getAdminiStratorDto());
-		}
-
+		
 		return adminiStratorResponse;
 	}
 

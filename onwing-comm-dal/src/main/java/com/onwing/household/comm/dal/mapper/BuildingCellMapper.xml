@@ -6,8 +6,9 @@
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<association property="building"
-			javaType="com.onwing.household.comm.dal.model.Building">
-			<id property="id" column="id" />
+			javaType="com.onwing.household.comm.dal.model.Building"
+			resultMap="com.onwing.household.comm.dal.dao.BuildingMapper.BaseResultMap">
+
 		</association>
 	</resultMap>
 </mapper>

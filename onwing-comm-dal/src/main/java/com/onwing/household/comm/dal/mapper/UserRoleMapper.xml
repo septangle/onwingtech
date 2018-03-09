@@ -1,40 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.onwing.household.comm.dal.dao.UserRoleMapper" >
-  <resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.UserRole" >
-    <result column="user_id" property="userId" jdbcType="BIGINT" />
-    <result column="role_id" property="roleId" jdbcType="BIGINT" />
-    <result column="community_id" property="communityId" jdbcType="BIGINT" />
-  </resultMap>
-  <insert id="insert" parameterType="com.onwing.household.comm.dal.model.UserRole" >
-    insert into tbl_user_role (user_id, role_id, community_id
-      )
-    values (#{userId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{communityId,jdbcType=BIGINT}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.UserRole" >
-    insert into tbl_user_role
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="userId != null" >
-        user_id,
-      </if>
-      <if test="roleId != null" >
-        role_id,
-      </if>
-      <if test="communityId != null" >
-        community_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="userId != null" >
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="roleId != null" >
-        #{roleId,jdbcType=BIGINT},
-      </if>
-      <if test="communityId != null" >
-        #{communityId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
+<mapper namespace="com.onwing.household.comm.dal.dao.UserRoleMapper">
+	<resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.UserRole">
+		<association property="adminiStrator"
+			javaType="com.onwing.household.comm.dal.model.AdminiStrator"
+			resultMap="com.onwing.household.comm.dal.dao.AdminiStratorMapper.BaseResultMap">
+		</association>
+		<association property="role"
+			javaType="com.onwing.household.comm.dal.model.Role" resultMap="com.onwing.household.comm.dal.dao.RoleMapper.BaseResultMap">
+		</association>
+		<association property="community"
+			javaType="com.onwing.household.comm.dal.model.Community"
+			resultMap="com.onwing.household.comm.dal.dao.CommunityMapper.BaseResultMap">
+
+		</association>
+	</resultMap>
+	<insert id="insert" parameterType="com.onwing.household.comm.dal.model.UserRole">
+		insert into tbl_user_role
+		(user_id, role_id, community_id
+		)
+		values (#{userId,jdbcType=BIGINT},
+		#{roleId,jdbcType=BIGINT},
+		#{communityId,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.UserRole">
+		insert into tbl_user_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="roleId != null">
+				role_id,
+			</if>
+			<if test="communityId != null">
+				community_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="roleId != null">
+				#{roleId,jdbcType=BIGINT},
+			</if>
+			<if test="communityId != null">
+				#{communityId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="selectByUserId" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select a.id,a.`name`,b.role_name from tbl_community
+		a,tbl_role
+		b,tbl_user_role c
+		where a.id=c.community_id
+		and b.id=c.role_id
+		and c.user_id = #{userId}
+	</select>
 </mapper>

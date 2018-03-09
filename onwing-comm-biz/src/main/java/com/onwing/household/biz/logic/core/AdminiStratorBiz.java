@@ -2,6 +2,7 @@ package com.onwing.household.biz.logic.core;
 
 
 import com.onwing.household.biz.dto.AdminiStratorDto;
+import com.onwing.household.biz.dto.UserRoleDto;
 import com.onwing.household.biz.exception.BusinessException;
 
 /**
@@ -18,5 +19,5 @@ public interface AdminiStratorBiz {
 	 * @return AdminiStratorDto
 	 * @throws Exception
 	 */
-	public AdminiStratorDto queryLoginUser(AdminiStratorDto adminiStratorDto) throws BusinessException;
+	public UserRoleDto queryLoginUser(AdminiStratorDto adminiStratorDto) throws BusinessException;
 }

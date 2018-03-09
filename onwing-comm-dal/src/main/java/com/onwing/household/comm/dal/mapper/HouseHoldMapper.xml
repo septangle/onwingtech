@@ -3,10 +3,6 @@
 <mapper namespace="com.onwing.household.comm.dal.dao.HouseHoldMapper">
 	<resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.HouseHold">
 		<id column="id" property="id" jdbcType="BIGINT" />
-		<association property="community"
-			javaType="com.onwing.household.comm.dal.model.Community">
-			<id property="id" column="id" />
-		</association>
 		<result column="community_name" property="communityName"
 			jdbcType="VARCHAR" />
 		<result column="household_name" property="householdName"
@@ -23,6 +19,10 @@
 		<result column="household_type" property="householdType"
 			jdbcType="VARCHAR" />
 		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
+		<association property="community"
+			javaType="com.onwing.household.comm.dal.model.Community"
+			resultMap="com.onwing.household.comm.dal.dao.CommunityMapper.BaseResultMap">
+		</association>
 	</resultMap>
 	<sql id="Base_Column_List">
 		id,community_id,community_name,household_name, gender,
@@ -187,16 +187,20 @@
 		tbl_household
 		set community_id = #{communityId,jdbcType=BIGINT},
 		community_name = #{communityName,jdbcType=VARCHAR},
-		household_name = #{householdName,jdbcType=VARCHAR},
+		household_name =
+		#{householdName,jdbcType=VARCHAR},
 		gender = #{gender,jdbcType=CHAR},
 		tel = #{tel,jdbcType=VARCHAR},
-		building_block_number = #{buildingBlockNumber,jdbcType=VARCHAR},
-		room_number = #{roomNumber,jdbcType=VARCHAR},
+		building_block_number =
+		#{buildingBlockNumber,jdbcType=VARCHAR},
+		room_number =
+		#{roomNumber,jdbcType=VARCHAR},
 		photo_id =
 		#{photoId,jdbcType=VARCHAR},
 		card_number =
 		#{cardNumber,jdbcType=VARCHAR},
-		remarks = #{remarks,jdbcType=VARCHAR}
+		remarks =
+		#{remarks,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 
@@ -252,21 +256,22 @@
 		from
 		tbl_household
 	</select>
-	
+
 	<select id="getFuzzyQuery" resultMap="BaseResultMap"
 		parameterType="com.onwing.household.comm.dal.model.HouseHold">
-		select 
+		select
 		<include refid="Base_Column_List" />
-		from tbl_household 
-		where household_name 
-		like "%"#{searchContent,jdbcType=VARCHAR}"%" or 
-		tel like "%"#{searchContent,jdbcType=VARCHAR}"%" or 
-		gender like "%"#{searchContent,jdbcType=VARCHAR}"%" or 
-		building_block_number like "%"#{searchContent,jdbcType=VARCHAR}"%" or 
-		room_number like "%"#{searchContent,jdbcType=VARCHAR}"%" or 
-		card_number like "%"#{searchContent,jdbcType=VARCHAR}"%" or 
-		household_type like "%"#{searchContent,jdbcType=VARCHAR}"%" or 
+		from tbl_household
+		where household_name
+		like "%"#{searchContent,jdbcType=VARCHAR}"%" or
+		tel like "%"#{searchContent,jdbcType=VARCHAR}"%" or
+		gender like "%"#{searchContent,jdbcType=VARCHAR}"%" or
+		building_block_number like "%"#{searchContent,jdbcType=VARCHAR}"%" or
+		room_number like "%"#{searchContent,jdbcType=VARCHAR}"%" or
+		card_number like "%"#{searchContent,jdbcType=VARCHAR}"%" or
+		household_type like "%"#{searchContent,jdbcType=VARCHAR}"%" or
 		identify_card like "%"#{searchContent,jdbcType=VARCHAR}"%"
-		LIMIT #{startRow}, #{pageSize}
+		LIMIT #{startRow},
+		#{pageSize}
 	</select>
 </mapper>

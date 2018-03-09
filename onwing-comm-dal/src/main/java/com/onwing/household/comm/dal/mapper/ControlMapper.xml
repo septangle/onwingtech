@@ -4,12 +4,14 @@
 	<resultMap id="BaseResultMap" type="com.onwing.household.comm.dal.model.Control">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="door_name" property="doorName" jdbcType="VARCHAR" />
 		<result column="port" property="port" jdbcType="VARCHAR" />
 		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<association property="door"
+			javaType="com.onwing.household.comm.dal.model.Door" resultMap="com.onwing.household.comm.dal.dao.DoorMapper.BaseResultMap">
+		</association>
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, name, door_name, port, ip
+		id, name, port, ip
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
@@ -19,14 +21,17 @@
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-		delete from tbl_control
+		delete from
+		tbl_control
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 	<insert id="insert" parameterType="com.onwing.household.comm.dal.model.Control"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into tbl_control (name, door_name, port,
+		insert into tbl_control (name,
+		door_name, port,
 		ip)
-		values (#{name,jdbcType=VARCHAR}, #{doorName,jdbcType=VARCHAR},
+		values (#{name,jdbcType=VARCHAR},
+		#{doorName,jdbcType=VARCHAR},
 		#{port,jdbcType=VARCHAR},
 		#{ip,jdbcType=VARCHAR})
 	</insert>
@@ -36,9 +41,6 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="name != null">
 				name,
-			</if>
-			<if test="doorName != null">
-				door_name,
 			</if>
 			<if test="port != null">
 				port,
@@ -50,9 +52,6 @@
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="name != null">
 				#{name,jdbcType=VARCHAR},
-			</if>
-			<if test="doorName != null">
-				#{doorName,jdbcType=VARCHAR},
 			</if>
 			<if test="port != null">
 				#{port,jdbcType=VARCHAR},
@@ -68,9 +67,6 @@
 			<if test="name != null">
 				name = #{name,jdbcType=VARCHAR},
 			</if>
-			<if test="doorName != null">
-				door_name = #{doorName,jdbcType=VARCHAR},
-			</if>
 			<if test="port != null">
 				port = #{port,jdbcType=VARCHAR},
 			</if>
@@ -83,7 +79,6 @@
 	<update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.Control">
 		update tbl_control
 		set name = #{name,jdbcType=VARCHAR},
-		door_name = #{doorName,jdbcType=VARCHAR},
 		port = #{port,jdbcType=VARCHAR},
 		ip = #{ip,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=BIGINT}
@@ -104,9 +99,6 @@
 		where 1=1
 		<if test="name != null">
 			and name = #{name,jdbcType=VARCHAR}
-		</if>
-		<if test="doorName != null">
-			and door_name = #{doorName,jdbcType=VARCHAR}
 		</if>
 		<if test="port != null">
 			and port = #{port,jdbcType=VARCHAR}
