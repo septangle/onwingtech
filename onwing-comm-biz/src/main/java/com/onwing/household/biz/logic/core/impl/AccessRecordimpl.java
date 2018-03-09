@@ -22,11 +22,12 @@ public class AccessRecordimpl implements AccessRecordBiz {
 	private AccessRecordMapper accessRecordMapper;
 
 	@Override
-	public List<HouseAccessRecordDto> selectAccessRecord(int startRow,int pageSize) {
+	public List<HouseAccessRecordDto> selectAccessRecord(int startRow,int pageSize,String communityId) {
 		List<HouseAccessRecordDto> houseAccessRecordDtoList = new ArrayList<HouseAccessRecordDto>();
 		HouseAccessRecord houseAccessRecord = null;
 		try {
-			List<HouseAccessRecord> houseAccessRecordList = accessRecordMapper.selectAccessRecord(startRow,pageSize,houseAccessRecord);
+			Long cid =Long.parseLong(communityId);
+			List<HouseAccessRecord> houseAccessRecordList = accessRecordMapper.selectAccessRecord(startRow,pageSize,cid,houseAccessRecord);
 			if (houseAccessRecordList != null) {
 				for (HouseAccessRecord houseAccessRecordParam : houseAccessRecordList) {
 					houseAccessRecordDtoList

@@ -33,7 +33,8 @@ public class AccessRecordController extends BaseController<AccessRecordControlle
 		int count=accessRecordMapper.getCountByHouseHold();
  		Page pageTool=Page.getPageByRequest(servletRequest,count);
  		int startRow=(pageTool.getPage()-1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
-		return accessRecordFacade.findAllAccessRecord(startRow,pageTool.getPageSize(),count);
+		String communityId=servletRequest.getParameter("communityId");
+		return accessRecordFacade.findAllAccessRecord(startRow,pageTool.getPageSize(),count,communityId);
 	}
 	
 	

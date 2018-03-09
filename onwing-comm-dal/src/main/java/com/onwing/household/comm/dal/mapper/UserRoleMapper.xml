@@ -33,7 +33,7 @@
 			<if test="roleId != null">
 				role_id,
 			</if>
-			<if test="communityId != null">
+			<if test="community.id != null">
 				community_id,
 			</if>
 		</trim>
@@ -44,7 +44,7 @@
 			<if test="roleId != null">
 				#{roleId,jdbcType=BIGINT},
 			</if>
-			<if test="communityId != null">
+			<if test="community.id != null">
 				#{communityId,jdbcType=BIGINT},
 			</if>
 		</trim>

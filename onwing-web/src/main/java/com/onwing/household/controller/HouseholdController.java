@@ -49,9 +49,9 @@ public class HouseholdController extends BaseController<HouseholdController> {
 			@RequestParam("gender") String gender, @RequestParam("tel") String tel,
 			@RequestParam("identifyCard") String identifyCard,
 			@RequestParam("buildingBlockNumber") String buildingBlockNumber,
-			@RequestParam("roomNumber") String roomNumber, @RequestParam("cardNumber") String cardNumber,
-			@RequestParam("householdType") String householdType,
-			@RequestParam("remarks") String remarks, @RequestParam MultipartFile file,
+			@RequestParam("roomNumber") String roomNumber, @RequestParam(value="cardNumber",required=false) String cardNumber,
+			@RequestParam(value="householdType",required=false) String householdType,
+			@RequestParam(value="remarks",required=false) String remarks, @RequestParam MultipartFile file,
 			HttpServletRequest servletRequest) throws Exception {
 		String path = System.getProperty("onwing.root") + AppConstants.FILE_PATH;
 		File files = new File(path);
@@ -128,10 +128,11 @@ public class HouseholdController extends BaseController<HouseholdController> {
 		int startRow = (pageTool.getPage() - 1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
 		String fileStr = System.getProperty("onwing.root");
 		String searchContent=servletRequest.getParameter("searchContent");
+		String communityId=servletRequest.getParameter("communityId");
 		if (searchContent.equals("")) {
-			return householdfacade.findAllHouseHold(startRow, pageTool.getPageSize(), fileStr + AppConstants.FILE_PATH,count);
+			return householdfacade.findAllHouseHold(startRow, pageTool.getPageSize(), fileStr + AppConstants.FILE_PATH,count,communityId);
 		}else{			
-			return householdfacade.getFuzzyQuery(startRow, pageTool.getPageSize(), searchContent, count);
+			return householdfacade.getFuzzyQuery(startRow, pageTool.getPageSize(), searchContent, count,communityId);
 		}
 	}
 

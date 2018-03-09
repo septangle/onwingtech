@@ -23,7 +23,7 @@ public interface AccessRecordMapper {
    /*************自定义查询******************/
     
     List<HouseAccessRecord> selectAccessRecord(@Param("startRow")int startRow,
-			@Param("pageSize")int pageSize,@Param("entity")HouseAccessRecord houseAccessRecord);
+			@Param("pageSize")int pageSize,@Param("communityId")Long communityId,@Param("entity")HouseAccessRecord houseAccessRecord);
     
     //查询住户出入记录总数
     int  getCountByHouseHold();

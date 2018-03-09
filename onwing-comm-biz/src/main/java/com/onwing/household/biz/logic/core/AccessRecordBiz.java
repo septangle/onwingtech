@@ -17,7 +17,7 @@ public interface AccessRecordBiz {
 	 * @return list<HouseAccessRecordDto>
 	 * @throws Exception
 	 */
-	public List<HouseAccessRecordDto> selectAccessRecord(int page,int pageSize);
+	public List<HouseAccessRecordDto> selectAccessRecord(int page,int pageSize,String communityId);
 	
 	public void addAccessRecord(AccessRecord accessRecord);
 	

@@ -24,7 +24,7 @@ public interface HouseHoldMapper {
     List<HouseHold> selectBySelective(HouseHold record);
     
     List<HouseHold> getAllHouseHold(@Param("startRow")int startRow,
-			@Param("pageSize")int pageSize,@Param("entity")HouseHold houseHold);
+			@Param("pageSize")int pageSize,@Param("communityId")Long communityId,@Param("entity")HouseHold houseHold);
     
     int getCountByHousehold();
     

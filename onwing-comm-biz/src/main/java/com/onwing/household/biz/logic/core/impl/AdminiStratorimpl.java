@@ -21,6 +21,7 @@ public class AdminiStratorimpl implements AdminiStratorBiz{
 	@Autowired 
 	private UserRoleMapper userRoleMapper;
 
+
 	//登录
 	@Override
 	public UserRoleDto queryLoginUser(AdminiStratorDto adminiStratorDto) throws BusinessException {

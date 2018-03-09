@@ -15,6 +15,8 @@ public class HouseAccessRecordDto {
     private Date outOffTime;
     
     private String photoUrl;
+    
+    private Long communityId;
 
 	public Long getId() {
 		return id;
@@ -64,6 +66,14 @@ public class HouseAccessRecordDto {
 
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
+	}
+
+	public Long getCommunityId() {
+		return communityId;
+	}
+
+	public void setCommunityId(Long communityId) {
+		this.communityId = communityId;
 	}
     
     

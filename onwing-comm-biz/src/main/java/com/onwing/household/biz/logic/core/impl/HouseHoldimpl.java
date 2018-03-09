@@ -11,7 +11,9 @@ import com.onwing.household.biz.dto.HouseHoldDto;
 import com.onwing.household.biz.exception.BusinessException;
 import com.onwing.household.biz.logic.core.HouseHoldBiz;
 import com.onwing.household.comm.AppConstants;
+import com.onwing.household.comm.dal.dao.CommunityMapper;
 import com.onwing.household.comm.dal.dao.HouseHoldMapper;
+import com.onwing.household.comm.dal.model.Community;
 import com.onwing.household.comm.dal.model.HouseHold;
 import com.onwing.household.util.ModelUtil;
 
@@ -22,13 +24,20 @@ public class HouseHoldimpl implements HouseHoldBiz {
 
 	@Autowired
 	private HouseHoldMapper householdMapper;
+	
+	@Autowired
+	private CommunityMapper communityMapper;
 
 	@Override
 	public boolean addHousehold(HouseHoldDto householdDto) throws BusinessException {
 		boolean flag = false;
 		HouseHold household;
+		Community community = new Community();
 		try {
+			community.setName(householdDto.getCommunityName());
+			List<Community> clist=communityMapper.selectBySelective(community);
 			household = ModelUtil.dtoToModel(householdDto, HouseHold.class);
+			household.setCommunity(clist.get(0));
 			int i = householdMapper.insertSelective(household);
 			if (i == 0) {
 				throw new BusinessException(AppConstants.ADD_HOUSE_HOLD_FAIL_CODE,
@@ -82,11 +91,12 @@ public class HouseHoldimpl implements HouseHoldBiz {
 	}
 
 	@Override
-	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String strFile) throws BusinessException {
+	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String strFile,String communityId) throws BusinessException {
 		List<HouseHoldDto> householdDtoList = null;
 		try {
+			long cid =Long.parseLong(communityId);
 			householdDtoList = new ArrayList<HouseHoldDto>();
-			List<HouseHold> householdList = householdMapper.getAllHouseHold(startRow, pageSize, null);
+			List<HouseHold> householdList = householdMapper.getAllHouseHold(startRow, pageSize,cid, null);
 			if (householdList != null) {
 				for (HouseHold houseHoldParam : householdList) {
 					householdDtoList.add(ModelUtil.modelToDto(houseHoldParam, HouseHoldDto.class));
@@ -142,7 +152,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 	}
 
 	@Override
-	public List<HouseHoldDto> getFuzzyQuery(int startRow, int pageSize, String searchContent) throws BusinessException {
+	public List<HouseHoldDto> getFuzzyQuery(int startRow, int pageSize, String searchContent,String communityId) throws BusinessException {
 		List<HouseHoldDto> householdDtoList = null;
 		try {
 			householdDtoList = new ArrayList<HouseHoldDto>();

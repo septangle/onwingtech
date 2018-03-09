@@ -7,6 +7,8 @@ public class CommunityDto {
 	private String name;
 	
 	private String address;
+	
+    private Long communityId;
 
 	public Long getId() {
 		return id;
@@ -30,6 +32,14 @@ public class CommunityDto {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public Long getCommunityId() {
+		return communityId;
+	}
+
+	public void setCommunityId(Long communityId) {
+		this.communityId = communityId;
 	}
 	
 	

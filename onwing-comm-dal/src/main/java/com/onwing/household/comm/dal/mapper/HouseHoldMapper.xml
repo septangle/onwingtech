@@ -51,7 +51,7 @@
 		room_number, photo_id,
 		card_number, remarks)
 		values
-		(#{communityId,jdbcType=BIGINT},#{communityName,jdbcType=VARCHAR},
+		(#{community.id,jdbcType=BIGINT},#{communityName,jdbcType=VARCHAR},
 		#{householdName,jdbcType=VARCHAR},
 		#{gender,jdbcType=CHAR},
 		#{tel,jdbcType=VARCHAR},
@@ -63,7 +63,7 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into tbl_household
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="communityId != null">
+			<if test="community.id != null">
 				community_id,
 			</if>
 			<if test="communityName != null">
@@ -101,8 +101,8 @@
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="communityId != null">
-				#{communityId,jdbcType=BIGINT},
+			<if test="community.id != null">
+				#{community.id,jdbcType=BIGINT},
 			</if>
 			<if test="communityName != null">
 				#{communityName,jdbcType=VARCHAR},
@@ -142,7 +142,7 @@
 	<update id="updateByPrimaryKeySelective" parameterType="com.onwing.household.comm.dal.model.HouseHold">
 		update tbl_household
 		<set>
-			<if test="communityId != null">
+			<if test="community.id != null">
 				community_id = #{communityId,jdbcType=BIGINT},
 			</if>
 			<if test="communityName != null">
@@ -248,7 +248,8 @@
 		parameterType="com.onwing.household.comm.dal.model.HouseHold">
 		select
 		<include refid="Base_Column_List" />
-		from tbl_household LIMIT #{startRow}, #{pageSize}
+		from tbl_household where community_id=#{communityId,jdbcType=BIGINT} 
+		LIMIT #{startRow}, #{pageSize}
 	</select>
 
 	<select id="getCountByHousehold" resultType="int">
@@ -262,15 +263,23 @@
 		select
 		<include refid="Base_Column_List" />
 		from tbl_household
-		where household_name
-		like "%"#{searchContent,jdbcType=VARCHAR}"%" or
-		tel like "%"#{searchContent,jdbcType=VARCHAR}"%" or
-		gender like "%"#{searchContent,jdbcType=VARCHAR}"%" or
-		building_block_number like "%"#{searchContent,jdbcType=VARCHAR}"%" or
-		room_number like "%"#{searchContent,jdbcType=VARCHAR}"%" or
-		card_number like "%"#{searchContent,jdbcType=VARCHAR}"%" or
-		household_type like "%"#{searchContent,jdbcType=VARCHAR}"%" or
-		identify_card like "%"#{searchContent,jdbcType=VARCHAR}"%"
+		where community_id=#{communityId,jdbcType=BIGINT} and 
+		household_name like
+		"%"#{searchContent,jdbcType=VARCHAR}"%" or
+		tel like
+		"%"#{searchContent,jdbcType=VARCHAR}"%" or
+		gender like
+		"%"#{searchContent,jdbcType=VARCHAR}"%" or
+		building_block_number like
+		"%"#{searchContent,jdbcType=VARCHAR}"%" or
+		room_number like
+		"%"#{searchContent,jdbcType=VARCHAR}"%" or
+		card_number like
+		"%"#{searchContent,jdbcType=VARCHAR}"%" or
+		household_type like
+		"%"#{searchContent,jdbcType=VARCHAR}"%" or
+		identify_card like
+		"%"#{searchContent,jdbcType=VARCHAR}"%"
 		LIMIT #{startRow},
 		#{pageSize}
 	</select>
