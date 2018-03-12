@@ -11,7 +11,7 @@ public class Camara {
     
     private String ip;
     
-    private String replayId;
+    private String relayId;
 
     public Long getId() {
         return id;
@@ -54,12 +54,12 @@ public class Camara {
 		this.ip = ip;
 	}
 
-	public String getReplayId() {
-		return replayId;
+	public String getRelayId() {
+		return relayId;
 	}
 
-	public void setReplayId(String replayId) {
-		this.replayId = replayId;
+	public void setRelayId(String relayId) {
+		this.relayId = relayId;
 	}
     
     

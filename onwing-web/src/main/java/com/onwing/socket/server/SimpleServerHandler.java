@@ -277,7 +277,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			return false;
 		}
 		String lockControlId = cameraList.get(0).getControl().getName();// 控制器name: control1
-		String relayNumber = cameraList.get(0).getReplayId(); // 继电器号 02
+		String relayNumber = cameraList.get(0).getRelayId(); // 继电器号 02
 		
 		DoorLockBiz doorLockimpl = doorLockMap.getLockSocketMap().get(lockControlId);
 		if (doorLockimpl == null) {
