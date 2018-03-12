@@ -49,4 +49,19 @@
     set role_name = #{roleName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <!--===============自定义sql =============== -->
+  <select id="selectBySelective" resultMap="BaseResultMap"
+		parameterType="com.onwing.household.comm.dal.model.Role">
+		select
+		<include refid="Base_Column_List" />
+		from tbl_role
+		where 1=1
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="roleName != null">
+			and role_name = #{roleName,jdbcType=VARCHAR}
+		</if>
+  </select>
 </mapper>

@@ -15,6 +15,10 @@ public class AppConstants {
 	public final static String QUERY_LOGIN_USERLOING_ERROR_MESSAGE = "该用户已登录！";
 	public final static String NOT_LOGIN_CODE="10010003";
 	public final static String NOT_LOGIN_MESSAGE="该用户未登录";
+	public final static String EXISTED_CODE="10010004";
+	public final static String EXISTED_MESSAGE="用户名已经存在";
+	public final static String ROLE_EXISTED_CODE="10010005";
+	public final static String ROLE_EXISTED_MESSAGE="角色名不存在或有重复";
 
 	//addHousehold 1003
 	public final static String ADD_HOUSE_HOLD_FAIL_CODE = "10030001";

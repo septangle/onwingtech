@@ -1,5 +1,8 @@
 package com.onwing.household.comm.dal.dao;
 
+import java.util.List;
+
+import com.onwing.household.comm.dal.model.AdminiStrator;
 import com.onwing.household.comm.dal.model.Role;
 
 public interface RoleMapper {
@@ -14,4 +17,8 @@ public interface RoleMapper {
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
+    
+    /****************自定义查询*******************/
+    
+    List<Role> selectBySelective(Role record);
 }

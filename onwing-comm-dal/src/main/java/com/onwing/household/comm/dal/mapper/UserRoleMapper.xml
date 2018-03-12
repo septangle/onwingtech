@@ -19,18 +19,18 @@
 		insert into tbl_user_role
 		(user_id, role_id, community_id
 		)
-		values (#{userId,jdbcType=BIGINT},
-		#{roleId,jdbcType=BIGINT},
-		#{communityId,jdbcType=BIGINT}
+		values (#{adminiStrator.id,jdbcType=BIGINT},
+		#{role.id,jdbcType=BIGINT},
+		#{community.id,jdbcType=BIGINT}
 		)
 	</insert>
 	<insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.UserRole">
 		insert into tbl_user_role
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="userId != null">
+			<if test="adminiStrator.id != null">
 				user_id,
 			</if>
-			<if test="roleId != null">
+			<if test="role.id != null">
 				role_id,
 			</if>
 			<if test="community.id != null">
@@ -38,14 +38,14 @@
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="userId != null">
-				#{userId,jdbcType=BIGINT},
+			<if test="adminiStrator.id != null">
+				#{adminiStrator.id,jdbcType=BIGINT},
 			</if>
-			<if test="roleId != null">
-				#{roleId,jdbcType=BIGINT},
+			<if test="role.id != null">
+				#{role.id,jdbcType=BIGINT},
 			</if>
 			<if test="community.id != null">
-				#{communityId,jdbcType=BIGINT},
+				#{community.id,jdbcType=BIGINT},
 			</if>
 		</trim>
 	</insert>

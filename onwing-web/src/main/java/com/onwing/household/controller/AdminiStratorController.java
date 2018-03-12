@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.onwing.household.biz.logic.facade.AdminiStratorFacade;
 import com.onwing.household.biz.request.AdminiStratorRequest;
+import com.onwing.household.biz.request.UserRoleRequest;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -43,7 +44,23 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 		
 		return adminiStratorResponse;
 	}
-
 	
-
+	/**
+	 * 创建用户（物业管理员，物业保安）
+	 */
+	@ApiOperation(value = "创建用户（物业管理员，物业保安）", httpMethod = "POST", response = AdminiStratorResponse.class)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "tel", value = "电话", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "roleName", value = "角色名称", required = true, dataType = "string"),
+			@ApiImplicitParam(name = "communityId", value = "小区id", required = true, dataType = "string")
+	})
+	@RequestMapping(value = "/addUser.do", method = RequestMethod.POST)
+	public @ResponseBody AdminiStratorResponse addUser(@RequestBody UserRoleRequest request,
+			HttpServletRequest servletRequest) throws Exception {
+		AdminiStratorResponse adminiStratorResponse = adminiStratorFacade.addUser(request);
+		return adminiStratorResponse;
+	}
+	
 }
