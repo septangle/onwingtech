@@ -31,9 +31,14 @@ public class AppConstants {
 	public final static String UPDATE_HOUSE_HOLD_FAIL_MESSAGE = "住户信息更新失败";
 	public final static String UPDATE_HOUSE_HOLD_SUCCESS_MESSAGE = "住户信息更新成功";
 	
+	//Community module 1006
+	public final static String COMMUNITY_PARENT_NODE_NOT_EXISTED = "10060001";
+	public final static String COMMUNITY_PARENT_NODE_NOT_EXISTED_MESSAGE = "小区：父节点不存在";
+	
 	//addphoto
 	public final static String ADD_PHOTO_SUCCESS="上传成功";
 	public final static String FILE_PATH="householdImage/";
+	public final static String CSV_PATH="csv/";
 	public final static String STRANGER_FILE_PATH="strangerImage/";
 	
 	//addStranger

@@ -268,11 +268,17 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	public boolean openControlLock(String cameraName, String photoName) {
-		String control_relay_map = lockControlProperties.get(cameraName);
-		String[] control_relay_map_split = control_relay_map.split("-");
-		String lockControlId = control_relay_map_split[0]; // 控制器name,
-															// control1
-		String relayNumber = control_relay_map_split[1]; // 继电器号 02
+		//从数据库中获取camera相关信息 by cameraName
+		Camara camera = new Camara();
+		camera.setName(cameraName);
+		List<Camara> cameraList = camaraMapper.selectBySelective(camera);
+		if (cameraList == null || cameraList.size() != 1) {
+			logger.error("camera from DB with name: {} is null or not only", cameraName);
+			return false;
+		}
+		String lockControlId = cameraList.get(0).getControl().getName();// 控制器name: control1
+		String relayNumber = cameraList.get(0).getReplayId(); // 继电器号 02
+		
 		DoorLockBiz doorLockimpl = doorLockMap.getLockSocketMap().get(lockControlId);
 		if (doorLockimpl == null) {
 			logger.error("doorLockimpl is null");

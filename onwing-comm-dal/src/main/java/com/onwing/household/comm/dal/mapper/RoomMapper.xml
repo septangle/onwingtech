@@ -9,4 +9,21 @@
 			resultMap="com.onwing.household.comm.dal.dao.FloorsMapper.BaseResultMap">
 		</association>
 	</resultMap>
+	
+	<insert id="insert" parameterType="com.onwing.household.comm.dal.model.Room"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_room  ##############
+		(community_id,community_name, household_name, gender, tel,
+		building_block_number,
+		room_number, photo_id,
+		card_number, remarks)
+		values
+		(#{community.id,jdbcType=BIGINT},#{communityName,jdbcType=VARCHAR},
+		#{householdName,jdbcType=VARCHAR},
+		#{gender,jdbcType=CHAR},
+		#{tel,jdbcType=VARCHAR},
+		#{buildingBlockNumber,jdbcType=VARCHAR},
+		#{roomNumber,jdbcType=VARCHAR}, #{photoId,jdbcType=VARCHAR},
+		#{cardNumber,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR})
+	</insert>
 </mapper>

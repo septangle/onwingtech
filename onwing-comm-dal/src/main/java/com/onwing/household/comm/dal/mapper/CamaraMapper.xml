@@ -5,13 +5,16 @@
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="direction" property="direction" jdbcType="VARCHAR" />
+		
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="relay_id" property="relayId" jdbcType="VARCHAR" />
 		<association property="control"
-			javaType="com.onwing.household.comm.dal.model.Control">
-			<id property="id" column="id" />
+			javaType="com.onwing.household.comm.dal.model.Control" 
+			resultMap="com.onwing.household.comm.dal.dao.ControlMapper.BaseResultMap">
 		</association>
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, name, control_id, direction
+		id, name, control_id, direction, ip, relay_id
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
@@ -26,10 +29,10 @@
 	</delete>
 	<insert id="insert" parameterType="com.onwing.household.comm.dal.model.Camara"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into tbl_camera (name, control_id, direction
+		insert into tbl_camera (name, control_id, direction, ip, relay_id
 		)
-		values (#{name,jdbcType=VARCHAR}, #{controlId,jdbcType=BIGINT},
-		#{direction,jdbcType=VARCHAR}
+		values (#{name,jdbcType=VARCHAR}, #{control.id,jdbcType=BIGINT},
+		#{direction,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{relay_id,jdbcType=VARCHAR}
 		)
 	</insert>
 	<insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Camara"
@@ -39,22 +42,34 @@
 			<if test="name != null">
 				name,
 			</if>
-			<if test="controlId != null">
+			<if test="control.id != null">
 				control_id,
 			</if>
 			<if test="direction != null">
 				direction,
+			</if>
+			<if test="ip != null">
+				ip,
+			</if>
+			<if test="relayId != null">
+				relay_id,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="name != null">
 				#{name,jdbcType=VARCHAR},
 			</if>
-			<if test="controlId != null">
-				#{controlId,jdbcType=BIGINT},
+			<if test="control.id != null">
+				#{control.id,jdbcType=BIGINT},
 			</if>
 			<if test="direction != null">
 				#{direction,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				#{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="relayId != null">
+				#{relayId,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -64,11 +79,17 @@
 			<if test="name != null">
 				name = #{name,jdbcType=VARCHAR},
 			</if>
-			<if test="controlId != null">
-				control_id = #{controlId,jdbcType=BIGINT},
+			<if test="control.id != null">
+				control_id = #{control.id,jdbcType=BIGINT},
 			</if>
 			<if test="direction != null">
 				direction = #{direction,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="relayId != null">
+				relay_id = #{relayId,jdbcType=VARCHAR},
 			</if>
 		</set>
 		where id = #{id,jdbcType=BIGINT}
@@ -76,8 +97,10 @@
 	<update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.Camara">
 		update tbl_camera
 		set name = #{name,jdbcType=VARCHAR},
-		control_id = #{controlId,jdbcType=BIGINT},
-		direction = #{direction,jdbcType=VARCHAR}
+		control_id = #{control.id,jdbcType=BIGINT},
+		direction = #{direction,jdbcType=VARCHAR},
+		ip = #{ip,jdbcType=VARCHAR},
+		relay_id = #{relayId,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=BIGINT}
 	</update>
                     <!--  	自定义查询 -->
@@ -99,9 +122,9 @@
 		<if test="name != null">
 			and name = #{name,jdbcType=VARCHAR}
 		</if>
-<!-- 		<if test="controlId != null">
-			and control_id = #{controlId,jdbcType=BIGINT}
-		</if> -->
+		<if test="control.id != null">
+			and control_id = #{control.id,jdbcType=BIGINT}
+		</if>
 		<if test="direction != null">
 			and direction = #{direction,jdbcType=VARCHAR}
 		</if>
