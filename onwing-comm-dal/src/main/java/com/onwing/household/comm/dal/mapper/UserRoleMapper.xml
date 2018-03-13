@@ -52,9 +52,9 @@
 
 	<select id="selectByUserId" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
-		select a.id,a.`name`,b.role_name from tbl_community
-		a,tbl_role
-		b,tbl_user_role c
+		select 
+		* 
+		from tbl_community a,tbl_role b,tbl_user_role c 
 		where a.id=c.community_id
 		and b.id=c.role_id
 		and c.user_id = #{userId}

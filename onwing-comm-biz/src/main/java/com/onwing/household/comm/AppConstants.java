@@ -19,6 +19,8 @@ public class AppConstants {
 	public final static String EXISTED_MESSAGE="用户名已经存在";
 	public final static String ROLE_EXISTED_CODE="10010005";
 	public final static String ROLE_EXISTED_MESSAGE="角色名不存在或有重复";
+	public final static String NAME_MULTI_OR_NULL_CODE="10010006";
+	public final static String NAME_MULTI_OR_NULL_MESSAGE="用户名有重复或不存在";
 
 	//addHousehold 1003
 	public final static String ADD_HOUSE_HOLD_FAIL_CODE = "10030001";
