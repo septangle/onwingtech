@@ -20,7 +20,7 @@
                 </div>
                 <!-- 分页开始 -->
                 <div style="float:right;margin-top: -30px;">
-                <Page :total="datacount" :page-size="pagesize" show-total @on-change="changePage" style="text-align:right;margin-top:50px"></Page>
+                    <Page :total="datacount" :page-size="pagesize" show-total @on-change="changePage" style="text-align:right;margin-top:50px"></Page>
                 </div>
                 <!-- 分页结束 -->
             </div>
@@ -135,213 +135,231 @@ td.ivu-table-expanded-cell {
 }
 </style>
 <script>
-    import GlobalServer from '../../config.js';
-    import axios from 'axios';
-
-    export default {
-        name: 'whitelist_inout_index',
-        data () {
-            return {
-                bigPhotoUrl:'',
-                progresshow:false,
-                progresscount:0,
-                progresstatus:'active',
-                progressspeed:0,
-                inout_data:[],
-                inout_page_data:[],
-                inout_thumb: [],
-                datacount: 0,
-                pageindex:1,
-                pagesize: 20,
-                page_loading:false,
-                data_loading:false,
-                columns_title:[
-                    {
-                        title: 'ID',
-                        key: 'id',
-                        ellipsis:'true',
-                        width: 80,
-                        align: 'center',
-                        sortType: 'desc'
-                    },{
+import GlobalServer from '../../config.js';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+export default {
+    name: 'whitelist_inout_index',
+    data () {
+        return {
+            bigPhotoUrl:'',
+            progresshow:false,
+            progresscount:0,
+            progresstatus:'active',
+            progressspeed:0,
+            inout_data:[],
+            inout_page_data:[],
+            inout_thumb: [],
+            datacount: 0,
+            pageindex:1,
+            pagesize: 20,
+            page_loading:false,
+            data_loading:false,
+            columns_title:[
+                {
+                    title: 'ID',
+                    key: 'id',
+                    ellipsis:'true',
+                    width: 80,
+                    align: 'center',
+                    sortType: 'desc'
+                },{
+                    title: '小区名称',
+                    key: 'householdName',
+                    ellipsis:'true',
+                    width: 110,
+                    align: 'center'
+                },{
                     title: '缩略图',
                     key: 'photoUrl',
                     width: 120,
                     align: 'center',
                     render: (h,params) => {
-                      return h('img',{
-                        attrs: {
-                          src: this.inout_thumb[params.row._index],
-                          style: 'width:100%;height:auto;margin-top:4px;'
-                        },
-                        on: {
-                          click: (event) => {
-                            //this.showDialog = true;
-                            //console.info(this);
-                            this.bigPhotoUrl = event.target.src;
-                            this.changeBigPhoto();
-                            this.showDialog();
-                            this.showMask();
-                          }
-                        }
-                      })
+                        return h('img',{
+                            attrs: {
+                                src: this.inout_thumb[params.row._index],
+                                style: 'width:100%;height:auto;margin-top:4px;'
+                            },
+                            on: {
+                                click: (event) => {
+                                    //this.showDialog = true;
+                                    //console.info(this);
+                                    this.bigPhotoUrl = event.target.src;
+                                    this.changeBigPhoto();
+                                    this.showDialog();
+                                    this.showMask();
+                                }
+                            }
+                        })
                     }
-                  },{
-                        title: '姓名',
-                        key: 'householdName',
-                        ellipsis:'true',
-                        width: 110,
-                        align: 'center'
-                    },{
-                        title: '住址',
-                        key: 'addres',
-                        ellipsis:'true',
-                        width: 170,
-                        align: 'center'
-                    },{
-                        title: '进入时间',
-                        key: 'outOffTime',
-                        align: 'center'
-                    }]
-            }
-        },
-        methods: {
-            getInoutDate(currentPage,pageSize) {
-                /* axios有自己的作用域,无法获取vue实例,所以要将vue实例的this传到一个变量中以便在axios中调用 */
-                var _this = this;
-                /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
-                _this.page_loading = true;
-                /* 获取所有住户信息并将值传入进inout_data数组 */
-                axios.get(GlobalServer.findAllAccessRecord + '?page=' + currentPage + '&pageSize=' + pageSize)
-                .then(function(response){
-                    let data = response.data;
-                    if(data.error === null){
-                        _this.datacount = data.totalNumber;
-                        /* 定义tempArr数组，临时存放返回的出入记录 */
-                        // let tempArr = [];
-                        // tempArr = data.houseAccessRecordDtosList;
-
-                        /* 遍历tempArr数组，将数组中每一条出入记录对象中的单元号和房号进行拼接 */
-                        _this.inout_data = data.houseAccessRecordDtosList.map(function(value){
-                            let tempObj = {};
-                            let tempDate = _this.setDate(value.outOffTime);
-                            tempObj.id = value.id;
-                            tempObj.householdName = value.householdName;
-                            tempObj.addres = value.buildingBlockNumber + value.roomNumber + '室';
-                            tempObj.outOffTime = tempDate;
-                            _this.inout_thumb.push(GlobalServer.ServerHost + 'onwing-web/' + value.photoUrl);
-                            return tempObj;
-                        });
-
-                        /* 如果数据条目数小于每页显示的条目数,则将所有数据传入分页数据对象,
-                           如果数据条目数大于每页显示的条目数,则将第一页要显示的数据传入分页数据对象 */
-                        // if(_this.datacount <= _this.pagesize) {
-                        //     _this.inout_page_data = _this.inout_data;
-                        // } else {
-                        //     _this.inout_page_data = _this.inout_data.slice(0,_this.pagesize-1);
-                        // }
-
-                        /* 将page_loading值设置为false,隐藏'下在加载数据'的蒙板 */
-                        _this.page_loading = false;
-                    }
-                })
-                .catch(function(error){
-                    console.info('error=' + error);
-                })
-            },
-            changePage(index){  //入参index <Page>组件中on-change事件的返回值，表示页码改变后的页码
-                // start 每页的开始数据
-                // let start = (index - 1) * this.pagesize;
-                // end 每页的结束数据
-                // let end = index * this.pagesize;
-
-                //this.inout_page_data = this.inout_data.slice(start,end);
-                this.getInoutDate(index,this.pagesize);
-            },
-            exportData (type) {
-                if (type === 1) {
-                    this.$refs.table.exportCsv({
-                        filename: '原始数据',
-                        columns: this.columns_title,
-                        data: this.inout_data
-                    });
-                } else if (type === 2) {
-                    this.$refs.table.exportCsv({
-                        filename: '排序和过滤后的数据',
-                        original: false
-                    });
+                },{
+                    title: '姓名',
+                    key: 'householdName',
+                    ellipsis:'true',
+                    width: 110,
+                    align: 'center'
+                },{
+                    title: '住址',
+                    key: 'addres',
+                    ellipsis:'true',
+                    width: 170,
+                    align: 'center'
+                },{
+                    title: '进入时间',
+                    key: 'outOffTime',
+                    align: 'center'
+                },{
+                    title: '门禁设备号',
+                    key: 'doorControlID',
+                    align: 'center'
+                },{
+                    title: '摄像头设备号',
+                    key: 'cameraID',
+                    align: 'center'
                 }
-            },
-            setDate (value) {
-                let temp = new Date(value);
-                let year = temp.getFullYear() + '年',
-                    month = temp.getMonth() + 1 + '月',
-                    date = temp.getDate() + '日',
-                    hours = temp.getHours() + '点',
-                    minutes = temp.getMinutes() + '分',
-                    second = temp.getSeconds() + '秒',
-                    fullDate = '';
-                return fullDate = year + month + date + hours + minutes + second;
-            },
-            hideMask () {
-                //this.showDialog = false;
-                //this.bigPhotoUrl = '';
-                var mask = document.getElementById('mask');
-                mask.classList.add('hide');
-            },
-            showDialog () {
-                var dialog = document.getElementById('dialog');
-                dialog.classList.remove('hide');
-            },
-            showMask () {
-                var mask = document.getElementById('mask');
-                mask.classList.remove('hide');
-            },
-            changeBigPhoto () {
-                var bigImg = document.getElementById('bigImg');
-                bigImg.setAttribute('src',this.bigPhotoUrl);
-            },
-            createDialog (body) {
-                //body = document.querySelector('body');
-                var _this = this;
-                var dialog = document.createElement('div'),
-                    close = document.createElement('span'),
-                    p = document.createElement('p'),
-                    img = document.createElement('img');
+            ]
+        }
+    },
+    methods: {
+        getInoutDate(currentPage,pageSize) {
+            /* axios有自己的作用域,无法获取vue实例,所以要将vue实例的this传到一个变量中以便在axios中调用 */
+            var _this = this;
+            /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
+            _this.page_loading = true;
+            /* 获取所有住户信息并将值传入进inout_data数组 */
+            axios.get(GlobalServer.findAllAccessRecord + '?page=' + currentPage + '&pageSize=' + pageSize)
+            .then(function(response){
+                let data = response.data;
+                if(data.error === null){
+                    _this.datacount = data.totalNumber;
+                    /* 定义tempArr数组，临时存放返回的出入记录 */
+                    // let tempArr = [];
+                    // tempArr = data.houseAccessRecordDtosList;
 
-                dialog.className = 'dialog-showBigPhoto hide';
-                dialog.id = 'dialog';
-                close.className = 'close';
-                close.id = 'close';
-                close.textContent = 'X';
-                img.id = 'bigImg';
-                close.addEventListener('click',function(){
-                    dialog.classList.add('hide');
-                    _this.hideMask();
-                    _this.bigPhotoUrl = '';
-                })
-                p.appendChild(img);
-                dialog.appendChild(p);
-                dialog.appendChild(close);
-                body.appendChild(dialog);
-            },
-            createMask (body) {
-                var mask = document.createElement('div');
-                mask.className = 'mask hide';
-                mask.id = 'mask';
-                body.appendChild(mask);
+                    /* 遍历tempArr数组，将数组中每一条出入记录对象中的单元号和房号进行拼接 */
+                    _this.inout_data = data.houseAccessRecordDtosList.map(function(value){
+                        let tempObj = {};
+                        let tempDate = _this.setDate(value.outOffTime);
+                        tempObj.id = value.id;
+                        tempObj.householdName = value.householdName;
+                        tempObj.addres = value.buildingBlockNumber + value.roomNumber + '室';
+                        tempObj.outOffTime = tempDate;
+                        //doorControlID门禁设备号,cameraID摄像头设备号
+                        tempObj.doorControlID = value.doorControlID;
+                        tempObj.cameraID = value.cameraID;
+                        _this.inout_thumb.push(GlobalServer.ServerHost + 'onwing-web/' + value.photoUrl);
+                        return tempObj;
+                    });
+
+                    /* 如果数据条目数小于每页显示的条目数,则将所有数据传入分页数据对象,
+                       如果数据条目数大于每页显示的条目数,则将第一页要显示的数据传入分页数据对象 */
+                    // if(_this.datacount <= _this.pagesize) {
+                    //     _this.inout_page_data = _this.inout_data;
+                    // } else {
+                    //     _this.inout_page_data = _this.inout_data.slice(0,_this.pagesize-1);
+                    // }
+
+                    /* 将page_loading值设置为false,隐藏'下在加载数据'的蒙板 */
+                    _this.page_loading = false;
+                }
+            })
+            .catch(function(error){
+                console.info('error=' + error);
+            })
+        },
+        changePage(index){  //入参index <Page>组件中on-change事件的返回值，表示页码改变后的页码
+            // start 每页的开始数据
+            // let start = (index - 1) * this.pagesize;
+            // end 每页的结束数据
+            // let end = index * this.pagesize;
+
+            //this.inout_page_data = this.inout_data.slice(start,end);
+            this.getInoutDate(index,this.pagesize);
+        },
+        exportData (type) {
+            if (type === 1) {
+                this.$refs.table.exportCsv({
+                    filename: '原始数据',
+                    columns: this.columns_title,
+                    data: this.inout_data
+                });
+            } else if (type === 2) {
+                this.$refs.table.exportCsv({
+                    filename: '排序和过滤后的数据',
+                    original: false
+                });
             }
         },
-        beforeCreate() {},
-        created() {
-            this.getInoutDate(1,this.pagesize);
+        setDate (value) {
+            let temp = new Date(value);
+            let year = temp.getFullYear() + '年',
+                month = temp.getMonth() + 1 + '月',
+                date = temp.getDate() + '日',
+                hours = temp.getHours() + '点',
+                minutes = temp.getMinutes() + '分',
+                second = temp.getSeconds() + '秒',
+                fullDate = '';
+            return fullDate = year + month + date + hours + minutes + second;
         },
-        beforeMount() {},
-        mounted() {
-            var body = document.querySelector('body');
-            this.createDialog(body);
-            this.createMask(body);
+        hideMask () {
+            //this.showDialog = false;
+            //this.bigPhotoUrl = '';
+            var mask = document.getElementById('mask');
+            mask.classList.add('hide');
         },
-        activated() {}
-    }
+        showDialog () {
+            var dialog = document.getElementById('dialog');
+            dialog.classList.remove('hide');
+        },
+        showMask () {
+            var mask = document.getElementById('mask');
+            mask.classList.remove('hide');
+        },
+        changeBigPhoto () {
+            var bigImg = document.getElementById('bigImg');
+            bigImg.setAttribute('src',this.bigPhotoUrl);
+        },
+        createDialog (body) {
+            //body = document.querySelector('body');
+            var _this = this;
+            var dialog = document.createElement('div'),
+                close = document.createElement('span'),
+                p = document.createElement('p'),
+                img = document.createElement('img');
+
+            dialog.className = 'dialog-showBigPhoto hide';
+            dialog.id = 'dialog';
+            close.className = 'close';
+            close.id = 'close';
+            close.textContent = 'X';
+            img.id = 'bigImg';
+            close.addEventListener('click',function(){
+                dialog.classList.add('hide');
+                _this.hideMask();
+                _this.bigPhotoUrl = '';
+            });
+            p.appendChild(img);
+            dialog.appendChild(p);
+            dialog.appendChild(close);
+            body.appendChild(dialog);
+        },
+        createMask (body) {
+            var mask = document.createElement('div');
+            mask.className = 'mask hide';
+            mask.id = 'mask';
+            body.appendChild(mask);
+        }
+    },
+    beforeCreate() {},
+    created() {
+        this.getInoutDate(1,this.pagesize);
+    },
+    beforeMount() {},
+    mounted() {
+        var body = document.querySelector('body');
+        this.createDialog(body);
+        this.createMask(body);
+    },
+    activated() {}
+}
 </script>

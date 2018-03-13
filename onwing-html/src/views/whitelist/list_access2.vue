@@ -91,7 +91,7 @@ import axios from 'axios';
 import GlobalServer from '../../config.js';
 import Cookies from 'js-cookie';
 export default {
-    name: 'whitelist_list_index',
+    name: 'whitelist_list_access2_index',
     data () {
         return {
             dto:{
@@ -143,23 +143,18 @@ export default {
                     title: '联系电话',
                     key: 'tel',
                     ellipsis: true,
-                    width: 120,
+                    width: 180,
                     align: 'center'
                 },{
                     title: '楼号/单元号',
                     key: 'buildingBlockNumber',
                     ellipsis: true,
-                    width: 120,
+                    width: 150,
                     align: 'center'
                 },{
                     title: '房号',
                     key: 'roomNumber',
                     ellipsis: true,
-                    width: 100,
-                    align: 'center'
-                },{
-                    title: '门禁卡号',
-                    key: 'cardNumber',
                     width: 150,
                     align: 'center'
                 },{
@@ -215,19 +210,7 @@ export default {
                                         });
                                     }
                                 }
-                            }, '编辑'),
-                            h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small'
-                                },
-                                on: {
-                                    click: () => {
-                                        /* console.info(params); */
-                                        this.remove(params);
-                                    }
-                                }
-                            }, '删除')
+                            }, '查看详情')
                         ]);
                     }
                 }

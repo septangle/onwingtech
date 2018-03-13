@@ -34,10 +34,26 @@
                     <!-- <lock-screen></lock-screen> -->
                     <!-- <message-tip v-model="mesCount"></message-tip> -->
                     <!-- <theme-switch></theme-switch> -->
-
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
-                            <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
+                            <div v-if="this.userType == '1'">
+                                <span>{{communityName}}</span>
+                                <a href="javascript:void(0)" @click="FileUpCsv()">(上传拓扑)</a>
+                            </div>
+                            <div v-if="this.userType == '2'">
+                                <span>{{communityName}}</span>
+                            </div>
+                            <!--<Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
+                                <a href="javascript:void(0)">
+                                    <span class="main-user-name">{{ communityName }}</span>
+                                    <Icon type="arrow-down-b"></Icon>
+                                </a>
+                                <DropdownMenu slot="list">
+                                    &lt;!&ndash; <DropdownItem name="ownSpace">个人中心</DropdownItem> &ndash;&gt;
+                                    <DropdownItem name="loginout" >上传拓扑</DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>-->
+                            <Dropdown transfer="true" trigger="click" @on-click="handleClickUserDropdown">
                                 <a href="javascript:void(0)">
                                     <span class="main-user-name">{{ userName }}</span>
                                     <Icon type="arrow-down-b"></Icon>
@@ -90,6 +106,8 @@
             return {
                 shrink: false,
                 userName: '',
+                communityName: '',
+                userType: '',
                 isFullScreen: false,
                 openedSubmenuArr: this.$store.state.app.openedSubmenuArr
             };
@@ -129,12 +147,16 @@
                     this.$store.commit('addOpenSubmenu', pathArr[1].name);
                 }
 
+                //读取COOKIE中的用户名，用户类型，小区名称，小区ID
                 this.userName = Cookies.get('user');
+                this.userType = Cookies.get('userType');
+                this.communityName = Cookies.get('communityName');
+                this.communityID = Cookies.get('communityID');
 
-                let messageCount = 3;
-                this.messageCount = messageCount.toString();
+                //let messageCount = 3;
+                //this.messageCount = messageCount.toString();
                 this.checkTag(this.$route.name);
-                this.$store.commit('setMessageCount', 3);
+                //this.$store.commit('setMessageCount', 3);
             },
 
             toggleClick () {
@@ -179,6 +201,9 @@
             },
             fullscreenChange (isFullScreen) {
                 // console.log(isFullScreen);
+            },
+            FileUpCsv () {
+              console.info('fileup');
             }
         },
         watch: {

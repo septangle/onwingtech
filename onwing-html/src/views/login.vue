@@ -69,13 +69,20 @@ export default {
                 if (valid) {
                     dto.adminiStratorDto.adminName = _this.form.username;
                     dto.adminiStratorDto.password = _this.form.password;
+
                     axios.post(GlobalServer.login,dto)
                     .then(function(response){
                         let data = response.data;
                         if (data.error === null) {
-                            let adminName = data.adminiStratorDto.adminName
+                            let adminName = data.adminiStratorDto.adminName;
+                            let access = data.adminiStratorDto.access;  //用户权限0:金山有线管理员,1:小区物业管理员,2:小区保安管理员
+                            let communityID = data.adminiStratorDto.communityID;  //所在小区
+                            let communityName = data.adminiStratorDto.communityName;  //小区ID
+
                             Cookies.set('user', adminName);
-                            Cookies.set('access',0);
+                            Cookies.set('access',access);
+                            Cookies.set('communityName',communityName);
+                            Cookies.set('communityID',communityID);
                             _this.$Message.success('登录成功！');
                             setTimeout(function(){
                                 _this.$router.push({
@@ -99,7 +106,7 @@ export default {
                         //Cookies.set('user', _this.respData.adminName);
                     })
                     .catch(function(error){
-
+                        console.info(error);
                     });
 
                     _this.$store.commit('setAvator', _this.avatorImgUrl);

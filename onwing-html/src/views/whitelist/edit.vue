@@ -15,7 +15,7 @@
         <div class="validateView">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" class="formstyle">
                 <FormItem label="姓名" prop="householdName">
-                    <Input v-model="formValidate.householdName" disabled></Input>
+                    <Input v-model="formValidate.householdName" placeholder="请输入住户姓名" disabled></Input>
                 </FormItem>
                 <FormItem label="性别" prop="gender">
                     <RadioGroup v-model="formValidate.gender">
@@ -24,25 +24,27 @@
                     </RadioGroup>
                 </FormItem>
                 <FormItem label="身份证" prop="identifyCard">
-                    <Input v-model="formValidate.identifyCard" disabled></Input>
+                    <Input v-model="formValidate.identifyCard" placeholder="请填写身份证号" disabled></Input>
                 </FormItem>
                 <FormItem label="联系电话" prop="tel">
-                    <Input v-model="formValidate.tel" disabled></Input>
+                    <Input v-model="formValidate.tel" placeholder="请输入联系电话"></Input>
                 </FormItem>
                 <FormItem label="小区名称" prop="estateName">
-                    <Input v-model="formValidate.estateList" disabled></Input>
+                    <Select v-model="formValidate.estateName">
+                        <Option v-for="item in estateList" :value="item.value" :key="item.value">{{item.label}}</Option>
+                    </Select>
                 </FormItem>
                 <FormItem label="楼号" prop="buildingblockNumber">
                     <Input v-model="formValidate.buildingBlockNumber"></Input>
                 </FormItem>
                 <FormItem label="单元号" prop="apartmentNumber">
-                    <Input v-model="formValidate.apartmentNumber" disabled></Input>
+                    <Input v-model="formValidate.apartmentNumber"></Input>
                 </FormItem>
                 <FormItem label="楼层" prop="floorNumber">
-                    <Input v-model="formValidate.floorNumber" disabled></Input>
+                    <Input v-model="formValidate.floorNumber"></Input>
                 </FormItem>
                 <FormItem label="房号" prop="roomNumber">
-                    <Input v-model="formValidate.roomNumber" disabled></Input>
+                    <Input v-model="formValidate.roomNumber"></Input>
                 </FormItem>
                 <FormItem label="业主类型" prop="ownerType">
                     <RadioGroup v-model="formValidate.ownerType">
@@ -51,10 +53,13 @@
                     </RadioGroup>
                 </FormItem>
                 <FormItem label="门禁卡号" prop="cardNumber">
-                    <Input v-model="formValidate.cardNumber" disabled></Input>
+                    <Input v-model="formValidate.cardNumber"></Input>
                 </FormItem>
                 <FormItem label="备注" prop="remarks">
-                    <Input v-model="formValidate.remarks" type="textarea" :autosize="{minRows: 2,maxRows: 5}" disabled></Input>
+                    <Input v-model="formValidate.remarks" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="备注信息不要超过200字"></Input>
+                </FormItem>
+                <FormItem>
+                    <Button type="primary" @click="handleSubmit('formValidate')">修改</Button>
                 </FormItem>
             </Form>
         </div>
@@ -65,7 +70,7 @@ import axios from 'axios';
 import GlobalServer from '../../config.js';
 import Cookies from 'js-cookie';
 export default {
-    name:'whitelist_info_index',
+    name:'whitelist_edit_index',
     data () {
         return {
             formValidate: {
