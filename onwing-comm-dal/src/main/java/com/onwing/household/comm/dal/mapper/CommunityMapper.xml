@@ -33,5 +33,25 @@
 		</if>
 
 	</select>
+	<insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.Community"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_community
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				name,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
   
 </mapper>

@@ -40,6 +40,8 @@ public class AppConstants {
 	//Community module 1006
 	public final static String COMMUNITY_PARENT_NODE_NOT_EXISTED = "10060001";
 	public final static String COMMUNITY_PARENT_NODE_NOT_EXISTED_MESSAGE = "小区：父节点不存在";
+	public final static String COMMUNITY_NAME_EXISTED_CODE = "10060002";
+	public final static String COMMUNITY_NAME_EXISTED_MESSAGE = "小区名称已经存在";
 	
 	//addphoto
 	public final static String ADD_PHOTO_SUCCESS="上传成功";

@@ -1,6 +1,8 @@
 package com.onwing.household.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,8 +42,7 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 			HttpServletRequest servletRequest) throws Exception {
 		//MD5加密
 		request.getAdminiStratorDto().setPassword(MD5Util.encodeMD5String(request.getAdminiStratorDto().getPassword()));
-		AdminiStratorResponse adminiStratorResponse = adminiStratorFacade.login(request);		
-		
+		AdminiStratorResponse adminiStratorResponse = adminiStratorFacade.login(request);
 		return adminiStratorResponse;
 	}
 	

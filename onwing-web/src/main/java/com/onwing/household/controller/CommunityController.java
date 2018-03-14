@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,11 +23,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.csvreader.CsvReader;
 import com.onwing.household.base.CsvTopologyNode;
 import com.onwing.household.biz.dto.HouseHoldDto;
+import com.onwing.household.biz.exception.BusinessException;
 import com.onwing.household.biz.request.HouseholdRequest;
 import com.onwing.household.biz.response.CommunityResponse;
 import com.onwing.household.biz.response.Error;
 import com.onwing.household.biz.response.HouseholdResponse;
 import com.onwing.household.comm.AppConstants;
+import com.onwing.household.comm.dal.dao.CommunityMapper;
+import com.onwing.household.comm.dal.model.Community;
 import com.onwing.socket.client.CplusClient;
 import com.onwing.socket.client.QueryCardRecordsThread;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -34,6 +39,31 @@ import com.wordnik.swagger.annotations.ApiOperation;
 @RequestMapping("/community")
 public class CommunityController extends BaseController<CommunityController> {
 	private final static Logger logger = LoggerFactory.getLogger(CommunityController.class);
+
+	@Autowired
+	private CommunityMapper communityMapper;
+
+	/**
+	 * 创建小区
+	 */
+	@ApiOperation(value = "创建小区", httpMethod = "POST", response = CommunityResponse.class)
+	@RequestMapping(value = "/createCommunity.do", method = RequestMethod.POST)
+	public @ResponseBody CommunityResponse createCommunity(@RequestParam("name") String name,
+			@RequestParam("address") String address, HttpServletRequest servletRequest) throws Exception {
+		Community community = new Community();
+		community.setName(name);
+		List<Community> oldCommunityList = communityMapper.selectBySelective(community);
+		if (oldCommunityList!=null && oldCommunityList.size()>0) {
+			logger.error("community name: {} already existed in db", name);
+			throw new BusinessException(AppConstants.COMMUNITY_NAME_EXISTED_CODE,
+					AppConstants.COMMUNITY_NAME_EXISTED_MESSAGE);
+		}
+		
+		community.setAddress(address);
+		communityMapper.insertSelective(community);
+		logger.info("createCommunity done! : {}", name);
+		return new CommunityResponse();
+	}
 
 	/**
 	 * 从csv中导入某小区楼栋、房间列表
