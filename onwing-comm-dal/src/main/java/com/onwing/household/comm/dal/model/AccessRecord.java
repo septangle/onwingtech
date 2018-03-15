@@ -19,6 +19,12 @@ public class AccessRecord {
 
 	private Camara camera;
 
+	private String householdName;
+
+	private String communityName;
+
+	private String cameraName;
+
 	public Long getId() {
 		return id;
 	}
@@ -73,6 +79,38 @@ public class AccessRecord {
 
 	public void setCamara(Camara camera) {
 		this.camera = camera;
+	}
+
+	public Camara getCamera() {
+		return camera;
+	}
+
+	public void setCamera(Camara camera) {
+		this.camera = camera;
+	}
+
+	public String getHouseholdName() {
+		return householdName;
+	}
+
+	public void setHouseholdName(String householdName) {
+		this.householdName = householdName;
+	}
+
+	public String getCommunityName() {
+		return communityName;
+	}
+
+	public void setCommunityName(String communityName) {
+		this.communityName = communityName;
+	}
+
+	public String getCameraName() {
+		return cameraName;
+	}
+
+	public void setCameraName(String cameraName) {
+		this.cameraName = cameraName;
 	}
 
 }

@@ -7,6 +7,9 @@
 		<result column="out_off_time" property="outOffTime" jdbcType="TIMESTAMP" />
 		<result column="out_off" property="outOff" jdbcType="CHAR" />
 		<result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+		<result column="community_name" property="communityName" jdbcType="VARCHAR" />
+		<result column="household_name" property="householdName" jdbcType="VARCHAR" />
+		<result column="camera_name" property="cameraName" jdbcType="VARCHAR" />
 		<association property="community"
 			javaType="com.onwing.household.comm.dal.model.Community" resultMap="com.onwing.household.comm.dal.dao.CommunityMapper.BaseResultMap">
 		</association>
