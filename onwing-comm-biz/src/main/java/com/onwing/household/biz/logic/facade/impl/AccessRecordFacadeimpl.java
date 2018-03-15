@@ -47,9 +47,9 @@ public class AccessRecordFacadeimpl implements AccessRecordFacade {
 				houseAccessRecordDto.setHouseholdId(houseAccessRecord.getHouseHold().getId());
 				houseAccessRecordDto.setHouseholdName(houseAccessRecord.getHouseHold().getHouseholdName());
 				houseAccessRecordDto.setCommunityId(houseAccessRecord.getCommunity().getId());
-				houseAccessRecordDto.setCommunityName(houseAccessRecord.getCommunity().getName());
+				houseAccessRecordDto.setCommunityName(houseAccessRecord.getCommunityName());
 				houseAccessRecordDto.setCameraId(houseAccessRecord.getCamara().getId());
-				houseAccessRecordDto.setCameraName(houseAccessRecord.getCamara().getName());
+				houseAccessRecordDto.setCameraName(houseAccessRecord.getCameraName());
 				houseAccessRecordDtoList.add(houseAccessRecordDto);
 			}
 		}
