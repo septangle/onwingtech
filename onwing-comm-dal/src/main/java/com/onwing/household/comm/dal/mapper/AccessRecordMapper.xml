@@ -11,7 +11,7 @@
 			javaType="com.onwing.household.comm.dal.model.Community" resultMap="com.onwing.household.comm.dal.dao.CommunityMapper.BaseResultMap">
 		</association>
 		<association property="camera"
-			javaType="com.onwing.household.comm.dal.model.Camera" resultMap="com.onwing.household.comm.dal.dao.CamaraMapper.BaseResultMap">
+			javaType="com.onwing.household.comm.dal.model.Camara" resultMap="com.onwing.household.comm.dal.dao.CamaraMapper.BaseResultMap">
 		</association>
 		<association property="houseHold"
 			javaType="com.onwing.household.comm.dal.model.HouseHold" resultMap="com.onwing.household.comm.dal.dao.HouseHoldMapper.BaseResultMap">

@@ -4,8 +4,8 @@ import java.util.List;
 import com.onwing.household.biz.dto.HouseAccessRecordDto;
 
 @SuppressWarnings("serial")
-public class AccessRecordResponse extends BaseResponse{
-	
+public class AccessRecordResponse extends BaseResponse {
+
 	private List<HouseAccessRecordDto> houseAccessRecordDtosList;
 
 	public List<HouseAccessRecordDto> getHouseAccessRecordDtosList() {
@@ -15,9 +15,5 @@ public class AccessRecordResponse extends BaseResponse{
 	public void setHouseAccessRecordDtosList(List<HouseAccessRecordDto> houseAccessRecordDtosList) {
 		this.houseAccessRecordDtosList = houseAccessRecordDtosList;
 	}
-
-	
-	
-	
 
 }

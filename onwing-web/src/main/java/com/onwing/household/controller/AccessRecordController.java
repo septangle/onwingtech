@@ -10,6 +10,7 @@ import com.onwing.household.biz.logic.facade.AccessRecordFacade;
 import com.onwing.household.biz.response.AccessRecordResponse;
 import com.onwing.household.comm.dal.dao.AccessRecordMapper;
 import com.onwing.household.comm.dal.model.AccessRecord;
+import com.onwing.household.comm.dal.model.Community;
 import com.onwing.household.util.Page;
 import com.wordnik.swagger.annotations.ApiOperation;
 
@@ -36,15 +37,19 @@ public class AccessRecordController extends BaseController<AccessRecordControlle
 		if (searchContent.equals("")) {
 			searchContent = null;
 		}
-		//查询所有小区出入记录还是某小区出入记录 todo 获取小区id
-		
+		// 查询所有小区出入记录还是某小区出入记录 todo 获取小区id
+		String communityId = servletRequest.getParameter("communityId");
 		AccessRecord accessRecord = new AccessRecord();
+		if (!communityId.equals("-1")) {
+			Community community = new Community();
+			community.setId(Long.parseLong(communityId));
+			accessRecord.setCommunity(community);
+		}
 		int count = accessRecordMapper.getTotalCountBySearchContent(searchContent, accessRecord);
-
 		Page pageTool = Page.getPageByRequest(servletRequest, count);
 		int startRow = (pageTool.getPage() - 1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
-		String communityId = servletRequest.getParameter("communityId");
-		return accessRecordFacade.findAllAccessRecord(startRow, pageTool.getPageSize(), count, communityId);
+		return accessRecordFacade.findAllAccessRecord(startRow, pageTool.getPageSize(), count, searchContent,
+				communityId);
 	}
 
 }

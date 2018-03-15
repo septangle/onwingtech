@@ -3,20 +3,28 @@ package com.onwing.household.biz.dto;
 import java.util.Date;
 
 public class HouseAccessRecordDto {
-	
+
 	private Long id;
 
-    private String householdName;
-    
-    private String buildingBlockNumber;
-    
-    private String roomNumber;
-    
-    private Date outOffTime;
-    
-    private String photoUrl;
-    
-    private Long communityId;
+	private Long householdId;
+
+	private String householdName;
+
+	private String roomPath;
+
+	private Date outOffTime;
+
+	private String outOff;
+
+	private String photoUrl;
+
+	private Long communityId;
+
+	private String communityName;
+
+	private Long cameraId;
+
+	private String cameraName;
 
 	public Long getId() {
 		return id;
@@ -26,6 +34,14 @@ public class HouseAccessRecordDto {
 		this.id = id;
 	}
 
+	public Long getHouseholdId() {
+		return householdId;
+	}
+
+	public void setHouseholdId(Long householdId) {
+		this.householdId = householdId;
+	}
+
 	public String getHouseholdName() {
 		return householdName;
 	}
@@ -33,23 +49,13 @@ public class HouseAccessRecordDto {
 	public void setHouseholdName(String householdName) {
 		this.householdName = householdName;
 	}
-	
-	
 
-	public String getRoomNumber() {
-		return roomNumber;
+	public String getRoomPath() {
+		return roomPath;
 	}
 
-	public void setRoomNumber(String roomNumber) {
-		this.roomNumber = roomNumber;
-	}
-
-	public String getBuildingBlockNumber() {
-		return buildingBlockNumber;
-	}
-
-	public void setBuildingBlockNumber(String buildingBlockNumber) {
-		this.buildingBlockNumber = buildingBlockNumber;
+	public void setRoomPath(String roomPath) {
+		this.roomPath = roomPath;
 	}
 
 	public Date getOutOffTime() {
@@ -58,6 +64,14 @@ public class HouseAccessRecordDto {
 
 	public void setOutOffTime(Date outOffTime) {
 		this.outOffTime = outOffTime;
+	}
+
+	public String getOutOff() {
+		return outOff;
+	}
+
+	public void setOutOff(String outOff) {
+		this.outOff = outOff;
 	}
 
 	public String getPhotoUrl() {
@@ -75,7 +89,29 @@ public class HouseAccessRecordDto {
 	public void setCommunityId(Long communityId) {
 		this.communityId = communityId;
 	}
-    
-    
+
+	public String getCommunityName() {
+		return communityName;
+	}
+
+	public void setCommunityName(String communityName) {
+		this.communityName = communityName;
+	}
+
+	public Long getCameraId() {
+		return cameraId;
+	}
+
+	public void setCameraId(Long cameraId) {
+		this.cameraId = cameraId;
+	}
+
+	public String getCameraName() {
+		return cameraName;
+	}
+
+	public void setCameraName(String cameraName) {
+		this.cameraName = cameraName;
+	}
 
 }
