@@ -104,37 +104,37 @@
 		<include refid="Base_Column_List" />
 		from tbl_access_record
 		where 1=1
-		<if test="id != null">
-			and id = #{id,jdbcType=BIGINT}
+		<if test="entity.id != null">
+			and id = #{entity.id,jdbcType=BIGINT}
 		</if>
-		<if test="household.id != null">
-			and household_id = #{household.id,jdbcType=BIGINT}
+		<if test="entity.household.id != null">
+			and household_id = #{entity.household.id,jdbcType=BIGINT}
 		</if>
-		<if test="household.name != null">
-			and household_name = #{household.name,jdbcType=VARCHAR}
+		<if test="entity.household.name != null">
+			and household_name = #{entity.household.name,jdbcType=VARCHAR}
 		</if>
-		<if test="outOffTime != null">
-			and out_off_time = #{outOffTime,jdbcType=TIMESTAMP}
+		<if test="entity.outOffTime != null">
+			and out_off_time = #{entity.outOffTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="outOff != null">
-			and out_off = #{outOff,jdbcType=CHAR}
+		<if test="entity.outOff != null">
+			and out_off = #{entity.outOff,jdbcType=CHAR}
 		</if>
-		<if test="photoUrl != null">
-			and photo_url = #{photoUrl,jdbcType=VARCHAR}
+		<if test="entity.photoUrl != null">
+			and photo_url = #{entity.photoUrl,jdbcType=VARCHAR}
 		</if>
-		<if test="community.id != null">
-			and community_id = #{community.id,jdbcType=BIGINT}
+		<if test="entity.community.id != null">
+			and community_id = #{entity.community.id,jdbcType=BIGINT}
 		</if>
-		<if test="community.name != null">
-			and community_name = #{community.name,jdbcType=VARCHAR}
+		<if test="entity.community.name != null">
+			and community_name = #{entity.community.name,jdbcType=VARCHAR}
 		</if>
-		<if test="camera.id != null">
-			and camera_id = #{camera.id,jdbcType=BIGINT} 
+		<if test="entity.camera.id != null">
+			and camera_id = #{entity.camera.id,jdbcType=BIGINT} 
 		</if>
-		<if test="camera.name != null">
-			and camera_name = #{camera.name,jdbcType=VARCHAR} 
+		<if test="entity.camera.name != null">
+			and camera_name = #{entity.camera.name,jdbcType=VARCHAR} 
 		</if>
-		<if test="#{searchContent} != null">
+		<if test="searchContent != null">
 			and (household_name LIKE '%${searchContent}%' or community_name LIKE '%${searchContent}%' or camera_name LIKE '%${searchContent}%') 
 		</if>
 		ORDER BY tbl_access_record.id desc LIMIT #{startRow}, #{pageSize}
@@ -154,37 +154,37 @@
 		count(*)
 		from tbl_access_record
 		where 1=1
-		<if test="id != null">
-			and id = #{id,jdbcType=BIGINT}
+		<if test="entity.id != null">
+			and id = #{entity.id,jdbcType=BIGINT}
 		</if>
-		<if test="household.id != null">
-			and household_id = #{household.id,jdbcType=BIGINT}
+		<if test="entity.household.id != null">
+			and household_id = #{entity.household.id,jdbcType=BIGINT}
 		</if>
-		<if test="household.name != null">
-			and household_name = #{household.name,jdbcType=VARCHAR}
+		<if test="entity.household.name != null">
+			and household_name = #{entity.household.name,jdbcType=VARCHAR}
 		</if>
-		<if test="outOffTime != null">
-			and out_off_time = #{outOffTime,jdbcType=TIMESTAMP}
+		<if test="entity.outOffTime != null">
+			and out_off_time = #{entity.outOffTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="outOff != null">
-			and out_off = #{outOff,jdbcType=CHAR}
+		<if test="entity.outOff != null">
+			and out_off = #{entity.outOff,jdbcType=CHAR}
 		</if>
-		<if test="photoUrl != null">
-			and photo_url = #{photoUrl,jdbcType=VARCHAR}
+		<if test="entity.photoUrl != null">
+			and photo_url = #{entity.photoUrl,jdbcType=VARCHAR}
 		</if>
-		<if test="community.id != null">
-			and community_id = #{community.id,jdbcType=BIGINT}
+		<if test="entity.community.id != null">
+			and community_id = #{entity.community.id,jdbcType=BIGINT}
 		</if>
-		<if test="community.name != null">
-			and community_name = #{community.name,jdbcType=VARCHAR}
+		<if test="entity.community.name != null">
+			and community_name = #{entity.community.name,jdbcType=VARCHAR}
 		</if>
-		<if test="camera.id != null">
-			and camera_id = #{camera.id,jdbcType=BIGINT} 
+		<if test="entity.camera.id != null">
+			and camera_id = #{entity.camera.id,jdbcType=BIGINT} 
 		</if>
-		<if test="camera.name != null">
-			and camera_name = #{camera.name,jdbcType=VARCHAR} 
+		<if test="entity.camera.name != null">
+			and camera_name = #{entity.camera.name,jdbcType=VARCHAR} 
 		</if>
-		<if test="#{searchContent} != null">
+		<if test="searchContent != null">
 			and (household_name LIKE '%${searchContent}%' or community_name LIKE '%${searchContent}%' or camera_name LIKE '%${searchContent}%') 
 		</if>
 	</select>
