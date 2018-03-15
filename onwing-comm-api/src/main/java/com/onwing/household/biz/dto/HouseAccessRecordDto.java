@@ -26,6 +26,10 @@ public class HouseAccessRecordDto {
 
 	private String cameraName;
 
+	private Long controlId;
+
+	private String controlName;
+
 	public Long getId() {
 		return id;
 	}
@@ -112,6 +116,22 @@ public class HouseAccessRecordDto {
 
 	public void setCameraName(String cameraName) {
 		this.cameraName = cameraName;
+	}
+
+	public Long getControlId() {
+		return controlId;
+	}
+
+	public void setControlId(Long controlId) {
+		this.controlId = controlId;
+	}
+
+	public String getControlName() {
+		return controlName;
+	}
+
+	public void setControlName(String controlName) {
+		this.controlName = controlName;
 	}
 
 }

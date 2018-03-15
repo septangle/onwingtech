@@ -10,6 +10,7 @@ import com.onwing.household.biz.dto.HouseHoldDto;
 import com.onwing.household.biz.logic.core.AccessRecordBiz;
 import com.onwing.household.biz.logic.facade.AccessRecordFacade;
 import com.onwing.household.biz.response.AccessRecordResponse;
+import com.onwing.household.comm.dal.dao.CamaraMapper;
 import com.onwing.household.comm.dal.model.AccessRecord;
 import com.onwing.household.comm.dal.model.Camara;
 import com.onwing.household.comm.dal.model.Community;
@@ -21,6 +22,9 @@ public class AccessRecordFacadeimpl implements AccessRecordFacade {
 
 	@Autowired
 	private AccessRecordBiz accessRecordBiz;
+
+	@Autowired
+	private CamaraMapper camaraMapper;
 
 	@Override
 	public AccessRecordResponse findAllAccessRecord(int startRow, int pageSize, int count, String searchContent,
@@ -50,6 +54,12 @@ public class AccessRecordFacadeimpl implements AccessRecordFacade {
 				houseAccessRecordDto.setCommunityName(houseAccessRecord.getCommunityName());
 				houseAccessRecordDto.setCameraId(houseAccessRecord.getCamara().getId());
 				houseAccessRecordDto.setCameraName(houseAccessRecord.getCameraName());
+				// todo
+				Camara camera2 = camaraMapper.selectByPrimaryKey(houseAccessRecord.getCamara().getId());
+				houseAccessRecordDto.setControlId(camera2.getControl().getId());
+				houseAccessRecordDto.setControlName(camera2.getControl().getName());
+				houseAccessRecordDto.setRoomPath(houseAccessRecord.getHouseHold().getRoomPath());
+				// end
 				houseAccessRecordDtoList.add(houseAccessRecordDto);
 			}
 		}

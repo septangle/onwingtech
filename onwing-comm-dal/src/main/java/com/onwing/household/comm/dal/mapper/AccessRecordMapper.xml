@@ -22,7 +22,29 @@
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id, household_id, household_name,out_off_time, out_off,photo_url,community_id,community_name,camera_id,camera_name
+		tbl_access_record.id, 
+		tbl_access_record.household_id, 
+		tbl_access_record.household_name,
+		tbl_access_record.out_off_time, 
+		tbl_access_record.out_off,
+		tbl_access_record.photo_url,
+		tbl_access_record.community_id,
+		tbl_access_record.community_name,
+		tbl_access_record.camera_id,
+		tbl_access_record.camera_name
+	</sql>
+	<sql id="Base_Column_List2">
+		tbl_access_record.id, 
+		tbl_access_record.household_id, 
+		tbl_access_record.household_name,
+		tbl_access_record.out_off_time, 
+		tbl_access_record.out_off,
+		tbl_access_record.photo_url,
+		tbl_access_record.community_id,
+		tbl_access_record.community_name,
+		tbl_access_record.camera_id,
+		tbl_access_record.camera_name,
+		tbl_household.room_path
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
@@ -104,41 +126,42 @@
 	<select id="selectAccessRecord" resultMap="BaseResultMap"
 		parameterType="com.onwing.household.comm.dal.model.AccessRecord">
 		select
-		<include refid="Base_Column_List" />
-		from tbl_access_record
+		<include refid="Base_Column_List2" />
+		from tbl_access_record, tbl_household
 		where 1=1
 		<if test="entity.id != null">
-			and id = #{entity.id,jdbcType=BIGINT}
+			and tbl_access_record.id = #{entity.id,jdbcType=BIGINT}
 		</if>
 		<if test="entity.houseHold.id != null">
-			and household_id = #{entity.houseHold.id,jdbcType=BIGINT}
+			and tbl_access_record.household_id = #{entity.houseHold.id,jdbcType=BIGINT}
 		</if>
 		<if test="entity.houseHold.householdName != null">
-			and household_name = #{entity.houseHold.householdName,jdbcType=VARCHAR}
+			and tbl_access_record.household_name = #{entity.houseHold.householdName,jdbcType=VARCHAR}
 		</if>
 		<if test="entity.outOffTime != null">
-			and out_off_time = #{entity.outOffTime,jdbcType=TIMESTAMP}
+			and tbl_access_record.out_off_time = #{entity.outOffTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="entity.outOff != null">
-			and out_off = #{entity.outOff,jdbcType=CHAR}
+			and tbl_access_record.out_off = #{entity.outOff,jdbcType=CHAR}
 		</if>
 		<if test="entity.photoUrl != null">
-			and photo_url = #{entity.photoUrl,jdbcType=VARCHAR}
+			and tbl_access_record.photo_url = #{entity.photoUrl,jdbcType=VARCHAR}
 		</if>
 		<if test="entity.community.id != null">
-			and community_id = #{entity.community.id,jdbcType=BIGINT}
+			and tbl_access_record.community_id = #{entity.community.id,jdbcType=BIGINT}
 		</if>
 		<if test="entity.community.name != null">
-			and community_name = #{entity.community.name,jdbcType=VARCHAR}
+			and tbl_access_record.community_name = #{entity.community.name,jdbcType=VARCHAR}
 		</if>
 		<if test="entity.camara.id != null">
-			and camera_id = #{entity.camara.id,jdbcType=BIGINT} 
+			and tbl_access_record.camera_id = #{entity.camara.id,jdbcType=BIGINT} 
 		</if>
 		<if test="entity.camara.name != null">
-			and camera_name = #{entity.camara.name,jdbcType=VARCHAR} 
+			and tbl_access_record.camera_name = #{entity.camara.name,jdbcType=VARCHAR} 
 		</if>
+			and tbl_access_record.household_id = tbl_household.id 
 		<if test="searchContent != null">
-			and (household_name LIKE '%${searchContent}%' or community_name LIKE '%${searchContent}%' or camera_name LIKE '%${searchContent}%') 
+			and (tbl_access_record.household_name LIKE '%${searchContent}%' or tbl_access_record.community_name LIKE '%${searchContent}%' or tbl_access_record.camera_name LIKE '%${searchContent}%') 
 		</if>
 		ORDER BY tbl_access_record.id desc LIMIT #{startRow}, #{pageSize}
 	</select>

@@ -6,7 +6,7 @@
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="direction" property="direction" jdbcType="VARCHAR" />
 		
-		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="camera_ip" property="ip" jdbcType="VARCHAR" />
 		<result column="relay_id" property="relayId" jdbcType="VARCHAR" />
 		<association property="control"
 			javaType="com.onwing.household.comm.dal.model.Control" 
@@ -19,9 +19,10 @@
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
 		select
-		<include refid="Base_Column_List" />
-		from tbl_camera
-		where id = #{id,jdbcType=BIGINT}
+		a.id as camera_id, a.name, b.id as control_id, b.name as control_name,direction, a.ip as camera_ip, relay_id
+		from tbl_camera a, tbl_control b
+		where a.id = #{id,jdbcType=BIGINT} 
+		and a.control_id = b.id
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
 		delete from tbl_camera
