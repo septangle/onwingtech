@@ -11,7 +11,9 @@ import com.onwing.household.biz.logic.core.AccessRecordBiz;
 import com.onwing.household.biz.logic.facade.AccessRecordFacade;
 import com.onwing.household.biz.response.AccessRecordResponse;
 import com.onwing.household.comm.dal.model.AccessRecord;
+import com.onwing.household.comm.dal.model.Camara;
 import com.onwing.household.comm.dal.model.Community;
+import com.onwing.household.comm.dal.model.HouseHold;
 import com.onwing.household.util.ModelUtil;
 
 @Service
@@ -26,16 +28,29 @@ public class AccessRecordFacadeimpl implements AccessRecordFacade {
 		List<HouseAccessRecordDto> houseAccessRecordDtoList = new ArrayList<HouseAccessRecordDto>();
 		AccessRecordResponse accessRecordResponse = new AccessRecordResponse();
 		AccessRecord accessRecord = new AccessRecord();
+		HouseHold houseHold = new HouseHold();// 设置一个空对象
+		Camara camera = new Camara();
+		Community community = new Community();
+
 		if (!communityId.equals("-1")) {
-			Community community = new Community();
 			community.setId(Long.parseLong(communityId));
-			accessRecord.setCommunity(community);
 		}
+		accessRecord.setCommunity(community);
+		accessRecord.setHouseHold(houseHold);
+		accessRecord.setCamara(camera);
 		List<AccessRecord> houseAccessRecordList = accessRecordBiz.selectAccessRecord(startRow, pageSize, searchContent,
 				accessRecord);
 		if (houseAccessRecordList != null) {
 			for (AccessRecord houseAccessRecord : houseAccessRecordList) {
-				houseAccessRecordDtoList.add(ModelUtil.modelToDto(houseAccessRecord, HouseAccessRecordDto.class));
+				HouseAccessRecordDto houseAccessRecordDto = ModelUtil.modelToDto(houseAccessRecord,
+						HouseAccessRecordDto.class);
+				houseAccessRecordDto.setHouseholdId(houseAccessRecord.getHouseHold().getId());
+				houseAccessRecordDto.setHouseholdName(houseAccessRecord.getHouseHold().getHouseholdName());
+				houseAccessRecordDto.setCommunityId(houseAccessRecord.getCommunity().getId());
+				houseAccessRecordDto.setCommunityName(houseAccessRecord.getCommunity().getName());
+				houseAccessRecordDto.setCameraId(houseAccessRecord.getCamara().getId());
+				houseAccessRecordDto.setCameraName(houseAccessRecord.getCamara().getName());
+				houseAccessRecordDtoList.add(houseAccessRecordDto);
 			}
 		}
 		accessRecordResponse.setHouseAccessRecordDtosList(houseAccessRecordDtoList);

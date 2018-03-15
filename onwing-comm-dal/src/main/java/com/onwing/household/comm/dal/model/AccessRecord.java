@@ -17,7 +17,7 @@ public class AccessRecord {
 
 	private Community community;
 
-	private Camera camera;
+	private Camara camera;
 
 	public Long getId() {
 		return id;
@@ -67,11 +67,11 @@ public class AccessRecord {
 		this.community = community;
 	}
 
-	public Camera getCamera() {
+	public Camara getCamara() {
 		return camera;
 	}
 
-	public void setCamera(Camera camera) {
+	public void setCamara(Camara camera) {
 		this.camera = camera;
 	}
 

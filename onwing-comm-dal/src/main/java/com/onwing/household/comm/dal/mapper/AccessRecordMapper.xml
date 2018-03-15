@@ -107,11 +107,11 @@
 		<if test="entity.id != null">
 			and id = #{entity.id,jdbcType=BIGINT}
 		</if>
-		<if test="entity.household.id != null">
-			and household_id = #{entity.household.id,jdbcType=BIGINT}
+		<if test="entity.houseHold.id != null">
+			and household_id = #{entity.houseHold.id,jdbcType=BIGINT}
 		</if>
-		<if test="entity.household.name != null">
-			and household_name = #{entity.household.name,jdbcType=VARCHAR}
+		<if test="entity.houseHold.householdName != null">
+			and household_name = #{entity.houseHold.householdName,jdbcType=VARCHAR}
 		</if>
 		<if test="entity.outOffTime != null">
 			and out_off_time = #{entity.outOffTime,jdbcType=TIMESTAMP}
@@ -128,11 +128,11 @@
 		<if test="entity.community.name != null">
 			and community_name = #{entity.community.name,jdbcType=VARCHAR}
 		</if>
-		<if test="entity.camera.id != null">
-			and camera_id = #{entity.camera.id,jdbcType=BIGINT} 
+		<if test="entity.camara.id != null">
+			and camera_id = #{entity.camara.id,jdbcType=BIGINT} 
 		</if>
-		<if test="entity.camera.name != null">
-			and camera_name = #{entity.camera.name,jdbcType=VARCHAR} 
+		<if test="entity.camara.name != null">
+			and camera_name = #{entity.camara.name,jdbcType=VARCHAR} 
 		</if>
 		<if test="searchContent != null">
 			and (household_name LIKE '%${searchContent}%' or community_name LIKE '%${searchContent}%' or camera_name LIKE '%${searchContent}%') 
@@ -157,11 +157,11 @@
 		<if test="entity.id != null">
 			and id = #{entity.id,jdbcType=BIGINT}
 		</if>
-		<if test="entity.household.id != null">
-			and household_id = #{entity.household.id,jdbcType=BIGINT}
+		<if test="entity.houseHold.id != null">
+			and household_id = #{entity.houseHold.id,jdbcType=BIGINT}
 		</if>
-		<if test="entity.household.name != null">
-			and household_name = #{entity.household.name,jdbcType=VARCHAR}
+		<if test="entity.houseHold.householdName != null">
+			and household_name = #{entity.houseHold.householdName,jdbcType=VARCHAR}
 		</if>
 		<if test="entity.outOffTime != null">
 			and out_off_time = #{entity.outOffTime,jdbcType=TIMESTAMP}
@@ -178,11 +178,11 @@
 		<if test="entity.community.name != null">
 			and community_name = #{entity.community.name,jdbcType=VARCHAR}
 		</if>
-		<if test="entity.camera.id != null">
-			and camera_id = #{entity.camera.id,jdbcType=BIGINT} 
+		<if test="entity.camara.id != null">
+			and camera_id = #{entity.camara.id,jdbcType=BIGINT} 
 		</if>
-		<if test="entity.camera.name != null">
-			and camera_name = #{entity.camera.name,jdbcType=VARCHAR} 
+		<if test="entity.camara.name != null">
+			and camera_name = #{entity.camara.name,jdbcType=VARCHAR} 
 		</if>
 		<if test="searchContent != null">
 			and (household_name LIKE '%${searchContent}%' or community_name LIKE '%${searchContent}%' or camera_name LIKE '%${searchContent}%') 
