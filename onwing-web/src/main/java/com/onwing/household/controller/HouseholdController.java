@@ -22,17 +22,20 @@ import com.onwing.household.biz.request.HouseholdRequest;
 import com.onwing.household.biz.response.HouseholdResponse;
 import com.onwing.household.comm.AppConstants;
 import com.onwing.household.comm.dal.dao.HouseHoldMapper;
+import com.onwing.household.comm.dal.model.Community;
+import com.onwing.household.comm.dal.model.HouseHold;
 import com.onwing.household.util.Page;
 import com.onwing.socket.client.CplusClient;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
+
 @Controller
 @RequestMapping("/household")
 public class HouseholdController extends BaseController<HouseholdController> {
 	@Resource
 	private Map<String, String> cplusClientProperties;
-	
+
 	@Autowired
 	private HouseHoldFacade householdfacade;
 
@@ -45,45 +48,44 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@ApiOperation(value = "录入业主信息", httpMethod = "POST", response = HouseholdResponse.class)
 	@RequestMapping(value = "/addHouseHold.do", method = RequestMethod.POST)
 	public @ResponseBody HouseholdResponse addHouseHold(@RequestParam("communityName") String communityName,
-            @RequestParam("householdName") String householdName,
-			@RequestParam("gender") String gender, @RequestParam("tel") String tel,
-			@RequestParam("identifyCard") String identifyCard,
-			@RequestParam("buildingBlockNumber") String buildingBlockNumber,
-			@RequestParam("roomNumber") String roomNumber, @RequestParam(value="cardNumber",required=false) String cardNumber,
-			@RequestParam(value="householdType",required=false) String householdType,
-			@RequestParam(value="remarks",required=false) String remarks, @RequestParam MultipartFile file,
+			@RequestParam("householdName") String householdName, @RequestParam("gender") String gender,
+			@RequestParam("tel") String tel, @RequestParam("identifyCard") String identifyCard,
+			@RequestParam("roomPath") String roomPath,
+			@RequestParam(value = "cardNumber", required = false) String cardNumber,
+			@RequestParam(value = "householdType", required = false) String householdType,
+			@RequestParam(value = "remarks", required = false) String remarks, @RequestParam MultipartFile file,
 			HttpServletRequest servletRequest) throws Exception {
 		String path = System.getProperty("onwing.root") + AppConstants.FILE_PATH;
 		File files = new File(path);
 		if (!files.exists() && !files.isDirectory()) {
 			files.mkdir();
 		}
-		String  tmpFileName=file.getOriginalFilename();//上传的文件名			
+		String tmpFileName = file.getOriginalFilename();//上传的文件名			
 		String extension = tmpFileName.substring(tmpFileName.lastIndexOf("."));
-		String nowFileName=identifyCard+extension;
-		
-		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path,nowFileName));
-        HouseholdRequest householdRequest = new HouseholdRequest();
-        HouseHoldDto holdDto = new HouseHoldDto();
-        holdDto.setCommunityName(communityName);
-        holdDto.setHouseholdName(householdName);
-        holdDto.setGender(gender);
-        holdDto.setTel(tel);
-        holdDto.setIdentifyCard(identifyCard);
-        holdDto.setBuildingBlockNumber(buildingBlockNumber);
-        holdDto.setRoomNumber(roomNumber);
-        holdDto.setCardNumber(cardNumber);
-        holdDto.setHouseholdType(householdType);
-        holdDto.setRemarks(remarks);
-        holdDto.setPhotoId(AppConstants.FILE_PATH+nowFileName);
-        
-        householdRequest.setHouseholdDto(holdDto);
-        
-        // 发送消息给c++，让其重新加载白名单图片库
-        CplusClient cplusClient = new CplusClient(cplusClientProperties); 
-        cplusClient.sendReloadPictureMsgMain(nowFileName);
-        // end
-		
+		String nowFileName = identifyCard + extension;
+
+		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path, nowFileName));
+		HouseholdRequest householdRequest = new HouseholdRequest();
+		HouseHoldDto holdDto = new HouseHoldDto();
+		holdDto.setCommunityName(communityName);
+		holdDto.setHouseholdName(householdName);
+		holdDto.setGender(gender);
+		holdDto.setTel(tel);
+		holdDto.setIdentifyCard(identifyCard);
+/*		holdDto.setBuildingBlockNumber(buildingBlockNumber);
+		holdDto.setRoomNumber(roomNumber);*/
+		holdDto.setCardNumber(cardNumber);
+		holdDto.setHouseholdType(householdType);
+		holdDto.setRemarks(remarks);
+		holdDto.setPhotoId(AppConstants.FILE_PATH + nowFileName);
+
+		householdRequest.setHouseholdDto(holdDto);
+
+		// 发送消息给c++，让其重新加载白名单图片库
+		CplusClient cplusClient = new CplusClient(cplusClientProperties);
+		cplusClient.sendReloadPictureMsgMain(nowFileName);
+		// end
+
 		return householdfacade.addHouseHold(householdRequest);
 	}
 
@@ -123,17 +125,25 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@ApiOperation(value = "查询业主信息", httpMethod = "GET", response = HouseholdResponse.class)
 	@RequestMapping(value = "/findAllHouseHold.do", method = RequestMethod.GET)
 	public @ResponseBody HouseholdResponse findHouseHold(HttpServletRequest servletRequest) throws Exception {
-		int count = householdMapper.getCountByHousehold();
+		String fileStr = System.getProperty("onwing.root");
+		String searchContent = servletRequest.getParameter("searchContent");
+		String communityId = servletRequest.getParameter("communityId");
+
+		if (searchContent.equals("")) {
+			searchContent = null;
+		}
+		HouseHold houseHold = new HouseHold();
+		Community community = new Community();
+		if (!communityId.equals("-1")) {
+			community.setId(Long.parseLong(communityId));
+
+		} 
+		houseHold.setCommunity(community);
+		int count = householdMapper.getTotalCountBySearchContent(searchContent, community.getId());
 		Page pageTool = Page.getPageByRequest(servletRequest, count);
 		int startRow = (pageTool.getPage() - 1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
-		String fileStr = System.getProperty("onwing.root");
-		String searchContent=servletRequest.getParameter("searchContent");
-		String communityId=servletRequest.getParameter("communityId");
-		if (searchContent.equals("")) {
-			return householdfacade.findAllHouseHold(startRow, pageTool.getPageSize(), fileStr + AppConstants.FILE_PATH,count,communityId);
-		}else{			
-			return householdfacade.getFuzzyQuery(startRow, pageTool.getPageSize(), searchContent, count,communityId);
-		}
+		return householdfacade.findAllHouseHold(startRow, pageTool.getPageSize(), fileStr + AppConstants.FILE_PATH,
+				searchContent, count,community.getId());
 	}
 
 	/**

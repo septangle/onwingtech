@@ -91,12 +91,11 @@ public class HouseHoldimpl implements HouseHoldBiz {
 	}
 
 	@Override
-	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String strFile,String communityId) throws BusinessException {
+	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String strFile,String searchContent,Long communityId) throws BusinessException {
 		List<HouseHoldDto> householdDtoList = null;
 		try {
-			long cid =Long.parseLong(communityId);
 			householdDtoList = new ArrayList<HouseHoldDto>();
-			List<HouseHold> householdList = householdMapper.getAllHouseHold(startRow, pageSize,cid, null);
+			List<HouseHold> householdList = householdMapper.getAllHouseHoldList(startRow, pageSize, searchContent,communityId, new HouseHold());
 			if (householdList != null) {
 				for (HouseHold houseHoldParam : householdList) {
 					householdDtoList.add(ModelUtil.modelToDto(houseHoldParam, HouseHoldDto.class));
@@ -149,23 +148,6 @@ public class HouseHoldimpl implements HouseHoldBiz {
 			return houseHold;
 		}
 		return null;
-	}
-
-	@Override
-	public List<HouseHoldDto> getFuzzyQuery(int startRow, int pageSize, String searchContent,String communityId) throws BusinessException {
-		List<HouseHoldDto> householdDtoList = null;
-		try {
-			householdDtoList = new ArrayList<HouseHoldDto>();
-			List<HouseHold> householdList=householdMapper.getFuzzyQuery(startRow, pageSize, searchContent, null);
-			if (householdList != null) {
-				for (HouseHold houseHoldParam : householdList) {
-					householdDtoList.add(ModelUtil.modelToDto(houseHoldParam, HouseHoldDto.class));
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return householdDtoList;
 	}
 
 

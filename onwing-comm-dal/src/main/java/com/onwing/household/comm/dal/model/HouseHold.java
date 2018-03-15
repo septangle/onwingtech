@@ -15,9 +15,7 @@ public class HouseHold {
     
     private String identifyCard;
 
-    private String buildingBlockNumber;
-
-    private String roomNumber;
+    private String roomPath;
 
     private String photoId;
 
@@ -85,23 +83,17 @@ public class HouseHold {
 		this.identifyCard = identifyCard;
 	}
 
-	public String getBuildingBlockNumber() {
-        return buildingBlockNumber;
-    }
 
-    public void setBuildingBlockNumber(String buildingBlockNumber) {
-        this.buildingBlockNumber = buildingBlockNumber == null ? null : buildingBlockNumber.trim();
-    }
 
-    public String getRoomNumber() {
-        return roomNumber;
-    }
+    public String getRoomPath() {
+		return roomPath;
+	}
 
-    public void setRoomNumber(String roomNumber) {
-        this.roomNumber = roomNumber == null ? null : roomNumber.trim();
-    }
+	public void setRoomPath(String roomPath) {
+		this.roomPath = roomPath;
+	}
 
-    public String getPhotoId() {
+	public String getPhotoId() {
         return photoId;
     }
 

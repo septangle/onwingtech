@@ -23,11 +23,8 @@ public interface HouseHoldMapper {
     
     List<HouseHold> selectBySelective(HouseHold record);
     
-    List<HouseHold> getAllHouseHold(@Param("startRow")int startRow,
-			@Param("pageSize")int pageSize,@Param("communityId")Long communityId,@Param("entity")HouseHold houseHold);
+    int getTotalCountBySearchContent(@Param("searchContent")String searchContent,@Param("communityId")Long communityId);
     
-    int getCountByHousehold();
-    
-    List<HouseHold> getFuzzyQuery(@Param("startRow")int startRow,
-			@Param("pageSize")int pageSize,@Param("searchContent")String searchContent,@Param("entity")HouseHold houseHold);
+    List<HouseHold> getAllHouseHoldList(@Param("startRow")int startRow,
+			@Param("pageSize")int pageSize,@Param("searchContent")String searchContent,@Param("communityId")Long communityId,@Param("entity")HouseHold houseHold);
 }

@@ -11,9 +11,7 @@
 		<result column="tel" property="tel" jdbcType="VARCHAR" />
 		<result column="identify_card" property="identifyCard"
 			jdbcType="VARCHAR" />
-		<result column="building_block_number" property="buildingBlockNumber"
-			jdbcType="VARCHAR" />
-		<result column="room_number" property="roomNumber" jdbcType="VARCHAR" />
+		<result column="room_path" property="roomPath" jdbcType="VARCHAR" />
 		<result column="photo_id" property="photoId" jdbcType="VARCHAR" />
 		<result column="card_number" property="cardNumber" jdbcType="VARCHAR" />
 		<result column="household_type" property="householdType"
@@ -26,7 +24,7 @@
 	</resultMap>
 	<sql id="Base_Column_List">
 		id,community_id,community_name,household_name, gender,
-		tel,identify_card, building_block_number, room_number,
+		tel,identify_card, , room_path,
 		photo_id,
 		card_number,household_type,
 		remarks
@@ -47,16 +45,14 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into tbl_household
 		(community_id,community_name, household_name, gender, tel,
-		building_block_number,
-		room_number, photo_id,
+		room_path, photo_id,
 		card_number, remarks)
 		values
 		(#{community.id,jdbcType=BIGINT},#{communityName,jdbcType=VARCHAR},
 		#{householdName,jdbcType=VARCHAR},
 		#{gender,jdbcType=CHAR},
 		#{tel,jdbcType=VARCHAR},
-		#{buildingBlockNumber,jdbcType=VARCHAR},
-		#{roomNumber,jdbcType=VARCHAR}, #{photoId,jdbcType=VARCHAR},
+		#{roomPath,jdbcType=VARCHAR}, #{photoId,jdbcType=VARCHAR},
 		#{cardNumber,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.HouseHold"
@@ -81,11 +77,8 @@
 			<if test="identifyCard != null">
 				identify_card,
 			</if>
-			<if test="buildingBlockNumber != null">
-				building_block_number,
-			</if>
-			<if test="roomNumber != null">
-				room_number,
+			<if test="roomPath != null">
+				room_path,
 			</if>
 			<if test="photoId != null">
 				photo_id,
@@ -119,11 +112,8 @@
 			<if test="identifyCard != null">
 				#{identifyCard,jdbcType=VARCHAR},
 			</if>
-			<if test="buildingBlockNumber != null">
-				#{buildingBlockNumber,jdbcType=VARCHAR},
-			</if>
-			<if test="roomNumber != null">
-				#{roomNumber,jdbcType=VARCHAR},
+			<if test="roomPath != null">
+				#{roomPath,jdbcType=VARCHAR},
 			</if>
 			<if test="photoId != null">
 				#{photoId,jdbcType=VARCHAR},
@@ -160,12 +150,8 @@
 			<if test="identifyCard != null">
 				identifyCard = #{identifyCard,jdbcType=VARCHAR},
 			</if>
-			<if test="buildingBlockNumber != null">
-				building_block_number =
-				#{buildingBlockNumber,jdbcType=VARCHAR},
-			</if>
-			<if test="roomNumber != null">
-				room_number = #{roomNumber,jdbcType=VARCHAR},
+			<if test="roomPath != null">
+				room_path = #{roomPath,jdbcType=VARCHAR},
 			</if>
 			<if test="photoId != null">
 				photo_id = #{photoId,jdbcType=VARCHAR},
@@ -191,10 +177,8 @@
 		#{householdName,jdbcType=VARCHAR},
 		gender = #{gender,jdbcType=CHAR},
 		tel = #{tel,jdbcType=VARCHAR},
-		building_block_number =
-		#{buildingBlockNumber,jdbcType=VARCHAR},
-		room_number =
-		#{roomNumber,jdbcType=VARCHAR},
+		room_path =
+		#{roomPath,jdbcType=VARCHAR},
 		photo_id =
 		#{photoId,jdbcType=VARCHAR},
 		card_number =
@@ -226,12 +210,8 @@
 		<if test="identifyCard != null">
 			and identify_card = #{identifyCard,jdbcType=VARCHAR}
 		</if>
-		<if test="buildingBlockNumber != null">
-			and building_block_number =
-			#{buildingBlockNumber,jdbcType=VARCHAR}
-		</if>
-		<if test="roomNumber != null">
-			and room_number = #{roomNumber,jdbcType=VARCHAR}
+		<if test="roomPath != null">
+			and room_path = #{roomPath,jdbcType=VARCHAR}
 		</if>
 		<if test="photoId != null">
 			and photo_id = #{photoId,jdbcType=VARCHAR}
@@ -262,7 +242,7 @@
 			'%${searchContent}%' or
 			building_block_number like
 			'%${searchContent}%' or
-			room_number like
+			room_path like
 			'%${searchContent}%' or
 			card_number like
 			'%${searchContent}%' or
@@ -293,7 +273,7 @@
 			'%${searchContent}%' or
 			building_block_number like
 			'%${searchContent}%' or
-			room_number like
+			room_path like
 			'%${searchContent}%' or
 			card_number like
 			'%${searchContent}%' or

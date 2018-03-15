@@ -46,7 +46,7 @@ public interface HouseHoldBiz {
 	 * @return list<HouseHoldDto>
 	 * @throws BusinessException
 	 */
-	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String fileStr,String communityId) throws BusinessException;
+	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String fileStr,String searchContent,Long communityId) throws BusinessException;
 	
 	/**
 	 * 根据id查询HouseHold
@@ -71,14 +71,6 @@ public interface HouseHoldBiz {
 	 * @throws BusinessException
 	 */
 	public HouseHold findHouseHoldBySelective(HouseHold houseHold) throws BusinessException;
-	
-	/**
-	 * 模糊查询住户
-	 * @param household
-	 * @return HouseHoldDto
-	 * @throws BusinessException
-	 */
-	public List<HouseHoldDto> getFuzzyQuery(int startRow,int pageSize,String searchContent,String communityId) throws BusinessException;
 	
 	
 

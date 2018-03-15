@@ -38,7 +38,7 @@ public interface HouseHoldFacade {
      * @throws Exception
 	 * @author zx
      */
-    public HouseholdResponse findAllHouseHold(int startRow,int pageSize,String fileStr,int count,String communityId) throws Exception;
+    public HouseholdResponse findAllHouseHold(int startRow,int pageSize,String fileStr,String searchContent,int count,Long communityId) throws Exception;
     
     /**
      * 根据id查询业主信息
@@ -56,11 +56,4 @@ public interface HouseHoldFacade {
      */
     public HouseholdResponse queryHouseHold(HouseholdRequest householdRequest) throws Exception;
     
-    /**
-     * 模糊查询用户信息
-     * @param
-     * @return
-     * @throws Exception
-     */
-    public HouseholdResponse getFuzzyQuery(int startRow,int pageSize,String searchContent,int count,String communityId) throws Exception;
 }

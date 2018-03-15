@@ -54,9 +54,9 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade {
 	}
 
 	@Override
-	public HouseholdResponse findAllHouseHold(int startRow,int pageSize,String fileStr,int count,String communityId) throws Exception {
+	public HouseholdResponse findAllHouseHold(int startRow,int pageSize,String fileStr,String searchContent,int count,Long communityId) throws Exception {
 		HouseholdResponse householdResponse = new HouseholdResponse();
-		List<HouseHoldDto> householdList = householdBiz.findHousehold(startRow,pageSize,fileStr,communityId);
+		List<HouseHoldDto> householdList = householdBiz.findHousehold(startRow,pageSize,fileStr,searchContent,communityId);
 		householdResponse.setHouseholdlist(householdList);
 		householdResponse.setTotalNumber(count);
 		return householdResponse;
@@ -75,16 +75,6 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade {
 		HouseholdResponse householdResponse = new HouseholdResponse();
 		List<HouseHoldDto> householdList = householdBiz.queryHouseHold(householdRequest.getHouseholdDto());
 		householdResponse.setHouseholdlist(householdList);
-		return householdResponse;
-	}
-
-	@Override
-	public HouseholdResponse getFuzzyQuery(int startRow, int pageSize, String searchContent, int count,String communityId)
-			throws Exception {
-		HouseholdResponse householdResponse = new HouseholdResponse();
-		List<HouseHoldDto> householdList = householdBiz.getFuzzyQuery(startRow, pageSize, searchContent,communityId);
-		householdResponse.setHouseholdlist(householdList);
-		householdResponse.setTotalNumber(count);
 		return householdResponse;
 	}
 

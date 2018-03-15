@@ -15,9 +15,7 @@ public class HouseHoldDto {
 	
     private String identifyCard;
 
-	private String buildingBlockNumber;
-
-	private String roomNumber;
+	private String roomPath;
 
 	private String photoId;
 
@@ -69,20 +67,13 @@ public class HouseHoldDto {
 		this.identifyCard = identifyCard;
 	}
 
-	public String getBuildingBlockNumber() {
-		return buildingBlockNumber;
+
+	public String getroomPath() {
+		return roomPath;
 	}
 
-	public void setBuildingBlockNumber(String buildingBlockNumber) {
-		this.buildingBlockNumber = buildingBlockNumber;
-	}
-
-	public String getRoomNumber() {
-		return roomNumber;
-	}
-
-	public void setRoomNumber(String roomNumber) {
-		this.roomNumber = roomNumber;
+	public void setroomPath(String roomPath) {
+		this.roomPath = roomPath;
 	}
 
 	public String getPhotoId() {
