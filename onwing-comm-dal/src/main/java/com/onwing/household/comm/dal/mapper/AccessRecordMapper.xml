@@ -4,27 +4,22 @@
 	<resultMap id="BaseResultMap"
 		type="com.onwing.household.comm.dal.model.AccessRecord">
 		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="household_id" property="householdId" jdbcType="BIGINT" />
 		<result column="out_off_time" property="outOffTime" jdbcType="TIMESTAMP" />
 		<result column="out_off" property="outOff" jdbcType="CHAR" />
 		<result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
-		<result column="community_id" property="communityId" jdbcType="BIGINT"/>
+		<association property="community"
+			javaType="com.onwing.household.comm.dal.model.Community" resultMap="com.onwing.household.comm.dal.dao.CommunityMapper.BaseResultMap">
+		</association>
+		<association property="camera"
+			javaType="com.onwing.household.comm.dal.model.Camera" resultMap="com.onwing.household.comm.dal.dao.CamaraMapper.BaseResultMap">
+		</association>
+		<association property="houseHold"
+			javaType="com.onwing.household.comm.dal.model.HouseHold" resultMap="com.onwing.household.comm.dal.dao.HouseHoldMapper.BaseResultMap">
+		</association>
 	</resultMap>
 
-	<resultMap id="ResultMapAccess"
-		type="com.onwing.household.comm.dal.model.HouseAccessRecord">
-		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="out_off_time" property="outOffTime" jdbcType="TIMESTAMP" />
-		<result column="household_name" property="householdName"
-			jdbcType="VARCHAR" />
-		<result column="room_number" property="roomNumber" jdbcType="VARCHAR" />
-		<result column="building_block_number" property="buildingBlockNumber"
-			jdbcType="VARCHAR" />
-		<result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
-		<result column="community_id" property="communityId" jdbcType="BIGINT"/>		
-	</resultMap>
 	<sql id="Base_Column_List">
-		id, household_id, out_off_time, out_off,photo_url
+		id, household_id, household_name,out_off_time, out_off,photo_url,community_id,community_name,camera_id,camera_name
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
@@ -38,20 +33,16 @@
 		tbl_access_record
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
-	<insert id="insert" parameterType="com.onwing.household.comm.dal.model.AccessRecord"
-		useGeneratedKeys="true" keyProperty="id">
-		insert into tbl_access_record
-		(household_id, out_off_time, out_off,photo_url)
-		values
-		(#{householdId,jdbcType=BIGINT}, #{outOffTime,jdbcType=TIMESTAMP},
-		#{outOff,jdbcType=CHAR},#{photo_url,jdbcType=VARCHAR})
-	</insert>
+
 	<insert id="insertSelective" parameterType="com.onwing.household.comm.dal.model.AccessRecord"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into tbl_access_record
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="householdId != null">
+			<if test="household.id != null">
 				household_id,
+			</if>
+			<if test="household.name != null">
+				household_name,
 			</if>
 			<if test="outOffTime != null">
 				out_off_time,
@@ -62,10 +53,25 @@
 			<if test="photoUrl != null">
 				photo_url,
 			</if>
+			<if test="community.id != null">
+				community_id,
+			</if>
+			<if test="community.name != null">
+				community_name,
+			</if>
+			<if test="camera.id != null">
+				camera_id,
+			</if>
+			<if test="camera.name != null">
+				camera_name
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="householdId != null">
-				#{householdId,jdbcType=BIGINT},
+			<if test="household.id != null">
+				#{household.id,jdbcType=BIGINT},
+			</if>
+			<if test="household.name != null">
+				#{household.name,jdbcType=VARCHAR},
 			</if>
 			<if test="outOffTime != null">
 				#{outOffTime,jdbcType=TIMESTAMP},
@@ -76,41 +82,62 @@
 			<if test="photoUrl != null">
 				#{photoUrl,jdbcType=VARCHAR},
 			</if>
+			<if test="community.id != null">
+				#{community.id,jdbcType=BIGINT},
+			</if>
+			<if test="community.name != null">
+				#{community.name,jdbcType=VARCHAR},
+			</if>
+			<if test="camera.id != null">
+				#{camera.id,jdbcType=BIGINT},
+			</if>
+			<if test="camera.name != null">
+				#{camera.name,jdbcType=VARCHAR}
+			</if>
 		</trim>
 	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.onwing.household.comm.dal.model.AccessRecord">
-		update tbl_access_record
-		<set>
-			<if test="householdId != null">
-				household_id = #{householdId,jdbcType=BIGINT},
-			</if>
-			<if test="outOffTime != null">
-				out_off_time = #{outOffTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="outOff != null">
-				out_off = #{outOff,jdbcType=CHAR},
-			</if>
-		</set>
-		where id = #{id,jdbcType=BIGINT}
-	</update>
-	<update id="updateByPrimaryKey" parameterType="com.onwing.household.comm.dal.model.AccessRecord">
-		update
-		tbl_access_record
-		set household_id = #{householdId,jdbcType=BIGINT},
-		out_off_time = #{outOffTime,jdbcType=TIMESTAMP},
-		out_off =
-		#{outOff,jdbcType=CHAR}
-		where id = #{id,jdbcType=BIGINT}
-	</update>
 
 	<!--===============自定义sql =============== -->
-	<select id="selectAccessRecord" resultMap="ResultMapAccess"
-		parameterType="com.onwing.household.comm.dal.model.HouseAccessRecord">
+	<select id="selectAccessRecord" resultMap="BaseResultMap"
+		parameterType="com.onwing.household.comm.dal.model.AccessRecord">
 		select
-		a.id,b.household_name,b.building_block_number,b.room_number,a.out_off_time,a.photo_url
-		from tbl_access_record a,tbl_household b
-		where a.community_id=#{communityId,jdbcType=BIGINT} and a.household_id=b.id ORDER BY a.id desc
-		LIMIT #{startRow}, #{pageSize}
+		<include refid="Base_Column_List" />
+		from tbl_access_record
+		where 1=1
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="household.id != null">
+			and household_id = #{household.id,jdbcType=BIGINT}
+		</if>
+		<if test="household.name != null">
+			and household_name = #{household.name,jdbcType=VARCHAR}
+		</if>
+		<if test="outOffTime != null">
+			and out_off_time = #{outOffTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="outOff != null">
+			and out_off = #{outOff,jdbcType=CHAR}
+		</if>
+		<if test="photoUrl != null">
+			and photo_url = #{photoUrl,jdbcType=VARCHAR}
+		</if>
+		<if test="community.id != null">
+			and community_id = #{community.id,jdbcType=BIGINT}
+		</if>
+		<if test="community.name != null">
+			and community_name = #{community.name,jdbcType=VARCHAR}
+		</if>
+		<if test="camera.id != null">
+			and camera_id = #{camera.id,jdbcType=BIGINT} 
+		</if>
+		<if test="camera.name != null">
+			and camera_name = #{camera.name,jdbcType=VARCHAR} 
+		</if>
+		<if test="#{searchContent} != null">
+			and (household_name LIKE '%${searchContent}%' or community_name LIKE '%${searchContent}%' or camera_name LIKE '%${searchContent}%') 
+		</if>
+		ORDER BY tbl_access_record.id desc LIMIT #{startRow}, #{pageSize}
 	</select>
 
 	<!-- 总记录数 -->
@@ -120,8 +147,48 @@
 		where
 		a.household_id=b.id
 	</select>
-
-
+	
+	<select id="getTotalCountBySearchContent" resultType="int"
+		parameterType="com.onwing.household.comm.dal.model.AccessRecord">
+		select
+		count(*)
+		from tbl_access_record
+		where 1=1
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="household.id != null">
+			and household_id = #{household.id,jdbcType=BIGINT}
+		</if>
+		<if test="household.name != null">
+			and household_name = #{household.name,jdbcType=VARCHAR}
+		</if>
+		<if test="outOffTime != null">
+			and out_off_time = #{outOffTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="outOff != null">
+			and out_off = #{outOff,jdbcType=CHAR}
+		</if>
+		<if test="photoUrl != null">
+			and photo_url = #{photoUrl,jdbcType=VARCHAR}
+		</if>
+		<if test="community.id != null">
+			and community_id = #{community.id,jdbcType=BIGINT}
+		</if>
+		<if test="community.name != null">
+			and community_name = #{community.name,jdbcType=VARCHAR}
+		</if>
+		<if test="camera.id != null">
+			and camera_id = #{camera.id,jdbcType=BIGINT} 
+		</if>
+		<if test="camera.name != null">
+			and camera_name = #{camera.name,jdbcType=VARCHAR} 
+		</if>
+		<if test="#{searchContent} != null">
+			and (household_name LIKE '%${searchContent}%' or community_name LIKE '%${searchContent}%' or camera_name LIKE '%${searchContent}%') 
+		</if>
+	</select>
+	
 	<select id="getAccessRecordByDate" resultMap="BaseResultMap">
 		select photo_url
 		from tbl_access_record

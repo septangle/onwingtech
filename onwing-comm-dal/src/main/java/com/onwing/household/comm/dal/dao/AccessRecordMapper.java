@@ -8,27 +8,24 @@ import com.onwing.household.comm.dal.model.AccessRecord;
 import com.onwing.household.comm.dal.model.HouseAccessRecord;
 
 public interface AccessRecordMapper {
-    int deleteByPrimaryKey(Long id);
+	int deleteByPrimaryKey(Long id);
 
-    int insert(AccessRecord record);
+	int insertSelective(AccessRecord record);
 
-    int insertSelective(AccessRecord record);
+	AccessRecord selectByPrimaryKey(Long id);
 
-    AccessRecord selectByPrimaryKey(Long id);
+	/************* 自定义查询 ******************/
 
-    int updateByPrimaryKeySelective(AccessRecord record);
+	List<AccessRecord> selectAccessRecord(@Param("startRow") int startRow, @Param("pageSize") int pageSize,
+			@Param("searchContent") String searchContent, @Param("entity") AccessRecord accessRecord);
 
-    int updateByPrimaryKey(AccessRecord record);
-    
-   /*************自定义查询******************/
-    
-    List<HouseAccessRecord> selectAccessRecord(@Param("startRow")int startRow,
-			@Param("pageSize")int pageSize,@Param("communityId")Long communityId,@Param("entity")HouseAccessRecord houseAccessRecord);
-    
-    //查询住户出入记录总数
-    int  getCountByHouseHold();
-    
-    List<AccessRecord> getAccessRecordByDate(@Param("numberDay")int numberDay);
-    
-    int delAccessRecordByDate(@Param("numberDay")int numberDay);
+	// 查询住户出入记录总数
+	int getCountByHouseHold();
+
+	int getTotalCountBySearchContent(@Param("searchContent") String searchContent,
+			@Param("entity") AccessRecord accessRecord);
+
+	List<AccessRecord> getAccessRecordByDate(@Param("numberDay") int numberDay);
+
+	int delAccessRecordByDate(@Param("numberDay") int numberDay);
 }
