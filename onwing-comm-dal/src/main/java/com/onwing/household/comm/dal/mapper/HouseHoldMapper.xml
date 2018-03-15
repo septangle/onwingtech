@@ -244,43 +244,63 @@
 		</if>
 	</select>
 
-	<select id="getAllHouseHold" resultMap="BaseResultMap"
-		parameterType="com.onwing.household.comm.dal.model.HouseHold">
-		select
-		<include refid="Base_Column_List" />
-		from tbl_household where community_id=#{communityId,jdbcType=BIGINT} 
-		LIMIT #{startRow}, #{pageSize}
-	</select>
-
-	<select id="getCountByHousehold" resultType="int">
-		select count(*)
-		from
-		tbl_household
-	</select>
-
-	<select id="getFuzzyQuery" resultMap="BaseResultMap"
+	<select id="getAllHouseHoldList" resultMap="BaseResultMap"
 		parameterType="com.onwing.household.comm.dal.model.HouseHold">
 		select
 		<include refid="Base_Column_List" />
 		from tbl_household
-		where community_id=#{communityId,jdbcType=BIGINT} and 
-		household_name like
-		"%"#{searchContent,jdbcType=VARCHAR}"%" or
-		tel like
-		"%"#{searchContent,jdbcType=VARCHAR}"%" or
-		gender like
-		"%"#{searchContent,jdbcType=VARCHAR}"%" or
-		building_block_number like
-		"%"#{searchContent,jdbcType=VARCHAR}"%" or
-		room_number like
-		"%"#{searchContent,jdbcType=VARCHAR}"%" or
-		card_number like
-		"%"#{searchContent,jdbcType=VARCHAR}"%" or
-		household_type like
-		"%"#{searchContent,jdbcType=VARCHAR}"%" or
-		identify_card like
-		"%"#{searchContent,jdbcType=VARCHAR}"%"
-		LIMIT #{startRow},
-		#{pageSize}
+		where 1=1
+		<if test="communityId != null">
+		and community_id = #{communityId,jdbcType=BIGINT}
+		</if>
+		<if test="searchContent != null">
+		and ( household_name like
+			'%${searchContent}%' or
+			tel like
+			'%${searchContent}%' or
+			gender like
+			'%${searchContent}%' or
+			building_block_number like
+			'%${searchContent}%' or
+			room_number like
+			'%${searchContent}%' or
+			card_number like
+			'%${searchContent}%' or
+			household_type like
+			'%${searchContent}%' or
+			identify_card like
+			'%${searchContent}%')
+		</if>
+		LIMIT #{startRow}, #{pageSize}
+	</select>
+
+
+	<select id="getTotalCountBySearchContent" resultType="int"
+		parameterType="com.onwing.household.comm.dal.model.HouseHold">
+		select
+		count(*)
+		from tbl_household
+		where 1=1
+		<if test="communityId != null">
+			and community_id = #{communityId ,jdbcType=BIGINT}
+		</if>
+		<if test="searchContent != null">
+			and (household_name like
+			'%${searchContent}%' or
+			tel like
+			'%${searchContent}%' or
+			gender like
+			'%${searchContent}%' or
+			building_block_number like
+			'%${searchContent}%' or
+			room_number like
+			'%${searchContent}%' or
+			card_number like
+			'%${searchContent}%' or
+			household_type like
+			'%${searchContent}%' or
+			identify_card like
+			'%${searchContent}%')
+		</if>
 	</select>
 </mapper>
