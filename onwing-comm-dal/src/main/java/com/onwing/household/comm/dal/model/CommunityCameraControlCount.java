@@ -1,17 +1,9 @@
-package com.onwing.household.biz.dto;
+package com.onwing.household.comm.dal.model;
 
-public class CommunityDto {
-
+public class CommunityCameraControlCount {
 	private Long id;
-
 	private String name;
-
-	private String address;
-
-	private Long communityId;
-
 	private Long cameraCount;
-
 	private Long controlCount;
 
 	public Long getId() {
@@ -28,22 +20,6 @@ public class CommunityDto {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public Long getCommunityId() {
-		return communityId;
-	}
-
-	public void setCommunityId(Long communityId) {
-		this.communityId = communityId;
 	}
 
 	public Long getCameraCount() {

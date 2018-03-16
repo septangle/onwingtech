@@ -1,6 +1,7 @@
 package com.onwing.household.biz.logic.facade.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import com.onwing.household.comm.dal.dao.CommunityMapper;
 import com.onwing.household.comm.dal.dao.UserRoleMapper;
 import com.onwing.household.comm.dal.model.AdminiStrator;
 import com.onwing.household.comm.dal.model.Community;
+import com.onwing.household.comm.dal.model.CommunityCameraControlCount;
 import com.onwing.household.comm.dal.model.UserRole;
 
 @Service
@@ -47,6 +49,15 @@ public class AdminiStratorFacadeImpl implements AdminiStratorFacade {
 		userRoleDto.setCommunityId(null);
 		userRoleDto.setCommunityName(null);
 		adminiStratorResponse.setUserRoleDto(userRoleDto);
+		// 获取所有小区的门禁数和摄像头数目
+		List<CommunityCameraControlCount> communityCameraControlCountList = communityMapper.queryCameraControlCount();
+		HashMap<Long, CommunityCameraControlCount> hMap = new HashMap<Long, CommunityCameraControlCount>();
+		if (communityCameraControlCountList != null) {
+			for (CommunityCameraControlCount communityCameraControlCount : communityCameraControlCountList) {
+				Long communityId = communityCameraControlCount.getId();
+				hMap.put(communityId, communityCameraControlCount);
+			}
+		}
 		// 判断用户角色
 		ArrayList<CommunityDto> communityDtoList = new ArrayList<CommunityDto>();
 		String roleName = userRoleDto.getRoleName();
@@ -57,15 +68,20 @@ public class AdminiStratorFacadeImpl implements AdminiStratorFacade {
 			if (communityList == null || communityList.size() == 0) {
 				// 小区列表为空
 				adminiStratorResponse.setCommunityList(communityDtoList);
+			} else {
+				for (Community community : communityList) {
+					CommunityDto communityDto = new CommunityDto();
+					communityDto.setAddress(community.getAddress());
+					communityDto.setCommunityId(community.getId());
+					communityDto.setName(community.getName());
+
+					CommunityCameraControlCount countObj = hMap.get(community.getId());
+					communityDto.setCameraCount(countObj == null ? 0 : countObj.getCameraCount());
+					communityDto.setControlCount(countObj == null ? 0 : countObj.getControlCount());
+					communityDtoList.add(communityDto);
+				}
+				adminiStratorResponse.setCommunityList(communityDtoList);
 			}
-			for (Community community : communityList) {
-				CommunityDto communityDto = new CommunityDto();
-				communityDto.setAddress(community.getAddress());
-				communityDto.setCommunityId(community.getId());
-				communityDto.setName(community.getName());
-				communityDtoList.add(communityDto);
-			}
-			adminiStratorResponse.setCommunityList(communityDtoList);
 		} else {
 			// 其他角色，返回与之绑定的小区信息
 			String username = request.getAdminiStratorDto().getAdminName();
@@ -88,6 +104,10 @@ public class AdminiStratorFacadeImpl implements AdminiStratorFacade {
 			communityDto.setAddress(community.getAddress());
 			communityDto.setCommunityId(community.getId());
 			communityDto.setName(community.getName());
+
+			CommunityCameraControlCount countObj = hMap.get(community.getId());
+			communityDto.setCameraCount(countObj == null ? 0 : countObj.getCameraCount());
+			communityDto.setControlCount(countObj == null ? 0 : countObj.getControlCount());
 			communityDtoList.add(communityDto);
 			adminiStratorResponse.setCommunityList(communityDtoList);
 		}

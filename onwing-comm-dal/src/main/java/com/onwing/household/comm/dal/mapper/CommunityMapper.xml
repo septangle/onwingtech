@@ -6,9 +6,28 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <resultMap id="CameraControlCountResultMap" type="com.onwing.household.comm.dal.model.CommunityCameraControlCount" >
+    <id column="community_id" property="id" jdbcType="BIGINT" />
+    <result column="community_name" property="name" jdbcType="VARCHAR" />
+    <result column="camera_count" property="cameraCount" jdbcType="BIGINT" />
+    <result column="control_count" property="controlCount" jdbcType="BIGINT" />
+  </resultMap>
+  
   <sql id="Base_Column_List" >
     id,name,address
   </sql>
+  
+  <select id="queryCameraControlCount" resultMap="CameraControlCountResultMap" >
+    SELECT
+	tbl_community.id, tbl_community.`name`, count(DISTINCT tbl_camera.id) as camera_count, count(DISTINCT tbl_control.id) as control_count
+	from tbl_community,tbl_door,tbl_control,tbl_camera 
+	where tbl_camera.control_id = tbl_control.id 
+	and tbl_control.door_id = tbl_door.id 
+	and tbl_door.community_id = tbl_community.id
+	group by tbl_community.id
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
