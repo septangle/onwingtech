@@ -23,8 +23,8 @@
 		</association>
 	</resultMap>
 	<sql id="Base_Column_List">
-		id,community_id,community_name,household_name, gender,
-		tel,identify_card, , room_path,
+		tbl_household.id as household_id,community_id,community_name,household_name, gender,
+		tel,identify_card, room_path,
 		photo_id,
 		card_number,household_type,
 		remarks
@@ -133,7 +133,7 @@
 		update tbl_household
 		<set>
 			<if test="community.id != null">
-				community_id = #{communityId,jdbcType=BIGINT},
+				community_id = #{community.id,jdbcType=BIGINT},
 			</if>
 			<if test="communityName != null">
 				community_name = #{communityName,jdbcType=VARCHAR},
@@ -148,7 +148,7 @@
 				tel = #{tel,jdbcType=VARCHAR},
 			</if>
 			<if test="identifyCard != null">
-				identifyCard = #{identifyCard,jdbcType=VARCHAR},
+				identify_card = #{identifyCard,jdbcType=VARCHAR},
 			</if>
 			<if test="roomPath != null">
 				room_path = #{roomPath,jdbcType=VARCHAR},
@@ -240,8 +240,6 @@
 			'%${searchContent}%' or
 			gender like
 			'%${searchContent}%' or
-			building_block_number like
-			'%${searchContent}%' or
 			room_path like
 			'%${searchContent}%' or
 			card_number like
@@ -270,8 +268,6 @@
 			tel like
 			'%${searchContent}%' or
 			gender like
-			'%${searchContent}%' or
-			building_block_number like
 			'%${searchContent}%' or
 			room_path like
 			'%${searchContent}%' or

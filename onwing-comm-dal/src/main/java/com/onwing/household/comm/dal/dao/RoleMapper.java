@@ -2,7 +2,6 @@ package com.onwing.household.comm.dal.dao;
 
 import java.util.List;
 
-import com.onwing.household.comm.dal.model.AdminiStrator;
 import com.onwing.household.comm.dal.model.Role;
 
 public interface RoleMapper {

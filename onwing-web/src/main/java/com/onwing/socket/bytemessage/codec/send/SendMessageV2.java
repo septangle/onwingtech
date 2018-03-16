@@ -1,6 +1,5 @@
 package com.onwing.socket.bytemessage.codec.send;
 
-import java.nio.ByteBuffer;
 
 import com.onwing.socket.bytemessage.pdu.MessageV2;
 

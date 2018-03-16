@@ -3,7 +3,7 @@ package com.onwing.household.comm.dal.model;
 public class HouseHold {
     private Long id;
     
-    private Community community;
+    private Community community = new Community();
     
     private String communityName;
 

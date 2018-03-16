@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,18 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.csvreader.CsvReader;
-import com.onwing.household.base.CsvTopologyNode;
-import com.onwing.household.biz.dto.HouseHoldDto;
 import com.onwing.household.biz.exception.BusinessException;
-import com.onwing.household.biz.request.HouseholdRequest;
 import com.onwing.household.biz.response.CommunityResponse;
 import com.onwing.household.biz.response.Error;
-import com.onwing.household.biz.response.HouseholdResponse;
 import com.onwing.household.comm.AppConstants;
 import com.onwing.household.comm.dal.dao.CommunityMapper;
 import com.onwing.household.comm.dal.model.Community;
-import com.onwing.socket.client.CplusClient;
-import com.onwing.socket.client.QueryCardRecordsThread;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 @Controller

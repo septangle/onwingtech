@@ -47,10 +47,10 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	 */
 	@ApiOperation(value = "录入业主信息", httpMethod = "POST", response = HouseholdResponse.class)
 	@RequestMapping(value = "/addHouseHold.do", method = RequestMethod.POST)
-	public @ResponseBody HouseholdResponse addHouseHold(@RequestParam("communityName") String communityName,
-			@RequestParam("householdName") String householdName, @RequestParam("gender") String gender,
-			@RequestParam("tel") String tel, @RequestParam("identifyCard") String identifyCard,
-			@RequestParam("roomPath") String roomPath,
+	public @ResponseBody HouseholdResponse addHouseHold(@RequestParam("communityId") String communityId,
+			@RequestParam("communityName") String communityName, @RequestParam("householdName") String householdName,
+			@RequestParam("gender") String gender, @RequestParam("tel") String tel,
+			@RequestParam("identifyCard") String identifyCard, @RequestParam("roomPath") String roomPath,
 			@RequestParam(value = "cardNumber", required = false) String cardNumber,
 			@RequestParam(value = "householdType", required = false) String householdType,
 			@RequestParam(value = "remarks", required = false) String remarks, @RequestParam MultipartFile file,
@@ -60,20 +60,24 @@ public class HouseholdController extends BaseController<HouseholdController> {
 		if (!files.exists() && !files.isDirectory()) {
 			files.mkdir();
 		}
-		String tmpFileName = file.getOriginalFilename();//上传的文件名			
+		String tmpFileName = file.getOriginalFilename();//上传的文件名	
+		//调用摄像头直接拍摄 无后缀名，默认加上.png
+		if (!tmpFileName.contains(".")) {
+			tmpFileName = tmpFileName + ".png";
+		}
 		String extension = tmpFileName.substring(tmpFileName.lastIndexOf("."));
 		String nowFileName = identifyCard + extension;
 
 		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path, nowFileName));
 		HouseholdRequest householdRequest = new HouseholdRequest();
 		HouseHoldDto holdDto = new HouseHoldDto();
+		holdDto.setCommunityId(Long.parseLong(communityId));
 		holdDto.setCommunityName(communityName);
 		holdDto.setHouseholdName(householdName);
 		holdDto.setGender(gender);
 		holdDto.setTel(tel);
 		holdDto.setIdentifyCard(identifyCard);
-/*		holdDto.setBuildingBlockNumber(buildingBlockNumber);
-		holdDto.setRoomNumber(roomNumber);*/
+		holdDto.setroomPath(roomPath);
 		holdDto.setCardNumber(cardNumber);
 		holdDto.setHouseholdType(householdType);
 		holdDto.setRemarks(remarks);
@@ -102,21 +106,62 @@ public class HouseholdController extends BaseController<HouseholdController> {
 
 	}
 
+	/*	*//**
+			* 修改业主信息
+			*//*
+			@ApiOperation(value = "修改业主信息", httpMethod = "POST", response = HouseholdResponse.class)
+			@ApiImplicitParams({
+				@ApiImplicitParam(name = "householdDto.id", value = "id", required = true, dataType = "string"),
+				@ApiImplicitParam(name = "householdDto.tel", value = "联系电话", required = true, dataType = "string"),
+				@ApiImplicitParam(name = "householdDto.cardNumber", value = "卡号", required = true, dataType = "string"),
+				@ApiImplicitParam(name = "householdDto.roomPath", value = "门号路径", required = true, dataType = "string"),
+				@ApiImplicitParam(name = "householdDto.remarks", value = "备注", required = false, dataType = "string") })
+			@RequestMapping(value = "/updateHouseHold.do", method = RequestMethod.POST)
+			public @ResponseBody HouseholdResponse updateHouseHold(HttpServletRequest servletRequest,
+				@RequestBody HouseholdRequest request) throws Exception {
+			return householdfacade.updateHouseHold(request);
+			}*/
+
 	/**
 	 * 修改业主信息
 	 */
 	@ApiOperation(value = "修改业主信息", httpMethod = "POST", response = HouseholdResponse.class)
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "householdDto.id", value = "id", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "householdDto.tel", value = "联系电话", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "householdDto.cardNumber", value = "卡号", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "householdDto.buildingBlockNumber", value = "楼栋号", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "householdDto.roomNumber", value = "门牌号", required = true, dataType = "string"),
-			@ApiImplicitParam(name = "householdDto.remarks", value = "备注", required = false, dataType = "string") })
 	@RequestMapping(value = "/updateHouseHold.do", method = RequestMethod.POST)
-	public @ResponseBody HouseholdResponse updateHouseHold(HttpServletRequest servletRequest,
-			@RequestBody HouseholdRequest request) throws Exception {
-		return householdfacade.updateHouseHold(request);
+	public @ResponseBody HouseholdResponse updateHouseHold(@RequestParam("id") String id,
+			@RequestParam(value = "householdName", required = false) String householdName,
+			@RequestParam(value = "gender", required = false) String gender,
+			@RequestParam(value = "tel", required = false) String tel,
+			@RequestParam(value = "identifyCard", required = true) String identifyCard,
+			@RequestParam(value = "roomPath", required = false) String roomPath,
+			@RequestParam(value = "cardNumber", required = false) String cardNumber,
+			@RequestParam(value = "file", required = false) MultipartFile file,
+			@RequestParam(value = "householdType", required = false) String householdType,
+			@RequestParam(value = "remarks", required = false) String remarks, HttpServletRequest servletRequest)
+			throws Exception {
+		String path = System.getProperty("onwing.root") + AppConstants.FILE_PATH;
+		String tmpFileName = file.getOriginalFilename();//上传的文件名	
+		//调用摄像头直接拍摄 无后缀名，默认加上.png
+		if (!tmpFileName.contains(".")) {
+			tmpFileName = tmpFileName + ".png";
+		}
+		String extension = tmpFileName.substring(tmpFileName.lastIndexOf("."));
+		String nowFileName = identifyCard + extension;
+		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path, nowFileName));
+		HouseholdRequest householdRequest = new HouseholdRequest();
+		HouseHoldDto holdDto = new HouseHoldDto();
+		holdDto.setId(Long.parseLong(id));
+		holdDto.setHouseholdName(householdName);
+		holdDto.setGender(gender);
+		holdDto.setTel(tel);
+		holdDto.setIdentifyCard(identifyCard);
+		holdDto.setroomPath(roomPath);
+		holdDto.setCardNumber(cardNumber);
+		holdDto.setHouseholdType(householdType);
+		holdDto.setRemarks(remarks);
+		holdDto.setPhotoId(AppConstants.FILE_PATH + nowFileName);
+
+		householdRequest.setHouseholdDto(holdDto);
+		return householdfacade.updateHouseHold(householdRequest);
 	}
 
 	/**
@@ -125,7 +170,6 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@ApiOperation(value = "查询业主信息", httpMethod = "GET", response = HouseholdResponse.class)
 	@RequestMapping(value = "/findAllHouseHold.do", method = RequestMethod.GET)
 	public @ResponseBody HouseholdResponse findHouseHold(HttpServletRequest servletRequest) throws Exception {
-		String fileStr = System.getProperty("onwing.root");
 		String searchContent = servletRequest.getParameter("searchContent");
 		String communityId = servletRequest.getParameter("communityId");
 
@@ -137,13 +181,13 @@ public class HouseholdController extends BaseController<HouseholdController> {
 		if (!communityId.equals("-1")) {
 			community.setId(Long.parseLong(communityId));
 
-		} 
+		}
 		houseHold.setCommunity(community);
 		int count = householdMapper.getTotalCountBySearchContent(searchContent, community.getId());
 		Page pageTool = Page.getPageByRequest(servletRequest, count);
 		int startRow = (pageTool.getPage() - 1) * Integer.parseInt(servletRequest.getParameter("pageSize"));
-		return householdfacade.findAllHouseHold(startRow, pageTool.getPageSize(), fileStr + AppConstants.FILE_PATH,
-				searchContent, count,community.getId());
+		return householdfacade.findAllHouseHold(startRow, pageTool.getPageSize(), searchContent, count,
+				community.getId());
 	}
 
 	/**

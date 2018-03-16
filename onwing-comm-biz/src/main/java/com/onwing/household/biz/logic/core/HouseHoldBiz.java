@@ -46,7 +46,7 @@ public interface HouseHoldBiz {
 	 * @return list<HouseHoldDto>
 	 * @throws BusinessException
 	 */
-	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String fileStr,String searchContent,Long communityId) throws BusinessException;
+	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String searchContent,Long communityId) throws BusinessException;
 	
 	/**
 	 * 根据id查询HouseHold

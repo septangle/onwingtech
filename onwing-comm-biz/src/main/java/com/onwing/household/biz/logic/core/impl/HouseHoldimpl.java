@@ -2,7 +2,6 @@ package com.onwing.household.biz.logic.core.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import com.onwing.household.biz.dto.HouseHoldDto;
 import com.onwing.household.biz.exception.BusinessException;
 import com.onwing.household.biz.logic.core.HouseHoldBiz;
 import com.onwing.household.comm.AppConstants;
-import com.onwing.household.comm.dal.dao.CommunityMapper;
 import com.onwing.household.comm.dal.dao.HouseHoldMapper;
 import com.onwing.household.comm.dal.model.Community;
 import com.onwing.household.comm.dal.model.HouseHold;
@@ -24,9 +22,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 
 	@Autowired
 	private HouseHoldMapper householdMapper;
-	
-	@Autowired
-	private CommunityMapper communityMapper;
+
 
 	@Override
 	public boolean addHousehold(HouseHoldDto householdDto) throws BusinessException {
@@ -34,10 +30,9 @@ public class HouseHoldimpl implements HouseHoldBiz {
 		HouseHold household;
 		Community community = new Community();
 		try {
-			community.setName(householdDto.getCommunityName());
-			List<Community> clist=communityMapper.selectBySelective(community);
 			household = ModelUtil.dtoToModel(householdDto, HouseHold.class);
-			household.setCommunity(clist.get(0));
+			community.setId(householdDto.getCommunityId());
+			household.setCommunity(community);
 			int i = householdMapper.insertSelective(household);
 			if (i == 0) {
 				throw new BusinessException(AppConstants.ADD_HOUSE_HOLD_FAIL_CODE,
@@ -91,7 +86,7 @@ public class HouseHoldimpl implements HouseHoldBiz {
 	}
 
 	@Override
-	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String strFile,String searchContent,Long communityId) throws BusinessException {
+	public List<HouseHoldDto> findHousehold(int startRow,int pageSize,String searchContent,Long communityId) throws BusinessException {
 		List<HouseHoldDto> householdDtoList = null;
 		try {
 			householdDtoList = new ArrayList<HouseHoldDto>();
@@ -113,8 +108,8 @@ public class HouseHoldimpl implements HouseHoldBiz {
 		HouseHold houseHold;
 		try {
 			houseHold = householdMapper.selectByPrimaryKey(houseHoldDto.getId());
-			System.out.println(houseHold.getGender());
 			houseHoldDto = ModelUtil.modelToDto(houseHold, HouseHoldDto.class);
+			houseHoldDto.setCommunityId(houseHold.getCommunity().getId());
 		} catch (Exception e) {
           logger.error("find household by Id error", e);
 		}

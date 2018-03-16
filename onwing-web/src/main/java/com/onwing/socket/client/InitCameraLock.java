@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.onwing.household.comm.dal.dao.CamaraMapper;
 import com.onwing.household.comm.dal.model.Camara;
-import com.onwing.socket.server.SimpleServerHandler;
 
 public class InitCameraLock {
 	private final static Logger logger = LoggerFactory.getLogger(InitCameraLock.class);

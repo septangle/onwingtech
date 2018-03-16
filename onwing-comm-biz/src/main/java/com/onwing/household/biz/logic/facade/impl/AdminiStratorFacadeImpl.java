@@ -12,7 +12,6 @@ import com.onwing.household.biz.dto.CommunityDto;
 import com.onwing.household.biz.dto.UserRoleDto;
 import com.onwing.household.biz.exception.BusinessException;
 import com.onwing.household.biz.logic.core.AdminiStratorBiz;
-import com.onwing.household.biz.logic.core.impl.AdminiStratorimpl;
 import com.onwing.household.biz.logic.facade.AdminiStratorFacade;
 import com.onwing.household.biz.request.AdminiStratorRequest;
 import com.onwing.household.biz.request.UserRoleRequest;

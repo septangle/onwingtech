@@ -54,9 +54,9 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade {
 	}
 
 	@Override
-	public HouseholdResponse findAllHouseHold(int startRow,int pageSize,String fileStr,String searchContent,int count,Long communityId) throws Exception {
+	public HouseholdResponse findAllHouseHold(int startRow,int pageSize,String searchContent,int count,Long communityId) throws Exception {
 		HouseholdResponse householdResponse = new HouseholdResponse();
-		List<HouseHoldDto> householdList = householdBiz.findHousehold(startRow,pageSize,fileStr,searchContent,communityId);
+		List<HouseHoldDto> householdList = householdBiz.findHousehold(startRow,pageSize,searchContent,communityId);
 		householdResponse.setHouseholdlist(householdList);
 		householdResponse.setTotalNumber(count);
 		return householdResponse;

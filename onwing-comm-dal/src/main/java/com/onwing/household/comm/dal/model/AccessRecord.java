@@ -2,8 +2,6 @@ package com.onwing.household.comm.dal.model;
 
 import java.util.Date;
 
-import javafx.scene.Camera;
-
 public class AccessRecord {
 	private Long id;
 

@@ -38,7 +38,7 @@ public interface HouseHoldFacade {
      * @throws Exception
 	 * @author zx
      */
-    public HouseholdResponse findAllHouseHold(int startRow,int pageSize,String fileStr,String searchContent,int count,Long communityId) throws Exception;
+    public HouseholdResponse findAllHouseHold(int startRow,int pageSize,String searchContent,int count,Long communityId) throws Exception;
     
     /**
      * 根据id查询业主信息

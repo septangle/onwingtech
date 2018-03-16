@@ -1,6 +1,5 @@
 package com.onwing.socket.bytemessage.pdu;
 
-import java.nio.ByteBuffer;
 
 import io.netty.buffer.ByteBuf;
 

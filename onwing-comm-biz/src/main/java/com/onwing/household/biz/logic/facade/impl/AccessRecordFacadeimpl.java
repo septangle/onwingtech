@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onwing.household.biz.dto.HouseAccessRecordDto;
-import com.onwing.household.biz.dto.HouseHoldDto;
 import com.onwing.household.biz.logic.core.AccessRecordBiz;
 import com.onwing.household.biz.logic.facade.AccessRecordFacade;
 import com.onwing.household.biz.response.AccessRecordResponse;

@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.onwing.household.comm.dal.model.AccessRecord;
-import com.onwing.household.comm.dal.model.HouseAccessRecord;
 
 public interface AccessRecordMapper {
 	int deleteByPrimaryKey(Long id);

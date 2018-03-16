@@ -1,6 +1,5 @@
 package com.onwing.socket.bytemessage.pdu;
 
-import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
 public class MessageHeader {

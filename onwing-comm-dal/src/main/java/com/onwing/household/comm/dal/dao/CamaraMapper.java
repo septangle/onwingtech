@@ -3,7 +3,6 @@ package com.onwing.household.comm.dal.dao;
 import java.util.List;
 
 import com.onwing.household.comm.dal.model.Camara;
-import com.onwing.household.comm.dal.model.HouseHold;
 
 public interface CamaraMapper {
     int deleteByPrimaryKey(Long id);
