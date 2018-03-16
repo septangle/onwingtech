@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.onwing.household.biz.dto.CommunityDto;
+import com.onwing.household.biz.dto.HouseHoldDto;
+import com.onwing.household.biz.dto.UserRoleCommunityDto;
 import com.onwing.household.biz.dto.UserRoleDto;
 import com.onwing.household.biz.exception.BusinessException;
 import com.onwing.household.biz.logic.core.AdminiStratorBiz;
@@ -24,7 +26,10 @@ import com.onwing.household.comm.dal.dao.UserRoleMapper;
 import com.onwing.household.comm.dal.model.AdminiStrator;
 import com.onwing.household.comm.dal.model.Community;
 import com.onwing.household.comm.dal.model.CommunityCameraControlCount;
+import com.onwing.household.comm.dal.model.HouseHold;
 import com.onwing.household.comm.dal.model.UserRole;
+import com.onwing.household.comm.dal.model.UserRoleCommunity;
+import com.onwing.household.util.ModelUtil;
 
 @Service
 public class AdminiStratorFacadeImpl implements AdminiStratorFacade {
@@ -118,6 +123,21 @@ public class AdminiStratorFacadeImpl implements AdminiStratorFacade {
 	public AdminiStratorResponse addUser(UserRoleRequest request) throws Exception {
 		AdminiStratorResponse adminiStratorResponse = new AdminiStratorResponse();
 		adminiStratorBiz.addUser(request);
+		return adminiStratorResponse;
+	}
+
+	@Override
+	public AdminiStratorResponse findAllUser() throws Exception {
+		AdminiStratorResponse adminiStratorResponse = new AdminiStratorResponse();
+		List<UserRoleCommunityDto> communityDtosList= new ArrayList<UserRoleCommunityDto>();
+		
+		List<UserRoleCommunity> userList=adminiStratorMapper.selectbyAllUser();
+		if (userList != null) {
+			for (UserRoleCommunity userRoleCommunity : userList) {
+				communityDtosList.add(ModelUtil.modelToDto(userRoleCommunity, UserRoleCommunityDto.class));
+			}
+		}
+		adminiStratorResponse.setUserRoleCommunityDto(communityDtosList);
 		return adminiStratorResponse;
 	}
 

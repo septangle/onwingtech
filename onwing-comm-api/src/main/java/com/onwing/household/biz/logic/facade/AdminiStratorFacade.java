@@ -16,5 +16,7 @@ public interface AdminiStratorFacade {
 	public AdminiStratorResponse login(AdminiStratorRequest request) throws Exception;
 	
 	public AdminiStratorResponse addUser(UserRoleRequest request) throws Exception;
+	
+	public AdminiStratorResponse findAllUser() throws Exception;
 
 }
