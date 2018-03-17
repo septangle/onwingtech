@@ -114,20 +114,21 @@
 	<select id="selectBySelective" resultMap="BaseResultMap"
 		parameterType="com.onwing.household.comm.dal.model.Camara">
 		select
-		<include refid="Base_Column_List" />
-		from tbl_camera
+		a.id as camera_id, a.name, a.direction, a.ip as camera_ip, a.relay_id, a.control_id, b.name as control_name, b.ip, b.port 
+		from tbl_camera a, tbl_control b 
 		where 1=1
 		<if test="id != null">
-			and id = #{id,jdbcType=BIGINT}
+			and a.id = #{id,jdbcType=BIGINT}
 		</if>
 		<if test="name != null">
-			and name = #{name,jdbcType=VARCHAR}
+			and a.name = #{name,jdbcType=VARCHAR}
 		</if>
 		<if test="control.id != null">
-			and control_id = #{control.id,jdbcType=BIGINT}
+			and a.control_id = #{control.id,jdbcType=BIGINT}
 		</if>
 		<if test="direction != null">
-			and direction = #{direction,jdbcType=VARCHAR}
+			and a.direction = #{direction,jdbcType=VARCHAR}
 		</if>
+			and a.control_id = b.id
 	</select>
 </mapper>

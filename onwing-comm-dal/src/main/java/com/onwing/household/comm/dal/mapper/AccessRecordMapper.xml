@@ -63,10 +63,10 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into tbl_access_record
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="household.id != null">
+			<if test="houseHold.id != null">
 				household_id,
 			</if>
-			<if test="household.name != null">
+			<if test="houseHold.householdName != null">
 				household_name,
 			</if>
 			<if test="outOffTime != null">
@@ -92,11 +92,11 @@
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="household.id != null">
-				#{household.id,jdbcType=BIGINT},
+			<if test="houseHold.id != null">
+				#{houseHold.id,jdbcType=BIGINT},
 			</if>
-			<if test="household.name != null">
-				#{household.name,jdbcType=VARCHAR},
+			<if test="houseHold.householdName != null">
+				#{houseHold.householdName,jdbcType=VARCHAR},
 			</if>
 			<if test="outOffTime != null">
 				#{outOffTime,jdbcType=TIMESTAMP},

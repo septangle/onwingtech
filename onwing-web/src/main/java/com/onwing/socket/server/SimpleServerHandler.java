@@ -21,12 +21,14 @@ import com.onwing.household.biz.logic.core.DoorLockBiz;
 import com.onwing.household.biz.logic.core.impl.DoorLockMap;
 import com.onwing.household.biz.logic.core.impl.DoorLockimpl;
 import com.onwing.household.comm.dal.dao.CamaraMapper;
+import com.onwing.household.comm.dal.dao.CommunityMapper;
 import com.onwing.household.comm.dal.dao.ControlMapper;
 import com.onwing.household.comm.dal.dao.HouseHoldMapper;
 import com.onwing.household.comm.dal.dao.StrangerAccessRecordMapper;
 import com.onwing.household.comm.dal.dao.StrangerMapper;
 import com.onwing.household.comm.dal.model.AccessRecord;
 import com.onwing.household.comm.dal.model.Camara;
+import com.onwing.household.comm.dal.model.Community;
 import com.onwing.household.comm.dal.model.Control;
 import com.onwing.household.comm.dal.model.HouseHold;
 import com.onwing.household.comm.dal.model.Stranger;
@@ -49,13 +51,15 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 	private InitCameraLock initCameraLock;
 	private ControlMapper controlMapper;
 	private CamaraMapper camaraMapper;
+	private CommunityMapper communityMapper;
 
 	private Map<String, Date> personEnterTimeMap = new HashMap<String, Date>();
 
 	public SimpleServerHandler(InitCameraLock initCameraLock, Map<String, String> lockControlProperties,
 			DoorLockMap doorLockMap, AccessRecordBiz accessRecordBiz,
 			StrangerAccessRecordMapper strangerAccessRecordMapper, HouseHoldMapper householdMapper,
-			StrangerMapper strangerMapper, ControlMapper controlMapper, CamaraMapper camaraMapper) {
+			StrangerMapper strangerMapper, ControlMapper controlMapper, CamaraMapper camaraMapper,
+			CommunityMapper communityMapper) {
 		this.initCameraLock = initCameraLock;
 		this.lockControlProperties = lockControlProperties;
 		this.doorLockMap = doorLockMap;
@@ -65,6 +69,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 		this.strangerMapper = strangerMapper;
 		this.controlMapper = controlMapper;
 		this.camaraMapper = camaraMapper;
+		this.communityMapper = communityMapper;
 	}
 
 	private void savePhoto(String photoFullPath, byte[] photoBytes) {
@@ -120,16 +125,19 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 					savePhoto(photoFullPath, photoBytes);
 					// end
 					// 记录到白名单出入记录
-					addHouseHoldAccessRecord(householdList.get(0), direction, time, identifyCard);
+					Community community = householdList.get(0).getCommunity();
+					addHouseHoldAccessRecord(householdList.get(0), direction, time, identifyCard, new Camara(),
+							community);
 					// end
 					// 重新上锁
 					initCameraLock.cameraLockMap.put(cameraName, null);
 					return;
 				}
 				// 是否访客刷卡
-				//Stranger stranger = new Stranger();
-				//stranger.setCardNumber(cardNumber);
-				//List<Stranger> strangerList = strangerMapper.selectBySelective(stranger);
+				// Stranger stranger = new Stranger();
+				// stranger.setCardNumber(cardNumber);
+				// List<Stranger> strangerList =
+				// strangerMapper.selectBySelective(stranger);
 				List<Stranger> strangerList = strangerMapper.selectByCardNumber(cardNumber);
 				if (strangerList != null && strangerList.size() == 1) { // 访客刷卡
 					logger.info("stranger use card: {} to open the door, we must save the catched photo", cardNumber);
@@ -172,7 +180,19 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 				return;
 
 			}
-		} else {
+		} else { // 白名单刷脸
+
+			// 根据cameraName，获取direction
+			Camara camera = new Camara();
+			camera.setName(cameraName);
+			camera.setControl(new Control());
+			List<Camara> cameraList = camaraMapper.selectBySelective(camera);
+			if (cameraList == null || cameraList.size() != 1) {
+				logger.error("camera from DB with name: {} is null or not only", cameraName);
+				return;
+			}
+			Camara curCamera = cameraList.get(0);
+
 			String identifyCard = null;
 			try {
 				String[] photoNameSplitList = photoName.split("\\.");
@@ -189,7 +209,6 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 				logger.error("no houseHold or not single household found in DB with photoName: {}", photoName);
 				return;
 			}
-			// 人脸匹配正确,即白名单
 			Date enterTime = personEnterTimeMap.get(photoName); // 上一次成功进入时间
 			Date currentTime = sdf.parse(time);
 			// long timeDeltaInSecond = (currentTime.getTime() -
@@ -211,28 +230,44 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			// end
 
 			// open lock
-			logger.info("household use face: {} to open the door", photoName);
+			logger.info("household use face: {} to open the door by camera: {}", photoName, cameraName);
 			if (!openControlLock(cameraName, photoName)) {
 				return;
 			}
 			// open lock end
 
 			// 记录白名单出入记录
-			// 根据cameraName，获取direction
-			Camara camera = new Camara();
-			camera.setName(cameraName);
-			List<Camara> cameraList = camaraMapper.selectBySelective(camera);
-			if (cameraList == null || cameraList.size() != 1) {
-				logger.error("camera from DB with name: {} is null or not only", cameraName);
+
+			String direction = curCamera.getDirection();
+			HouseHold selHouseHold = houseHoldList.get(0);
+
+			// 根据摄像头查找其所在的小区信息
+			Community community = getCommunityByCameraName(cameraName);
+			if (community == null) {
+				// 更新住户进入时间
+				personEnterTimeMap.put(photoName, currentTime);
 				return;
 			}
-			String direction = cameraList.get(0).getDirection();
-			HouseHold selHouseHold = houseHoldList.get(0);
-			addHouseHoldAccessRecord(selHouseHold, direction, time, identifyCard);
+
+			addHouseHoldAccessRecord(selHouseHold, direction, time, identifyCard, curCamera, community);
 			// 记录出入记录end
 			// 更新住户进入时间
 			personEnterTimeMap.put(photoName, currentTime);
 		}
+	}
+
+	private Community getCommunityByCameraName(String cameraName) {
+		List<Community> communityList = communityMapper.queryCommunityByCamera(cameraName);
+		if (communityList == null || communityList.size() == 0) {
+			logger.error("no community in db with cameraName: {}", cameraName);// 查无小区
+			return null;
+		}
+		if (communityList.size() != 1) {
+			logger.error("multi community in db with cameraName: {}", cameraName);// 查到多个小区
+			return null;
+		}
+		Community community = communityList.get(0);
+		return community;
 	}
 
 	/**
@@ -248,8 +283,8 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 	 *            白名单身份证号
 	 * @throws Exception
 	 */
-	private void addHouseHoldAccessRecord(HouseHold household, String direction, String time, String identifyCard)
-			throws Exception {
+	private void addHouseHoldAccessRecord(HouseHold household, String direction, String time, String identifyCard,
+			Camara camera, Community community) throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy_MM_dd-HH_mm_ss");
 		Date timeDate = sdf.parse(time);
@@ -264,21 +299,27 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 		accessRecord.setOutOffTime(outOffTime);
 		String photoUrl = "accessRecord/household/" + identifyCard + "/" + sdf2.format(timeDate) + ".jpg";
 		accessRecord.setPhotoUrl(photoUrl);
+		accessRecord.setCamara(camera);
+		accessRecord.setCameraName(camera.getName());
+		accessRecord.setCommunity(community);
+		accessRecord.setCommunityName(community.getName());
 		accessRecordBiz.addAccessRecord(accessRecord);
 	}
 
 	public boolean openControlLock(String cameraName, String photoName) {
-		//从数据库中获取camera相关信息 by cameraName
+		// 从数据库中获取camera相关信息 by cameraName
 		Camara camera = new Camara();
 		camera.setName(cameraName);
+		camera.setControl(new Control());
 		List<Camara> cameraList = camaraMapper.selectBySelective(camera);
 		if (cameraList == null || cameraList.size() != 1) {
 			logger.error("camera from DB with name: {} is null or not only", cameraName);
 			return false;
 		}
-		String lockControlId = cameraList.get(0).getControl().getName();// 控制器name: control1
+		String lockControlId = cameraList.get(0).getControl().getName();// 控制器name:
+																		// control1
 		String relayNumber = cameraList.get(0).getRelayId(); // 继电器号 02
-		
+
 		DoorLockBiz doorLockimpl = doorLockMap.getLockSocketMap().get(lockControlId);
 		if (doorLockimpl == null) {
 			logger.error("doorLockimpl is null");

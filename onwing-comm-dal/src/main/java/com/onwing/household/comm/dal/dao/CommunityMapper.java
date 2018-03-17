@@ -16,5 +16,7 @@ public interface CommunityMapper {
 	List<Community> selectBySelective(Community record);
 	
 	List<CommunityCameraControlCount> queryCameraControlCount();
+	
+	List<Community> queryCommunityByCamera(String cameraName);
 
 }
