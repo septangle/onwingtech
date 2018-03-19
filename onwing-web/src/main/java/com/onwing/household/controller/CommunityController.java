@@ -46,16 +46,18 @@ public class CommunityController extends BaseController<CommunityController> {
 		Community community = new Community();
 		community.setName(name);
 		List<Community> oldCommunityList = communityMapper.selectBySelective(community);
-		if (oldCommunityList!=null && oldCommunityList.size()>0) {
+		if (oldCommunityList != null && oldCommunityList.size() > 0) {
 			logger.error("community name: {} already existed in db", name);
 			throw new BusinessException(AppConstants.COMMUNITY_NAME_EXISTED_CODE,
 					AppConstants.COMMUNITY_NAME_EXISTED_MESSAGE);
 		}
-		
+
 		community.setAddress(address);
 		communityMapper.insertSelective(community);
 		logger.info("createCommunity done! : {}", name);
-		return new CommunityResponse();
+		CommunityResponse response = new CommunityResponse();
+		response.setNewCommunityId(community.getId());
+		return response;
 	}
 
 	/**
