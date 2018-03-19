@@ -37,9 +37,9 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie';
 import GlobalServer from '../config.js';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 export default {
     data () {
         return {
@@ -74,15 +74,52 @@ export default {
                     .then(function(response){
                         let data = response.data;
                         if (data.error === null) {
-                            let adminName = data.adminiStratorDto.adminName;
-                            let access = data.adminiStratorDto.access;  //用户权限0:金山有线管理员,1:小区物业管理员,2:小区保安管理员
-                            let communityID = data.adminiStratorDto.communityID;  //所在小区
-                            let communityName = data.adminiStratorDto.communityName;  //小区ID
+                            let roleName = data.userRoleDto.roleName;
+                            let access;  //用户权限0:金山有线管理员,1:小区物业管理员,2:小区保安管理员
+                            let communityList,
+                                communityID,   //小区ID
+                                communityName,  //小区名称
+                                communityAddress,  //小区地址
+                                cameraNumber,
+                                controNumber;
 
-                            Cookies.set('user', adminName);
+                            communityList = data.communityList;
+                            if(roleName === "超级管理员"){
+                                access = 0;
+                                communityID = [];
+                                communityName = [];
+                                communityAddress = [];
+                                cameraNumber = [];
+                                controNumber = [];
+                                for(let length=communityList.length,i=0;i!==length;i++){
+                                    communityName.push(communityList[i].name);
+                                    communityID.push(communityList[i].communityId);
+                                    communityAddress.push(communityList[i].address);
+                                    cameraNumber.push(communityList[i].cameraCount);
+                                    controNumber.push(communityList[i].controlCount);
+                                }
+                                sessionStorage.setItem('searchCommunityID','-1')
+                            } else if (roleName === "物业管理员") {
+                                access = 1;
+                                communityID = data.communityList[0].communityId;
+                                communityName = data.communityList[0].name;
+                                communityAddress = data.communityList[0].address;
+                                sessionStorage.setItem('searchCommunityID',communityID)
+                            } else {
+                                access = 2;
+                                communityID = data.communityList[0].communityId;
+                                communityName = data.communityList[0].name;
+                                communityAddress = data.communityList[0].address;
+                                sessionStorage.setItem('searchCommunityID',communityID)
+                            }
+
+                            Cookies.set('user', _this.form.username);
                             Cookies.set('access',access);
-                            Cookies.set('communityName',communityName);
-                            Cookies.set('communityID',communityID);
+                            sessionStorage.setItem('communityName',communityName);
+                            sessionStorage.setItem('communityID',communityID);
+                            sessionStorage.setItem('communityAddress', communityAddress);
+                            sessionStorage.setItem('cameraNumber',cameraNumber);
+                            sessionStorage.setItem('controNumber',controNumber);
                             _this.$Message.success('登录成功！');
                             setTimeout(function(){
                                 _this.$router.push({

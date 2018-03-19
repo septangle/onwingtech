@@ -36,23 +36,27 @@
                     <!-- <theme-switch></theme-switch> -->
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
-                            <div v-if="this.userType == '1'">
-                                <span>{{communityName}}</span>
-                                <a href="javascript:void(0)" @click="FileUpCsv()">(上传拓扑)</a>
+                            <div v-if="this.access === '0'">
+                                <Dropdown transfer="true" trigger="click">
+                                    <a href="javascript:void(0)">
+                                        <span class="main-user-name">{{communityName}}</span>
+                                        <Icon type="arrow-down-b"></Icon>
+                                    </a>
+                                  <DropdownMenu slot="list">
+                                      <DropdownItem name="" v-for="item in communityNameList" :value="item" :key="item"  @click.native="handleClickCommunityDropdown">{{item}}</DropdownItem>
+                                  </DropdownMenu>
+                                </Dropdown>
                             </div>
-                            <div v-if="this.userType == '2'">
+                            <div v-if="this.access === '1'">
+                                <span>{{communityName}}</span>
+                                <a href="javascript:void(0)" @click="doInput()">(上传拓扑)</a>
+                                <div style="display: none">
+                                    <input type="file" accept="" ref="upCsv" @change="fileChange()">
+                                </div>
+                            </div>
+                            <div v-if="this.access === '2'">
                                 <span>{{communityName}}</span>
                             </div>
-                            <!--<Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
-                                <a href="javascript:void(0)">
-                                    <span class="main-user-name">{{ communityName }}</span>
-                                    <Icon type="arrow-down-b"></Icon>
-                                </a>
-                                <DropdownMenu slot="list">
-                                    &lt;!&ndash; <DropdownItem name="ownSpace">个人中心</DropdownItem> &ndash;&gt;
-                                    <DropdownItem name="loginout" >上传拓扑</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>-->
                             <Dropdown transfer="true" trigger="click" @on-click="handleClickUserDropdown">
                                 <a href="javascript:void(0)">
                                     <span class="main-user-name">{{ userName }}</span>
@@ -91,6 +95,8 @@
     import themeSwitch from './main-components/theme-switch/theme-switch.vue'; */
     import Cookies from 'js-cookie';
     import util from '@/libs/util.js';
+    import GlobalServer from '../config.js';
+    import axios from 'axios';
 
     export default {
         components: {
@@ -106,10 +112,14 @@
             return {
                 shrink: false,
                 userName: '',
+                access: '',
                 communityName: '',
-                userType: '',
+                communityID:'',
+                communityNameList:[],
+                communityIDList:[],
                 isFullScreen: false,
-                openedSubmenuArr: this.$store.state.app.openedSubmenuArr
+                openedSubmenuArr: this.$store.state.app.openedSubmenuArr,
+                csvFile:''
             };
         },
         computed: {
@@ -149,20 +159,36 @@
 
                 //读取COOKIE中的用户名，用户类型，小区名称，小区ID
                 this.userName = Cookies.get('user');
-                this.userType = Cookies.get('userType');
-                this.communityName = Cookies.get('communityName');
-                this.communityID = Cookies.get('communityID');
+                this.access = Cookies.get('access');
+                this.communityNameList = sessionStorage.getItem('communityName').split(',');
+                this.communityIDList = sessionStorage.getItem('communityID').split(',');
+
+                if(this.access === '0') {
+                  this.communityNameList.unshift('所有小区');
+                  this.communityIDList.unshift(-1);
+                  this.communityName = '所有小区';
+                } else {
+                  this.communityName = this.communityNameList[0];
+                  this.communityID = this.communityIDList[0];
+                }
 
                 //let messageCount = 3;
                 //this.messageCount = messageCount.toString();
                 this.checkTag(this.$route.name);
                 //this.$store.commit('setMessageCount', 3);
+                //this.communityList =
             },
 
             toggleClick () {
                 this.shrink = !this.shrink;
             },
-
+            handleClickCommunityDropdown (event) {
+                let str = event.target.innerText,
+                    index = this.communityNameList.indexOf(str);
+                this.communityName = str;
+                this.communityID = this.communityIDList[index];
+                sessionStorage.setItem('searchCommunityID',this.communityID);
+            },
             handleClickUserDropdown (name) {
                 if (name === 'ownSpace') {
                     util.openNewPage(this, 'ownspace_index');
@@ -202,8 +228,37 @@
             fullscreenChange (isFullScreen) {
                 // console.log(isFullScreen);
             },
-            FileUpCsv () {
-              console.info('fileup');
+            doInput () {
+              //console.info('fileup');
+              this.$refs.upCsv.accept = '.csv';
+              this.$refs.upCsv.click();
+            },
+            fileChange () {
+                this.file = this.$refs.upCsv.files[0];
+                console.info(this.file);
+                this.upFile();
+            },
+            upFile () {
+                let _this = this,
+                    formdata = new FormData(),
+                    config = {
+                        headers:{
+                            'Content-Type':'application/x-www-form-urlencoded'
+                        }
+                    };
+                formdata.append('file',_this.file);
+                formdata.append('communityId',_this.communityID);
+                axios.post(GlobalServer.importRoomsFromCvs,formdata,config)
+                    .then(function(response){
+                        let data = response.data;
+                        if(data.error === null) {
+                            _this.$Message.success('上传成功！');
+                            _this.file = '';
+                        }
+                    })
+                    .catch(function(error){
+                        console.info(error);
+                    });
             }
         },
         watch: {

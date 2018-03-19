@@ -1,9 +1,26 @@
 <template>
 <div class="animated fadeIn">
+    <div>
+        <!--显示大图弹框-->
+        <Modal
+            v-model="showPictureModal"
+            :closable="false"
+            :mask-closable="false">
+            <div id="container">
+                <img :src="bigPhotoUrl" style="width:100%;">
+            </div>
+            <div slot="footer">
+                <Button size="large" @click="closeModal">关闭</Button>
+            </div>
+        </Modal>
+    </div>
     <Row>
         <Col :md="24">
             <div>
-                <div style="position:relative;">
+                <Input v-model="searchContent" placeholder="请输入需要查询的内容" style="width: 300px;">
+                    <Button slot="append" icon="ios-search" @click="getInoutDate(1,pagesize)"></Button>
+                </Input>
+                <div style="position:relative;margin-top: 10px;">
                     <!-- 表格开始 -->
                     <Table stripe border height="auto" :columns="columns_title" :data="inout_data" ref="table"></Table>
                     <!-- 表格结束 -->
@@ -37,103 +54,6 @@
     -->
 </div>
 </template>
-
-<style type="text/css" scoped>
-.ivu-tag-dot {
-    border: none!important;
-}
-
-tr.ivu-table-row-hover td .ivu-tag-dot {
-    background-color: #ebf7ff!important;
-}
-
-.demo-i-circle-custom h1 {
-    color: #3f414d;
-    font-size: 10px;
-    font-weight: normal;
-}
-
-.demo-i-circle-custom p {
-    color: #657180;
-    font-size: 8px;
-    margin: 5px 0 2px;
-}
-
-.demo-i-circle-custom span {
-    display: block;
-    padding-top: 15px;
-    color: #657180;
-    font-size: 10px;
-}
-
-.demo-i-circle-custom span :before {
-    content: '';
-    display: block;
-    width: 50px;
-    height: 1px;
-    margin: 0 auto;
-    background: #e0e3e6;
-    position: relative;
-    top: -20px;
-}
-
-.demo-i-circle-custom span i {
-    font-style: normal;
-    color: #3f414d;
-}
-
-.ivu-btn.ivu-btn-primary.ivu-btn-small:not(.ivu-btn-loading) {
-    padding: 2px 10px!important;
-}
-
-td.ivu-table-expanded-cell {
-    background-color: white!important;
-}
-</style>
-<style type="text/css">
-.dialog-showBigPhoto {
-  position: absolute;
-  width: 600px;
-  left: 50%;
-  top: 15%;
-  margin-left: -300px;
-  padding: 30px 20px 20px;
-  border-radius: 10px;
-  background-color: #fff;
-  line-height: 1;
-  z-index: 101;
-}
-
-.dialog-showBigPhoto .close {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  color: #999;
-  right: 2px;
-  top: 5px;
-  font-size: 20px;
-  line-height: 1;
-}
-.dialog-showBigPhoto img {
-  width: 100%;
-}
-
-.mask {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0,0,0,.5);
-  z-index: 100;
-}
-.hide {
-  display: none;
-}
-</style>
 <script>
 import GlobalServer from '../../config.js';
 import axios from 'axios';
@@ -142,17 +62,21 @@ export default {
     name: 'whitelist_inout_index',
     data () {
         return {
+            showPictureModal: false,
+            pageID:'inout',
             bigPhotoUrl:'',
             progresshow:false,
             progresscount:0,
             progresstatus:'active',
             progressspeed:0,
             inout_data:[],
-            inout_page_data:[],
             inout_thumb: [],
+            inout_page_data:[],
             datacount: 0,
             pageindex:1,
             pagesize: 20,
+            communityID:'',
+            searchContent:'',
             page_loading:false,
             data_loading:false,
             columns_title:[
@@ -165,7 +89,7 @@ export default {
                     sortType: 'desc'
                 },{
                     title: '小区名称',
-                    key: 'householdName',
+                    key: 'communityName',
                     ellipsis:'true',
                     width: 110,
                     align: 'center'
@@ -181,13 +105,10 @@ export default {
                                 style: 'width:100%;height:auto;margin-top:4px;'
                             },
                             on: {
-                                click: (event) => {
-                                    //this.showDialog = true;
-                                    //console.info(this);
-                                    this.bigPhotoUrl = event.target.src;
-                                    this.changeBigPhoto();
-                                    this.showDialog();
-                                    this.showMask();
+                                click: () => {
+                                    let rowIndex = params.row._index;
+                                    this.bigPhotoUrl = this.inout_thumb[rowIndex];
+                                    this.showPictureModal = true;
                                 }
                             }
                         })
@@ -197,11 +118,34 @@ export default {
                     key: 'householdName',
                     ellipsis:'true',
                     width: 110,
-                    align: 'center'
+                    align: 'center',
+                    render: (h,params) => {
+                        return h('p',{
+                            domProps: {
+                                innerHTML:this.inout_data[params.row._index].householdName
+                            },
+                            attrs:{
+                               style:'cursor:default'
+                            },
+                            on: {
+                                click: () => {
+                                    let rowIndex = params.row._index;
+                                    let argu = {
+                                            householdID: this.inout_data[rowIndex].householdID,
+                                            pageID: this.pageID
+                                        };
+                                    console.info(this.inout_data);
+                                    this.$router.push({
+                                        name: 'whitelist_info_index',
+                                        params: argu
+                                    });
+                                }
+                            }
+                        })
+                    }
                 },{
                     title: '住址',
-                    key: 'addres',
-                    ellipsis:'true',
+                    key: 'roomPath',
                     width: 170,
                     align: 'center'
                 },{
@@ -210,7 +154,7 @@ export default {
                     align: 'center'
                 },{
                     title: '门禁设备号',
-                    key: 'doorControlID',
+                    key: 'controlID',
                     align: 'center'
                 },{
                     title: '摄像头设备号',
@@ -221,13 +165,23 @@ export default {
         }
     },
     methods: {
+        init() {
+            let access = Cookies.get('access');
+            if (access === '0') {
+                this.communityID = -1;
+            } else {
+                this.communityID = sessionStorage.getItem('communityID');
+            }
+        },
         getInoutDate(currentPage,pageSize) {
             /* axios有自己的作用域,无法获取vue实例,所以要将vue实例的this传到一个变量中以便在axios中调用 */
             var _this = this;
+            let communityID = sessionStorage.getItem('searchCommunityID'),
+                searchContent = _this.searchContent;
             /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
             _this.page_loading = true;
             /* 获取所有住户信息并将值传入进inout_data数组 */
-            axios.get(GlobalServer.findAllAccessRecord + '?page=' + currentPage + '&pageSize=' + pageSize)
+            axios.get(GlobalServer.findAllAccessRecord + '?page=' + currentPage + '&pageSize=' + pageSize + '&communityId=' + communityID + '&searchContent=' + searchContent)
             .then(function(response){
                 let data = response.data;
                 if(data.error === null){
@@ -241,16 +195,18 @@ export default {
                         let tempObj = {};
                         let tempDate = _this.setDate(value.outOffTime);
                         tempObj.id = value.id;
+                        tempObj.householdID = value.householdId;
+                        tempObj.communityName = value.communityName;
                         tempObj.householdName = value.householdName;
-                        tempObj.addres = value.buildingBlockNumber + value.roomNumber + '室';
+                        tempObj.roomPath = value.roomPath.replace(/\//g,'-').replace(/^\-/,'');
                         tempObj.outOffTime = tempDate;
-                        //doorControlID门禁设备号,cameraID摄像头设备号
-                        tempObj.doorControlID = value.doorControlID;
-                        tempObj.cameraID = value.cameraID;
+                        //controlID门禁设备号,cameraID摄像头设备号
+                        tempObj.controlID = value.controlId;
+                        tempObj.cameraID = value.cameraId;
                         _this.inout_thumb.push(GlobalServer.ServerHost + 'onwing-web/' + value.photoUrl);
                         return tempObj;
                     });
-
+                    //console.info(_this.inout_data);
                     /* 如果数据条目数小于每页显示的条目数,则将所有数据传入分页数据对象,
                        如果数据条目数大于每页显示的条目数,则将第一页要显示的数据传入分页数据对象 */
                     // if(_this.datacount <= _this.pagesize) {
@@ -267,7 +223,8 @@ export default {
                 console.info('error=' + error);
             })
         },
-        changePage(index){  //入参index <Page>组件中on-change事件的返回值，表示页码改变后的页码
+        changePage(index){
+            //入参index <Page>组件中on-change事件的返回值，表示页码改变后的页码
             // start 每页的开始数据
             // let start = (index - 1) * this.pagesize;
             // end 每页的结束数据
@@ -301,65 +258,78 @@ export default {
                 fullDate = '';
             return fullDate = year + month + date + hours + minutes + second;
         },
-        hideMask () {
-            //this.showDialog = false;
-            //this.bigPhotoUrl = '';
-            var mask = document.getElementById('mask');
-            mask.classList.add('hide');
-        },
-        showDialog () {
-            var dialog = document.getElementById('dialog');
-            dialog.classList.remove('hide');
-        },
-        showMask () {
-            var mask = document.getElementById('mask');
-            mask.classList.remove('hide');
-        },
-        changeBigPhoto () {
-            var bigImg = document.getElementById('bigImg');
-            bigImg.setAttribute('src',this.bigPhotoUrl);
-        },
-        createDialog (body) {
-            //body = document.querySelector('body');
-            var _this = this;
-            var dialog = document.createElement('div'),
-                close = document.createElement('span'),
-                p = document.createElement('p'),
-                img = document.createElement('img');
-
-            dialog.className = 'dialog-showBigPhoto hide';
-            dialog.id = 'dialog';
-            close.className = 'close';
-            close.id = 'close';
-            close.textContent = 'X';
-            img.id = 'bigImg';
-            close.addEventListener('click',function(){
-                dialog.classList.add('hide');
-                _this.hideMask();
-                _this.bigPhotoUrl = '';
-            });
-            p.appendChild(img);
-            dialog.appendChild(p);
-            dialog.appendChild(close);
-            body.appendChild(dialog);
-        },
-        createMask (body) {
-            var mask = document.createElement('div');
-            mask.className = 'mask hide';
-            mask.id = 'mask';
-            body.appendChild(mask);
+        closeModal () {
+            this.showPictureModal = false;
         }
     },
     beforeCreate() {},
     created() {
+        this.init();
         this.getInoutDate(1,this.pagesize);
     },
     beforeMount() {},
     mounted() {
-        var body = document.querySelector('body');
-        this.createDialog(body);
-        this.createMask(body);
+
     },
-    activated() {}
+    activated() {},
+    watch:{
+        searchContent(arg1){
+            if (arg1.length === 0) {
+              this.getInoutDate(1,this.pagesize);
+            }
+        }
+    }
 }
 </script>
+<style type="text/css" scoped>
+  .ivu-tag-dot {
+    border: none!important;
+  }
+
+  tr.ivu-table-row-hover td .ivu-tag-dot {
+    background-color: #ebf7ff!important;
+  }
+
+  .demo-i-circle-custom h1 {
+    color: #3f414d;
+    font-size: 10px;
+    font-weight: normal;
+  }
+
+  .demo-i-circle-custom p {
+    color: #657180;
+    font-size: 8px;
+    margin: 5px 0 2px;
+  }
+
+  .demo-i-circle-custom span {
+    display: block;
+    padding-top: 15px;
+    color: #657180;
+    font-size: 10px;
+  }
+
+  .demo-i-circle-custom span :before {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 1px;
+    margin: 0 auto;
+    background: #e0e3e6;
+    position: relative;
+    top: -20px;
+  }
+
+  .demo-i-circle-custom span i {
+    font-style: normal;
+    color: #3f414d;
+  }
+
+  .ivu-btn.ivu-btn-primary.ivu-btn-small:not(.ivu-btn-loading) {
+    padding: 2px 10px!important;
+  }
+
+  td.ivu-table-expanded-cell {
+    background-color: white!important;
+  }
+</style>

@@ -1,195 +1,129 @@
 <template>
     <div class="validateMain">
         <div class="photoView">
-            <template>
-                <div class="editWrap" style="">
-                    <Icon size="24" type="edit" @click.native="handleFileUp()"></Icon>
-                    <Icon size="30" type="trash-b" @click.native="handlePhotoRemove()"></Icon>
-                </div>
-                <img :src="photoUrl" ref="img">
-            </template>
-            <form style="display:none">
-                <input id="household_photoup" type="file" accept="image/*" name="photoUrl" @change="handleFilechange()" ref="photoup">
-            </form>
+            <img :src="householdInfo.photoUrl" ref="img">
         </div>
         <div class="validateView">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" class="formstyle">
+            <Form ref="householdInfo" :model="householdInfo" :rules="ruleValidate" :label-width="100" class="formstyle">
                 <FormItem label="姓名" prop="householdName">
-                    <Input v-model="formValidate.householdName" disabled></Input>
+                    <Input v-model="householdInfo.householdName" disabled></Input>
                 </FormItem>
                 <FormItem label="性别" prop="gender">
-                    <RadioGroup v-model="formValidate.gender">
+                    <RadioGroup v-model="householdInfo.gender">
                         <Radio label="男" disabled>男</Radio>
                         <Radio label="女" disabled>女</Radio>
                     </RadioGroup>
                 </FormItem>
                 <FormItem label="身份证" prop="identifyCard">
-                    <Input v-model="formValidate.identifyCard" disabled></Input>
+                    <Input v-model="householdInfo.identifyCard" disabled></Input>
                 </FormItem>
                 <FormItem label="联系电话" prop="tel">
-                    <Input v-model="formValidate.tel" disabled></Input>
+                    <Input v-model="householdInfo.tel" disabled></Input>
                 </FormItem>
-                <FormItem label="小区名称" prop="estateName">
-                    <Input v-model="formValidate.estateList" disabled></Input>
+                <FormItem label="小区名称" prop="communityName">
+                    <Input v-model="householdInfo.communityName" disabled></Input>
                 </FormItem>
                 <FormItem label="楼号" prop="buildingblockNumber">
-                    <Input v-model="formValidate.buildingBlockNumber"></Input>
+                    <Input v-model="householdInfo.buildingBlockNumber" disabled></Input>
                 </FormItem>
                 <FormItem label="单元号" prop="apartmentNumber">
-                    <Input v-model="formValidate.apartmentNumber" disabled></Input>
+                    <Input v-model="householdInfo.apartmentNumber" disabled></Input>
                 </FormItem>
                 <FormItem label="楼层" prop="floorNumber">
-                    <Input v-model="formValidate.floorNumber" disabled></Input>
+                    <Input v-model="householdInfo.floorNumber" disabled></Input>
                 </FormItem>
                 <FormItem label="房号" prop="roomNumber">
-                    <Input v-model="formValidate.roomNumber" disabled></Input>
+                    <Input v-model="householdInfo.roomNumber" disabled></Input>
                 </FormItem>
-                <FormItem label="业主类型" prop="ownerType">
-                    <RadioGroup v-model="formValidate.ownerType">
+                <FormItem label="业主类型" prop="householdType">
+                    <RadioGroup v-model="householdInfo.householdType">
                         <Radio label="住户" disabled>住户</Radio>
                         <Radio label="租客" disabled>租客</Radio>
                     </RadioGroup>
                 </FormItem>
                 <FormItem label="门禁卡号" prop="cardNumber">
-                    <Input v-model="formValidate.cardNumber" disabled></Input>
+                    <Input v-model="householdInfo.cardNumber" disabled></Input>
                 </FormItem>
                 <FormItem label="备注" prop="remarks">
-                    <Input v-model="formValidate.remarks" type="textarea" :autosize="{minRows: 2,maxRows: 5}" disabled></Input>
+                    <Input v-model="householdInfo.remarks" type="textarea" :autosize="{minRows: 2,maxRows: 5}" disabled></Input>
                 </FormItem>
             </Form>
         </div>
     </div>
 </template>
 <script>
-import axios from 'axios';
 import GlobalServer from '../../config.js';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 export default {
     name:'whitelist_info_index',
     data () {
         return {
-            formValidate: {
+            householdInfo: {
                 id: '',
-                photoId: '',
                 householdName: '',
                 gender: '',
                 identifyCard:'',
                 tel: '',
-                estateName:'',
+                communityName:'',
                 buildingBlockNumber: '',
                 apartmentNumber:'',
                 floorNumber:'',
                 roomNumber: '',
-                ownerType:'',
+                householdType:'',
                 cardNumber: '',
                 remarks: '',
+                photoId: '',
+                photoUrl:'',
             },
-            photoUrl:'',
-            ruleValidate: {
-                householdName: [
-                    { required: true, message: '请填写姓名', trigger: 'blur' },
-                    { type: 'string', min: 1, message: '姓名格式错误', trigger: 'blur' }
-                ],
-                gender: [
-                    { required: true, message: '请选择性别', trigger: 'change' }
-                ],
-                identifyCard: [
-                    { required: true, message: '请填写身份证号', trigger: 'blur' },
-                    { type: 'string', min: 15, max: 18, message: '身份证号格式错误', trigger: 'blur' }
-                ],
-                tel: [
-                    { required: true, message: '请填写联系电话', trigger: 'blur' },
-                    { type: 'string', min: 7, message: '联系电话格式错误', trigger: 'blur' }
-                ],
-                estateName: [
-                    { required: true, message: '请填写小区', trigger: 'blur' }
-                ],
-                buildingBlockNumber: [
-                    { required: true, message: '请填写楼号', trigger: 'blur' }
-                ],
-                apartmentNumber: [
-                    { required: true, message: '请填写单元号', trigger: 'blur' }
-                ],
-                floorNumber: [
-                    { required: true, message: '请填写楼层', trigger: 'blur' }
-                ],
-                roomNumber: [
-                    { required: true, message: '请填写房号', trigger: 'blur' }
-                ],
-                ownerType: [
-                    { required: true, message: '请选择业主类型', trigger: 'change' }
-                ],
-                cardNumber: [
-                    { required: false },
-                    { type:'string',min: 0,max: 20,message:'门禁卡格式错误', trigger: 'blur'}
-                ],
-                remarks: [
-                    { type: 'string', min: 0, max: 200, message: '备注信息超过字数', trigger: 'blur' }
-                ]
-            }
         }
     },
     methods: {
         init() {
-            let data = this.$route.params;
+            let data = this.$route.params,
+                dto = {
+                    householdDto:{
+                      id : data.householdID
+                    }
+                };
+            console.info(data);
+            if(data.pageID === 'inout'){
+                let _this = this;
 
-            this.formValidate = data;
-            this.formValidate.cardNumber= data.cardNumber;
-            this.formValidate.householdName= data.householdName;
-            this.formValidate.gender= data.gender;
-            this.formValidate.identifyCard = data.identifyCard;
-            this.formValidate.tel= data.tel;
-            this.formValidate.buildingBlockNumber= data.buildingBlockNumber;
-            this.formValidate.roomNumber= data.roomNumber;
-            this.formValidate.remarks= data.remarks;
-            this.formValidate.photoId= data.photoId;
-            this.formValidate.id= data.id;
-
-            if (data.photoId){
-                this.photoUrl = GlobalServer.ServerHost + 'onwing-web/' + data.photoId;
-            } else if (!data.photoId) {
-                if (data.gender == '男'){
-                    this.photoUrl = GlobalServer.ServerHost + 'onwing-web/' + 'image/avatars-man.png';
-                } else if (data.gender == '女') {
-                    this.photoUrl = GlobalServer.ServerHost + 'onwing-web/' + 'image/avatars-woman.png';
-                }
+                axios.post(GlobalServer.findHouseHoldById,dto)
+                    .then(function(response){
+                        let data = response.data,
+                            address;
+                        address = data.houseHoldDto.roomPath.split('/');
+                        _this.householdInfo.householdName = data.houseHoldDto.householdName;
+                        _this.householdInfo.gender = data.houseHoldDto.gender;
+                        _this.householdInfo.identifyCard = data.houseHoldDto.identifyCard;
+                        _this.householdInfo.tel = data.houseHoldDto.tel;
+                        _this.householdInfo.communityName = data.houseHoldDto.communityName;
+                        _this.householdInfo.buildingBlockNumber = address[1];
+                        _this.householdInfo.apartmentNumber = address[2];
+                        _this.householdInfo.floorNumber = address[3];
+                        _this.householdInfo.roomNumber = address[4];
+                        _this.householdInfo.householdType = data.houseHoldDto.householdType;
+                        _this.householdInfo.cardNumber = data.houseHoldDto.cardNumber;
+                        _this.householdInfo.remarks = data.houseHoldDto.remarks;
+                    })
+                    .catch(function(err){
+                        console.info(err);
+                    })
+            } else {
+                this.householdInfo = data;
+                console.info(this.householdInfo);
             }
         },
-        handleSubmit (name) {
-            let _this = this;
-            let dto = {};
-            dto.householdDto = {};
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    dto.householdDto.id = _this.formValidate.id;
-                    dto.householdDto.cardNumber = _this.formValidate.cardNumber;
-                    dto.householdDto.tel = _this.formValidate.tel;
-                    dto.householdDto.buildingBlockNumber = _this.formValidate.buildingBlockNumber;
-                    dto.householdDto.roomNumber = _this.formValidate.roomNumber;
-                    dto.householdDto.remarks = _this.formValidate.remarks;
-                    /* 表单内容验证通过则开始提交修改 */
-                    axios.post(GlobalServer.updateHouseHold,dto)
-                    .then(function(response){
-                    let data = response.data;
-                        if(data.error == null) {
-                            _this.$Message.success('住户信息更新成功!');
-                        } else {
-                            _this.$Message.error(data.error.message);
-                        }
-                    })
-                } else {
-                    _this.$Message.error('请检查是否有信息未填写!');
-                }
-            });
-        },
-        handleReset (name) {
-            this.$refs[name].resetFields();
-        }
+
     },
     created(){
         this.init();
     },
-    activated () {},
+    activated () {
+        this.init();
+    },
     watch: {
         '$route' () {
             this.init();
@@ -209,15 +143,19 @@ export default {
   }
   .photoView {
     float: left;
-    width: 150px;
-    height: 100px;
+    width: 214px;
+    /*height: 100px;*/
   }
   .photoView img {
     width: 100%;
   }
   .validateView {
-    margin-left: 20px;
+    /*margin-left: 20px;*/
     float: left;
     width: 30%;
+  }
+  .validateView input[disabled] {
+    background-color: #fff;
+    color: #333;
   }
 </style>

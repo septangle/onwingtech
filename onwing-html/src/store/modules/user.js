@@ -6,9 +6,11 @@ const user = {
         logout (state, vm) {
             Cookies.remove('user');
             Cookies.remove('access');
-            Cookies.remove('userType');
-            Cookies.remove('communityID');
-            Cookies.remove('communityName');
+            sessionStorage.clear();
+            localStorage.clear();
+            //Cookies.remove('userType');
+            //Cookies.remove('communityID');
+            //Cookies.remove('communityName');
             /* Cookies.remove('password'); */
             // 恢复默认样式
             /* let themeLink = document.querySelector('link[name="theme"]');
@@ -18,7 +20,6 @@ const user = {
             if (localStorage.theme) {
                 theme = localStorage.theme;
             }
-            localStorage.clear();
             if (theme) {
                 localStorage.theme = theme;
             } */

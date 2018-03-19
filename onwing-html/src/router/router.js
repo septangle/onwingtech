@@ -62,13 +62,13 @@ export const otherRouter = {
             name: 'home_index',
             component: resolve => { require(['@/views/whitelist/inout.vue'], resolve); }
         },{
-            path: 'whitelist_info/:cardNumber',
+            path: 'whitelist_info',
             title: '查看住户信息',
             name: 'whitelist_info_index',
             component: resolve => { require(['@/views/whitelist/info.vue'], resolve); }
         },
         {
-            path: 'whitelist_edit/:cardNumber',
+            path: 'whitelist_edit',
             title: '修改住户信息',
             name: 'whitelist_edit_index',
             component: resolve => { require(['@/views/whitelist/edit.vue'], resolve); }
@@ -112,7 +112,7 @@ export const appRouter = [
         ]
     },
     {
-        path: '/whitelist/',
+        path: '/whitelist',
         icon: 'key',
         name: 'whitelist_add',
         title: '添加住户',
@@ -123,7 +123,7 @@ export const appRouter = [
         ]
     },
     {
-        path: '/community/',
+        path: '/community',
         icon: 'key',
         name: 'communityManage',
         title: '小区管理',
@@ -147,12 +147,12 @@ export const appRouter = [
         ]
     },
     {
-        path: '/user/',
+        path: '/user',
         icon: 'key',
         name: 'userManage',
         title: '账号管理',
         component: Main,
-        access: 0,
+        access: [0,1],
         children: [
             {
                 path: 'user_add',

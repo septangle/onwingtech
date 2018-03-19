@@ -1,9 +1,26 @@
 <template>
 <div class="animated fadeIn">
+    <div>
+        <!--显示大图弹框-->
+        <Modal
+            v-model="showPictureModal"
+            :closable="false"
+            :mask-closable="false">
+            <div id="container">
+                <img :src="bigPhotoUrl" width="100%">
+            </div>
+            <div slot="footer">
+                <Button size="large" @click="closeModal">关闭</Button>
+            </div>
+        </Modal>
+    </div>
     <Row>
         <Col :md="24">
             <div>
-                <div style="position:relative;">
+                <Input v-model="searchContent" placeholder="请输入需要查询的内容" style="width: 300px;">
+                    <Button slot="append" icon="ios-search" @click="getHouseholdDate(1,pagesize)"></Button>
+                </Input>
+                <div style="position:relative;margin-top: 10px;">
                     <!-- 表格开始 -->
                     <Table stripe border height="auto" :columns="columns_title" :data="household_data" ref="table"></Table>
                     <!-- 表格结束 -->
@@ -31,61 +48,6 @@
     </Row>
 </div>
 </template>
-
-<style type="text/css" scoped>
-.ivu-tag-dot {
-    border: none!important;
-}
-
-tr.ivu-table-row-hover td .ivu-tag-dot {
-    background-color: #ebf7ff!important;
-}
-
-.demo-i-circle-custom h1 {
-    color: #3f414d;
-    font-size: 10px;
-    font-weight: normal;
-}
-
-.demo-i-circle-custom p {
-    color: #657180;
-    font-size: 8px;
-    margin: 5px 0 2px;
-}
-
-.demo-i-circle-custom span {
-    display: block;
-    padding-top: 15px;
-    color: #657180;
-    font-size: 10px;
-}
-
-.demo-i-circle-custom span :before {
-    content: '';
-    display: block;
-    width: 50px;
-    height: 1px;
-    margin: 0 auto;
-    background: #e0e3e6;
-    position: relative;
-    top: -20px;
-}
-
-.demo-i-circle-custom span i {
-    font-style: normal;
-    color: #3f414d;
-}
-
-/*wz-btn wz-btn-primary wz-btn-small wz-btn-loading*/
-
-.ivu-btn.ivu-btn-primary.ivu-btn-small:not(.ivu-btn-loading) {
-    padding: 2px 10px!important;
-}
-
-td.ivu-table-expanded-cell {
-    background-color: white!important;
-}
-</style>
 <script>
 import axios from 'axios';
 import GlobalServer from '../../config.js';
@@ -99,16 +61,22 @@ export default {
                     id:''
                 }
             },
+            showPictureModal: false,
+            pageID:'list',
             baseUrl: '',
+            bigPhotoUrl: '',
             progresshow:false,
             progresscount:0,
             progresstatus:'active',
             progressspeed:0,
             household_data:[],
+            household_thumb:[],
             household_page_data:[],
             datacount: 0,
             pageindex:1,
             pagesize: 10,
+            communityID:'',
+            searchContent:'',
             page_loading:false,
             data_loading:false,
             columns_title:[
@@ -122,7 +90,22 @@ export default {
                     title: '缩略图',
                     key: 'photoUrl',
                     width: '120',
-                    align: 'center'
+                    align: 'center',
+                    render: (h,params) => {
+                        return h('img',{
+                            attrs: {
+                                src: this.household_thumb[params.row._index],
+                                style: 'width:100%;height:auto;margin-top:4px;'
+                            },
+                            on: {
+                                click: () => {
+                                    let rowIndex = params.row._index;
+                                    this.bigPhotoUrl = this.household_thumb[rowIndex];
+                                    this.showPictureModal = true;
+                                }
+                            }
+                        })
+                    }
                 },{
                     title: '姓名',
                     key: 'householdName',
@@ -146,20 +129,19 @@ export default {
                     width: 180,
                     align: 'center'
                 },{
-                    title: '楼号/单元号',
-                    key: 'buildingBlockNumber',
+                    title: '地址',
+                    key: 'roomPath',
                     ellipsis: true,
                     width: 150,
                     align: 'center'
                 },{
-                    title: '房号',
-                    key: 'roomNumber',
-                    ellipsis: true,
+                    title: '门禁卡号',
+                    key: 'cardNumber',
                     width: 150,
                     align: 'center'
                 },{
-                    title: '类型',
-                    key: 'ownerType',
+                    title: '业主类型',
+                    key: 'householdType',
                     align: 'center'
                 },{
                     title: '操作',
@@ -182,26 +164,22 @@ export default {
                                     click: () => {
                                         let rowIndex = params.row._index;
                                         //let photoUrl = this.household_data[rowIndex].photoUrl;
-                                        let photoId = this.household_data[rowIndex].photoId,
-                                            estateName = this.household_data[rowIndex].estateName,
-                                            apartmentNumber = this.household_data[rowIndex].apartmentNumber,
-                                            floorNumber = this.household_data[rowIndex].floorNumber,
-                                            cardNumber = this.household_data[rowIndex].cardNumber,
+                                        let address = params.row.roomPath.split('-'),
                                             remarks = this.household_data[rowIndex].remarks;
                                         let argu = {
                                             id: params.row.id,
-                                            photoId: photoId,
+                                            photoUrl: GlobalServer.ServerHost + 'onwing-web/' + params.row.photoUrl,
                                             householdName: params.row.householdName,
                                             gender: params.row.gender,
                                             identifyCard : params.row.identifyCard,
                                             tel: params.row.tel,
-                                            estateName: estateName,
-                                            apartmentNumber: apartmentNumber,
-                                            floorNumber: floorNumber,
-                                            buildingBlockNumber: params.row.buildingBlockNumber,
-                                            roomNumber: params.row.roomNumber,
-                                            onwerType: params.row.onwerType,
-                                            cardNumber: cardNumber,
+                                            communityName: params.row.communityName,
+                                            buildingBlockNumber: address[0],
+                                            apartmentNumber: address[1],
+                                            floorNumber: address[2],
+                                            roomNumber: address[3],
+                                            householdType: params.row.householdType,
+                                            cardNumber: params.row.cardNumber,
                                             remarks: remarks
                                         };
                                         this.$router.push({
@@ -219,18 +197,44 @@ export default {
     },//data
     /* 这儿开始是定义所有函数的地方 */
     methods: {
+        init() {
+            let access = Cookies.get('access');
+            if (access === '0') {
+                this.communityID = -1;
+            } else {
+                this.communityID = sessionStorage.getItem('communityID');
+                sessionStorage.setItem('searchCommunityID', this.communityID);
+            }
+        },
         getHouseholdDate(currentPage,pageSize) {
             /* axios有自己的作用域,无法获取vue实例,所以要将vue实例的this传到一个变量中以便在axios中调用 */
-            var _this = this;
+            let _this = this;
+            let communityID = sessionStorage.getItem('searchCommunityID'),
+                searchContent = _this.searchContent;
             /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
             _this.page_loading = true;
             /* 获取所有住户信息并将值传入进household_data数组 */
-            axios.get(GlobalServer.findAllHouseHold + '?page=' + currentPage + '&pageSize=' + pageSize)
+            axios.get(GlobalServer.findAllHouseHold + '?page=' + currentPage + '&pageSize=' + pageSize + '&communityId=' + communityID + '&searchContent=' + searchContent)
             .then(function(response){
                 let data = response.data;
                 if(data.householdlist){
                     /* 将获取到的住户信息数据存入household_data,用以缓存/分页 */
-                    _this.household_data = data.householdlist;
+                    _this.household_data = data.householdlist.map(function(value){
+                        let tempObj = {};
+                        tempObj.id = value.id;
+                        tempObj.communityName = value.communityName;
+                        tempObj.photoUrl = value.photoId;
+                        tempObj.householdName = value.householdName;
+                        tempObj.gender = value.gender;
+                        tempObj.identifyCard = value.identifyCard;
+                        tempObj.tel = value.tel;
+                        tempObj.roomPath = value.roomPath.replace(/\//g,'-').replace(/^\-/,'');
+                        tempObj.cardNumber = value.cardNumber;
+                        tempObj.householdType = value.householdType;
+                        tempObj.remarks = value.remarks;
+                        _this.household_thumb.push(GlobalServer.ServerHost + 'onwing-web/' + value.photoId);
+                      return tempObj;
+                    });
 
                     _this.datacount = data.totalNumber;
 
@@ -243,27 +247,6 @@ export default {
             })
             .catch(function(error){
                 console.info('error=' + error);
-            })
-        },
-        remove (params) {
-            /* 删除一条住户信息 */
-            let _this = this,
-                currentPage = _this.$refs.page.currentPage,
-                index = params.index,
-                indexInHouseholdData = (currentPage-1)*10 + index-1;
-
-            _this.dto.householdDto.id = params.row.id;
-            axios.post(GlobalServer.removeHouseHold,_this.dto)
-            .then(function(response){
-                // 如果返回值中的error为null，表示删除成功，并将household_data数组中对应的值删除
-                if(response.data.error == null){
-                    _this.household_data.splice(index, 1);
-                    //_this.household_data.splice(indexInHouseholdData, 1);
-                    _this.$Message.success('删除成功！');
-                }
-            })
-            .catch(function(error){
-                console.info(error);
             })
         },
         changePage(index){
@@ -289,14 +272,79 @@ export default {
                     original: false
                 });
             }
+        },
+        closeModal () {
+            this.showPictureModal = false;
         }
     },
     /* 这儿开始是生命周期 */
     beforeCreate() {},
     created() {
+        this.init();
         this.getHouseholdDate(this.pageindex,this.pagesize);
     },
     beforeMount() {},
-    mounted() {}
+    mounted() {},
+    watch:{
+        searchContent(arg1){
+            if (arg1.length === 0) {
+                this.getHouseholdDate(1,this.pagesize);
+            }
+        }
+    }
 }
 </script>
+<style type="text/css" scoped>
+  .ivu-tag-dot {
+    border: none!important;
+  }
+
+  tr.ivu-table-row-hover td .ivu-tag-dot {
+    background-color: #ebf7ff!important;
+  }
+
+  .demo-i-circle-custom h1 {
+    color: #3f414d;
+    font-size: 10px;
+    font-weight: normal;
+  }
+
+  .demo-i-circle-custom p {
+    color: #657180;
+    font-size: 8px;
+    margin: 5px 0 2px;
+  }
+
+  .demo-i-circle-custom span {
+    display: block;
+    padding-top: 15px;
+    color: #657180;
+    font-size: 10px;
+  }
+
+  .demo-i-circle-custom span :before {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 1px;
+    margin: 0 auto;
+    background: #e0e3e6;
+    position: relative;
+    top: -20px;
+  }
+
+  .demo-i-circle-custom span i {
+    font-style: normal;
+    color: #3f414d;
+  }
+
+  /*wz-btn wz-btn-primary wz-btn-small wz-btn-loading*/
+
+  .ivu-btn.ivu-btn-primary.ivu-btn-small:not(.ivu-btn-loading) {
+    padding: 2px 10px!important;
+  }
+
+  td.ivu-table-expanded-cell {
+    background-color: white!important;
+  }
+</style>

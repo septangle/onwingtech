@@ -5,7 +5,7 @@
       <div>
         <div style="position:relative;">
           <!-- 表格开始 -->
-          <Table stripe border height="auto" :columns="columns_title" :data="household_data" ref="table"></Table>
+          <Table stripe border height="auto" :columns="columns_title" :data="community_page_data" ref="table"></Table>
           <!-- 表格结束 -->
           <!-- 表格内容加载提示蒙板开始 -->
           <div style="position:absolute;top:0px;width:100%;height:100%;display: flex;align-items: center;justify-content: center;background: rgba(210, 216, 222, 0.5);" v-if="page_loading">
@@ -25,6 +25,9 @@
           <Page ref="page" :total="datacount" :page-size="pagesize" show-total @on-change="changePage" style="text-align:right;margin-top:50px"></Page>
         </div>
         <!-- 分页结束 -->
+        <div style="display: none">
+            <input type="file" accept="" ref="upCsv" @change="fileChange()">
+        </div>
       </div>
       </Col>
       <Col :md="12"></Col>
@@ -33,168 +36,187 @@
 </template>
 
 <script>
-  import axios from 'axios';
-  import GlobalServer from '../../config.js';
-  import Cookies from 'js-cookie';
-  export default {
-    name: 'community_list_index',
-    data () {
-      return {
-        dto:{
-          householdDto:{
-            id:''
-          }
+    import axios from 'axios';
+    import GlobalServer from '../../config.js';
+    import Cookies from 'js-cookie';
+    export default {
+        name: 'community_list_index',
+        data () {
+            return {
+                progresshow:false,
+                progresscount:0,
+                progresstatus:'active',
+                progressspeed:0,
+                community_data:[],
+                community_page_data:[],
+                datacount: 0,
+                pageindex: 1,
+                pagesize: 20,
+                page_loading:false,
+                data_loading:false,
+                file:'',
+                communityID:'',
+                communityName:'',
+                communityIndex:'',
+                columns_title:[
+                    {
+                        title: 'ID',
+                        key: 'communityID',
+                        ellipsis: true,
+                        width: 80,
+                        align: 'center'
+                    },{
+                        title: '小区名称',
+                        key: 'communityName',
+                        ellipsis: true,
+                        width: 200,
+                        align: 'center'
+                    },{
+                        title: '小区地址',
+                        key: 'communityAddress',
+                        align: 'center'
+                    },{
+                        title: '门禁设备数',
+                        key: 'controNumber',
+                        ellipsis: true,
+                        width: 150,
+                        align: 'center'
+                    },{
+                        title: '摄像头设备数',
+                        key: 'cameraNumber',
+                        ellipsis: true,
+                        width: 150,
+                        align: 'center'
+                    },{
+                        title: '操作',
+                        key: 'action',
+                        align: 'center',
+                        ellipsis: true,
+                        width: 200,
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            /* console.info(params); */
+                                            this.doInput(params);
+                                        }
+                                    }
+                                }, '上传拓扑文件')
+                            ]);
+                        }
+                    }//
+                ]
+            }//return
+        },//data
+      /* 这儿开始是定义所有函数的地方 */
+        methods: {
+            getCommunityDate(currentPage,pageSize) {
+              let communityName = sessionStorage.getItem('communityName').split(','),
+                  communityID = sessionStorage.getItem('communityID').split(','),
+                  communityAddress = sessionStorage.getItem('communityAddress').split(','),
+                  cameraNumber = sessionStorage.getItem('cameraNumber').split(','),
+                  controNumber = sessionStorage.getItem('controNumber').split(','),
+                  obj = {};
+              this.page_loading = true;
+              this.datacount = communityID.length;
+              for (let i = 0;i !== this.datacount; i++){
+                  obj.communityID = communityID[i];
+                  obj.communityName = communityName[i];
+                  obj.communityAddress = communityAddress[i];
+                  obj.cameraNumber = cameraNumber[i];
+                  obj.controNumber = controNumber[i];
+                  this.community_data.push(obj);
+                  obj = {};
+              }
+              console.info(this.community_data);
+              this.datacount < this.pagesize ? this.community_page_data = this.community_data : this.community_page_data = this.community_data.slice(0,this.pagesize);
+              this.page_loading = false;
+            },
+            doInput (params) {
+                console.info(params);
+                this.$refs.upCsv.accept = '.csv';
+                this.$refs.upCsv.click();
+                this.communityIndex = params.row.communityID;
+                console.info(this.communityIndex);
+            },
+            fileChange () {
+                console.info('change');
+                console.info(this.$refs.upCsv);
+                this.file = this.$refs.upCsv.files[0];
+                //console.info(this.file);
+                this.upFile();
+            },
+            upFile () {
+                console.info('up');
+                let _this = this,
+                    formdata = new FormData(),
+                    config = {
+                        headers:{
+                          'Content-Type':'application/x-www-form-urlencoded'
+                        }
+                    };
+                console.info('community:' + _this.communityIndex);
+                formdata.append('file',_this.file);
+                formdata.append('communityId',_this.communityIndex);
+                axios.post(GlobalServer.importRoomsFromCvs,formdata,config)
+                    .then(function(response){
+                        let data = response.data;
+                            if(data.error === null) {
+                                _this.$Message.success('上传成功！');
+                                _this.file = '';
+                                _this.communityIndex = '';
+                            }
+                    })
+                    .catch(function(error){
+                        console.info(error);
+                    });
+            },
+            changePage(index){
+                // start 每页的开始数据
+                let start = (index - 1) * this.pagesize;
+                // end 每页的结束数据
+                let end = index * this.pagesize;
+
+                this.community_page_data = this.community_data.slice(start,end);
+
+                //this.getCommunityDate(index,this.pagesize);
+            },
+            exportData (type) {
+                if (type === 1) {
+                    this.$refs.table.exportCsv({
+                        filename: '原始数据',
+                        columns: this.columns_title,
+                        data: this.household_data
+                    });
+                } else if (type === 2) {
+                    this.$refs.table.exportCsv({
+                        filename: '排序和过滤后的数据',
+                        original: false
+                    });
+                }
+            }
         },
-        baseUrl: '',
-        progresshow:false,
-        progresscount:0,
-        progresstatus:'active',
-        progressspeed:0,
-        household_data:[],
-        household_page_data:[],
-        datacount: 0,
-        pageindex:1,
-        pagesize: 10,
-        page_loading:false,
-        data_loading:false,
-        columns_title:[
-          {
-            title: 'ID',
-            key: 'id',
-            ellipsis: true,
-            width: 80,
-            align: 'center'
-          },{
-            title: '小区名称',
-            key: 'communityName',
-            ellipsis: true,
-            width: 200,
-            align: 'center'
-          },{
-            title: '小区地址',
-            key: 'communityAddress',
-            align: 'center'
-          },{
-            title: '门禁设备数',
-            key: 'doorControNumber',
-            ellipsis: true,
-            width: 150,
-            align: 'center'
-          },{
-            title: '摄像头设备数',
-            key: 'roomNumber',
-            ellipsis: true,
-            width: 150,
-            align: 'center'
-          },{
-            title: '操作',
-            key: 'action',
-            align: 'center',
-            ellipsis: true,
-            width: 200,
-            render: (h, params) => {
-              /* const task_status = parseInt(params.row.task_status); */
-              return h('div', [
-                h('Button', {
-                  props: {
-                    type: 'primary',
-                    size: 'small'
-                  },
-                  on: {
-                    click: () => {
-                      /* console.info(params); */
-                      this.remove(params);
-                    }
-                  }
-                }, '上传拓扑文件')
-              ]);
+      /* 这儿开始是生命周期 */
+        beforeCreate() {},
+        created() {
+            let access = Cookies.get('access');
+
+            if (access === '0') {
+                this.communityID = -1;
+            } else {
+                this.communityID = sessionStorage.getItem('communityID');
             }
-          }//
-        ]
-      }//return
-    },//data
-    /* 这儿开始是定义所有函数的地方 */
-    methods: {
-      getHouseholdDate(currentPage,pageSize) {
-        /* axios有自己的作用域,无法获取vue实例,所以要将vue实例的this传到一个变量中以便在axios中调用 */
-        var _this = this;
-        /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
-        _this.page_loading = true;
-        /* 获取所有住户信息并将值传入进household_data数组 */
-        axios.get(GlobalServer.findAllHouseHold + '?page=' + currentPage + '&pageSize=' + pageSize)
-          .then(function(response){
-            let data = response.data;
-            if(data.householdlist){
-              /* 将获取到的住户信息数据存入household_data,用以缓存/分页 */
-              _this.household_data = data.householdlist;
+            this.getCommunityDate(this.pageindex,this.pagesize);
 
-              _this.datacount = data.totalNumber;
-
-              /* 执行分页函数将住户信息数据分页,函数的参数为需要显示内容的页数 */
-              //_this.datacount < _this.pagesize ? _this.household_page_data = _this.household_data : _this.household_page_data = _this.household_data.slice(0,_this.pagesize);
-              /* 将page_loading值设置为false,隐藏'下在加载数据'的蒙板 */
-              _this.page_loading = false;
-            }
-            /* console.info(_this.household_data); */
-          })
-          .catch(function(error){
-            console.info('error=' + error);
-          })
-      },
-      remove (params) {
-        /* 删除一条住户信息 */
-        let _this = this,
-          currentPage = _this.$refs.page.currentPage,
-          index = params.index,
-          indexInHouseholdData = (currentPage-1)*10 + index-1;
-
-        _this.dto.householdDto.id = params.row.id;
-        axios.post(GlobalServer.removeHouseHold,_this.dto)
-          .then(function(response){
-            // 如果返回值中的error为null，表示删除成功，并将household_data数组中对应的值删除
-            if(response.data.error == null){
-              _this.household_data.splice(index, 1);
-              //_this.household_data.splice(indexInHouseholdData, 1);
-              _this.$Message.success('删除成功！');
-            }
-          })
-          .catch(function(error){
-            console.info(error);
-          })
-      },
-      changePage(index){
-        // start 每页的开始数据
-        // let start = (index - 1) * this.pagesize;
-        // end 每页的结束数据
-        // let end = index * this.pagesize;
-
-        // this.household_page_data = this.household_data.slice(start,end);
-
-        this.getHouseholdDate(index,this.pagesize);
-      },
-      exportData (type) {
-        if (type === 1) {
-          this.$refs.table.exportCsv({
-            filename: '原始数据',
-            columns: this.columns_title,
-            data: this.household_data
-          });
-        } else if (type === 2) {
-          this.$refs.table.exportCsv({
-            filename: '排序和过滤后的数据',
-            original: false
-          });
-        }
-      }
-    },
-    /* 这儿开始是生命周期 */
-    beforeCreate() {},
-    created() {
-      this.getHouseholdDate(this.pageindex,this.pagesize);
-    },
-    beforeMount() {},
-    mounted() {}
-  }
+        },
+        beforeMount() {},
+        mounted() {}
+    }
 </script>
 <style type="text/css" scoped>
   .ivu-tag-dot {
