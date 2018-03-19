@@ -15,7 +15,7 @@
 		<result column="admin_name" property="adminName" jdbcType="VARCHAR" />
 		<result column="tel" property="tel" jdbcType="VARCHAR" />
 		<result column="name" property="communityName" jdbcType="VARCHAR" />
-		<result column="roleName" property="roleName" jdbcType="VARCHAR" />
+		<result column="role_Name" property="roleName" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, admin_name, password, tel

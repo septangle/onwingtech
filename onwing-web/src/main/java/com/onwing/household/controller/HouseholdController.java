@@ -139,16 +139,22 @@ public class HouseholdController extends BaseController<HouseholdController> {
 			@RequestParam(value = "remarks", required = false) String remarks, HttpServletRequest servletRequest)
 			throws Exception {
 		String path = System.getProperty("onwing.root") + AppConstants.FILE_PATH;
-		String tmpFileName = file.getOriginalFilename();//上传的文件名	
-		//调用摄像头直接拍摄 无后缀名，默认加上.png
-		if (!tmpFileName.contains(".")) {
-			tmpFileName = tmpFileName + ".png";
-		}
-		String extension = tmpFileName.substring(tmpFileName.lastIndexOf("."));
-		String nowFileName = identifyCard + extension;
-		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path, nowFileName));
+		String nowFileName="";
 		HouseholdRequest householdRequest = new HouseholdRequest();
 		HouseHoldDto holdDto = new HouseHoldDto();
+		if (file!=null) {
+			String tmpFileName = file.getOriginalFilename();//上传的文件名	
+			//调用摄像头直接拍摄 无后缀名，默认加上.png
+			if (!tmpFileName.contains(".")) {
+				tmpFileName = tmpFileName + ".png";
+			}
+			String extension = tmpFileName.substring(tmpFileName.lastIndexOf("."));
+		    nowFileName = identifyCard + extension;
+			FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path, nowFileName));
+			holdDto.setPhotoId(AppConstants.FILE_PATH + nowFileName);
+
+		}
+		
 		holdDto.setId(Long.parseLong(id));
 		holdDto.setHouseholdName(householdName);
 		holdDto.setGender(gender);
@@ -158,7 +164,6 @@ public class HouseholdController extends BaseController<HouseholdController> {
 		holdDto.setCardNumber(cardNumber);
 		holdDto.setHouseholdType(householdType);
 		holdDto.setRemarks(remarks);
-		holdDto.setPhotoId(AppConstants.FILE_PATH + nowFileName);
 
 		householdRequest.setHouseholdDto(holdDto);
 		return householdfacade.updateHouseHold(householdRequest);
