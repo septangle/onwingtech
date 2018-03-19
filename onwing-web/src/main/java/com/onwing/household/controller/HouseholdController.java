@@ -166,6 +166,11 @@ public class HouseholdController extends BaseController<HouseholdController> {
 		holdDto.setRemarks(remarks);
 
 		householdRequest.setHouseholdDto(holdDto);
+		
+		// 发送消息给c++，让其重新加载白名单图片库
+		CplusClient cplusClient = new CplusClient(cplusClientProperties);
+		cplusClient.sendReloadPictureMsgMain(nowFileName);
+		// end
 		return householdfacade.updateHouseHold(householdRequest);
 	}
 
