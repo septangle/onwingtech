@@ -146,7 +146,7 @@ public class CommunityController extends BaseController<CommunityController> {
 		CsvReader csvReader = null;
 		try {
 			// 创建CSV读对象
-			csvReader = new CsvReader(csvPath, ',', Charset.forName("utf-8"));
+			csvReader = new CsvReader(csvPath, ',', Charset.forName("gbk"));
 			// 读表头
 			csvReader.readHeaders();
 			while (csvReader.readRecord()) {
