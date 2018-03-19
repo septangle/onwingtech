@@ -1,5 +1,6 @@
 package com.onwing.household.biz.logic.facade.impl;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,17 @@ import com.onwing.household.biz.logic.facade.HouseHoldFacade;
 import com.onwing.household.biz.request.HouseholdRequest;
 import com.onwing.household.biz.response.HouseholdResponse;
 import com.onwing.household.comm.AppConstants;
+import com.onwing.household.comm.dal.dao.HouseHoldMapper;
+import com.onwing.household.comm.dal.model.HouseHold;
 
 @Service
 public class HouseHoldFacadeImpl implements HouseHoldFacade {
 
 	@Autowired
 	private HouseHoldBiz householdBiz;
+	
+	@Autowired
+	private HouseHoldMapper householdMapper;
 
 	@Override
 	public HouseholdResponse addHouseHold(HouseholdRequest householdRequest) throws Exception {
@@ -30,8 +36,14 @@ public class HouseHoldFacadeImpl implements HouseHoldFacade {
 	}
 
 	@Override
-	public HouseholdResponse removeHouseHold(HouseholdRequest householdRequest) throws Exception {
+	public HouseholdResponse removeHouseHold(HouseholdRequest householdRequest,String path) throws Exception {
 		HouseholdResponse householdResponse = new HouseholdResponse();
+		HouseHold houseHold=householdMapper.selectByPrimaryKey(householdRequest.getHouseholdDto().getId());
+		String filePath=path+houseHold.getPhotoId();
+		File file = new File(filePath);
+		if (file!=null) {
+			file.delete();
+		}
 		boolean flag = householdBiz.removeHousehold(householdRequest.getHouseholdDto());
 		String message = flag ? AppConstants.REMOVE_HOUSE_HOLD_SUCCESS_MESSAGE
 				: AppConstants.REMOVE_HOUSE_HOLD_FAIL_MESSAGE;

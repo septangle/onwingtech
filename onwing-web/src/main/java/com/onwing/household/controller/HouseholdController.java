@@ -102,7 +102,8 @@ public class HouseholdController extends BaseController<HouseholdController> {
 	@RequestMapping(value = "/removeHouseHold.do", method = RequestMethod.POST)
 	public @ResponseBody HouseholdResponse removeHouseHold(HttpServletRequest servletRequest,
 			@RequestBody HouseholdRequest request) throws Exception {
-		return householdfacade.removeHouseHold(request);
+		String path = System.getProperty("onwing.root");
+		return householdfacade.removeHouseHold(request,path);
 
 	}
 

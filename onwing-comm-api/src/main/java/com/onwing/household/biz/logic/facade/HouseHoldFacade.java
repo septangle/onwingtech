@@ -20,7 +20,7 @@ public interface HouseHoldFacade {
 	 * @throws Exception
 	 * @author zx
 	 */
-	public HouseholdResponse removeHouseHold(HouseholdRequest householdRequest)throws Exception;
+	public HouseholdResponse removeHouseHold(HouseholdRequest householdRequest,String path)throws Exception;
 	
 	/**
 	 * 更新住户信息
