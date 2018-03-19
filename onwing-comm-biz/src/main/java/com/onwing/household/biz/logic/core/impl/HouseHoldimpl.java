@@ -109,6 +109,10 @@ public class HouseHoldimpl implements HouseHoldBiz {
 		try {
 			houseHold = householdMapper.selectByPrimaryKey(houseHoldDto.getId());
 			houseHoldDto = ModelUtil.modelToDto(houseHold, HouseHoldDto.class);
+			if (houseHold.getCommunity()==null) {
+				throw new BusinessException(AppConstants.FIND_HOUSEHOLD_ID_FAIL_CODE,
+						AppConstants.FIND_HOUSEHOLD_ID_FAIL_MESSAGE);
+			}
 			houseHoldDto.setCommunityId(houseHold.getCommunity().getId());
 		} catch (Exception e) {
           logger.error("find household by Id error", e);

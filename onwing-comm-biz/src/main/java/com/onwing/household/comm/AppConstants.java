@@ -56,6 +56,10 @@ public class AppConstants {
 	//updateStranger
 	public final static String UPDATE_STRANGER_SUCCESS_MESSAGE="操作成功";
 	public final static String UPDATE_STRANGER_FAIL_MESSAGE="操作失败";
+	
+	//household
+	public final static String FIND_HOUSEHOLD_ID_FAIL_CODE="1007001";
+	public final static String FIND_HOUSEHOLD_ID_FAIL_MESSAGE="该住户信息不存在";
 
 	
 
