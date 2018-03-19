@@ -127,11 +127,11 @@ public class AdminiStratorFacadeImpl implements AdminiStratorFacade {
 	}
 
 	@Override
-	public AdminiStratorResponse findAllUser() throws Exception {
+	public AdminiStratorResponse findAllUser(String communityId) throws Exception {
 		AdminiStratorResponse adminiStratorResponse = new AdminiStratorResponse();
 		List<UserRoleCommunityDto> communityDtosList= new ArrayList<UserRoleCommunityDto>();
 		
-		List<UserRoleCommunity> userList=adminiStratorMapper.selectbyAllUser();
+		List<UserRoleCommunity> userList=adminiStratorMapper.selectbyAllUser(communityId);
 		if (userList != null) {
 			for (UserRoleCommunity userRoleCommunity : userList) {
 				communityDtosList.add(ModelUtil.modelToDto(userRoleCommunity, UserRoleCommunityDto.class));

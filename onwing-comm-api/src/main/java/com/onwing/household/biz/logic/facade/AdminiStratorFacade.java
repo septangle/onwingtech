@@ -17,6 +17,6 @@ public interface AdminiStratorFacade {
 	
 	public AdminiStratorResponse addUser(UserRoleRequest request) throws Exception;
 	
-	public AdminiStratorResponse findAllUser() throws Exception;
+	public AdminiStratorResponse findAllUser(String communityId) throws Exception;
 
 }

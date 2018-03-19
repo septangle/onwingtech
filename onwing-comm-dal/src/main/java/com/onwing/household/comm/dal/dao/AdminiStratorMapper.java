@@ -2,6 +2,8 @@ package com.onwing.household.comm.dal.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.onwing.household.comm.dal.model.AdminiStrator;
 import com.onwing.household.comm.dal.model.UserRoleCommunity;
 
@@ -25,5 +27,5 @@ public interface AdminiStratorMapper {
     
     AdminiStrator login(AdminiStrator record);
     
-    List<UserRoleCommunity> selectbyAllUser();
+    List<UserRoleCommunity> selectbyAllUser(@Param("communityId")String communityId);
 }

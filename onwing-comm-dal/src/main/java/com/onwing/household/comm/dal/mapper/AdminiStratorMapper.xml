@@ -124,7 +124,8 @@
 	<select id="selectbyAllUser" resultMap="userRoleCommunityMap">
 		select
 		a.id,a.admin_name,a.tel,b.`name`,d.role_name
-		from tbl_administrator a ,
+		from
+		tbl_administrator a ,
 		tbl_community b,
 		tbl_user_role c,
 		tbl_role d
@@ -136,5 +137,9 @@
 		c.role_id=d.id
 		AND
 		c.role_id!=1
+		<if test="communityId !=null">
+		AND
+		b.id=#{communityId,jdbcType=VARCHAR}
+		</if>
 	</select>
 </mapper>

@@ -66,7 +66,11 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 	@ApiOperation(value = "查询所有管理员", httpMethod = "GET", response = AdminiStratorResponse.class)
 	@RequestMapping(value = "/findAllUser.do", method = RequestMethod.GET)
 	public @ResponseBody AdminiStratorResponse findAllUser(HttpServletRequest servletRequest) throws Exception {
-		AdminiStratorResponse adminiStratorResponse = adminiStratorFacade.findAllUser();
+		String communityId = servletRequest.getParameter("communityId");
+		if (communityId.equals("-1")) {
+			communityId=null;
+		}
+		AdminiStratorResponse adminiStratorResponse = adminiStratorFacade.findAllUser(communityId);
 		return adminiStratorResponse;
 	}
 }
