@@ -138,8 +138,32 @@
 		AND
 		c.role_id!=1
 		<if test="communityId !=null">
-		AND
-		b.id=#{communityId,jdbcType=VARCHAR}
+			AND
+			b.id=#{communityId,jdbcType=VARCHAR}
 		</if>
+		LIMIT #{startRow}, #{pageSize}
+	</select>
+
+	<select id="selectByAllUserCount" resultType="int">
+		select count(*)
+		from
+		tbl_administrator a ,
+		tbl_community b,
+		tbl_user_role c,
+		tbl_role d
+		where
+		a.id=c.user_id
+		AND
+		b.id=c.community_id
+		AND
+		c.role_id=d.id
+		AND
+		c.role_id!=1
+		<if test="communityId !=null">
+			AND
+			b.id=#{communityId,jdbcType=VARCHAR}
+		</if>
+
+
 	</select>
 </mapper>

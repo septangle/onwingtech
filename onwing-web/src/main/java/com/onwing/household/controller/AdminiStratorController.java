@@ -14,7 +14,9 @@ import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.onwing.household.biz.response.AdminiStratorResponse;
+import com.onwing.household.comm.dal.dao.AdminiStratorMapper;
 import com.onwing.household.util.MD5Util;
+import com.onwing.household.util.Page;
 
 /**
  * 管理员信息
@@ -27,6 +29,9 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 
 	@Autowired
 	private AdminiStratorFacade adminiStratorFacade;//管理员
+	
+	@Autowired
+	private AdminiStratorMapper adminiStratorMapper;
 
 	/**
 	 * 登录
@@ -70,7 +75,11 @@ public class AdminiStratorController extends BaseController<AdminiStratorControl
 		if (communityId.equals("-1")) {
 			communityId=null;
 		}
-		AdminiStratorResponse adminiStratorResponse = adminiStratorFacade.findAllUser(communityId);
+		int count=adminiStratorMapper.selectByAllUserCount(communityId);
+		Page pageTool = Page.getPageByRequest(servletRequest, count);
+		int startRow = (pageTool.getPage() - 1) * Integer.parseInt(servletRequest.getParameter("pageSize"));				
+		AdminiStratorResponse adminiStratorResponse = adminiStratorFacade.findAllUser(startRow, pageTool.getPageSize(),communityId,count);
+		adminiStratorResponse.setTotalNumber(count);
 		return adminiStratorResponse;
 	}
 }

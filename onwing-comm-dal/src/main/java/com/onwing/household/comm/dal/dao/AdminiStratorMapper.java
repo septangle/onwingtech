@@ -27,5 +27,8 @@ public interface AdminiStratorMapper {
     
     AdminiStrator login(AdminiStrator record);
     
-    List<UserRoleCommunity> selectbyAllUser(@Param("communityId")String communityId);
+    List<UserRoleCommunity> selectbyAllUser(@Param("startRow")int startRow,
+			@Param("pageSize")int pageSize,@Param("communityId")String communityId);
+    
+    int selectByAllUserCount(@Param("communityId")String communityId);
 }
