@@ -47,7 +47,7 @@ public class ClientTest {
 
 			ByteBuf buf = Unpooled.buffer();
 			// 获取图片信息
-			Resource res = new FileSystemResource("/Users/lvxiaobu/iso/8-1106-WILL.png");
+			Resource res = new FileSystemResource("/Users/lvxiaobu/iso/330000000000000.png");
 			InputStream input = res.getInputStream();
 			int photoSize = (int) res.contentLength();
 
@@ -71,8 +71,8 @@ public class ClientTest {
 			buf.writeInt(0);
 			buf.writeInt(payloadSize);
 			// 填充payload
-			ByteBufUtil.addStringBytesToByteBuf(buf, "camera1", 10);
-			ByteBufUtil.addStringBytesToByteBuf(buf, "0-0-0", 40); //335555555555555.jpg
+			ByteBufUtil.addStringBytesToByteBuf(buf, "camera2", 10);
+			ByteBufUtil.addStringBytesToByteBuf(buf, "111111111.jpg", 40); //330000000000000.jpg 0-0-0
 			ByteBufUtil.addStringBytesToByteBuf(buf, "2018/01/19 10:50:52", 40);
 			buf.writeInt(photoSize);
 			buf.writeBytes(photoBytes);
@@ -81,7 +81,8 @@ public class ClientTest {
 			buf.readBytes(msgBytes);
 			while (true) {
 				out.write(msgBytes);
-				Thread.sleep(100);
+				Thread.sleep(1000);
+				break;
 			}
 			//out.close();
 			//socket.close();
