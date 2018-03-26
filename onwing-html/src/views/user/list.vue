@@ -107,7 +107,7 @@ export default {
             /* 将page_loading值设置为true,用以在获取数据时显示‘正在加载数据’的蒙板 */
             _this.page_loading = true;
             /* 获取所有住户信息并将值传入进household_data数组 */
-            axios.get(GlobalServer.findAllUser + '?page=' + currentPage + '&pageSize=' + pageSize + 'communityId=' + _this.searchCommunityID)
+            axios.get(GlobalServer.findAllUser + '?page=' + currentPage + '&pageSize=' + pageSize + '&communityId=' + _this.searchCommunityID)
                 .then(function(response){
                     let data = response.data;
                     if(data.error === null){

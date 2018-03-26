@@ -194,6 +194,9 @@ export default {
 
             if (access === '0') {
                 this.communityFlag = false;
+                this.formValidate.communityID = data.formdate.communityName;
+                this.formValidate.communityName = data.formdate.communityName;
+                this.searchCommunityID = data.formdate.communityName;
             } else {
                 this.formValidate.communityID = this.communityList[0].value;
                 this.formValidate.communityName = this.communityList[0].value;
@@ -460,9 +463,9 @@ export default {
                     .then(function(response){
                         let data = response.data;
                         if(data.error === null){
-                            if(index === 0 ){
+                            if(index === 0 ) {
                                 _this.buildingList = data.childNodeNameList
-                            } else if(index === 1){
+                            } else if(index === 1) {
                                 _this.apartmentList = data.childNodeNameList
                             } else if(index === 2) {
                                 _this.floorList = data.childNodeNameList

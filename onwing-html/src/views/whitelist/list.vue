@@ -255,8 +255,9 @@ export default {
             axios.get(GlobalServer.findAllHouseHold + '?page=' + currentPage + '&pageSize=' + pageSize + '&communityId=' + communityID + '&searchContent=' + searchContent)
             .then(function(response){
                 let data = response.data;
-                if(data.householdlist){
+                if(data.error === null){
                     /* 将获取到的住户信息数据存入household_data,用以缓存/分页 */
+                    _this.household_thumb = [];
                     _this.household_data = data.householdlist.map(function(value){
                         let tempObj = {};
                         tempObj.id = value.id;

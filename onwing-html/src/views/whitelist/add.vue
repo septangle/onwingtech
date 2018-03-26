@@ -190,6 +190,9 @@ export default {
 
             communityNameList = sessionStorage.getItem('communityName').split(',');
             communityIDList = sessionStorage.getItem('communityID').split(',');
+            this.communityList = [];
+            this.communityIDList = [];
+            this.communityNameList = [];
             this.communityIDList = communityIDList;
             this.communityNameList = communityNameList;
             _length = communityNameList.length;
@@ -425,11 +428,12 @@ export default {
                         .then(function(response){
                             let data = response.data;
                             if(data.error === null) {
-                                this.drawToCanvas(_this.photoUrl);
                                 _this.$Message.success('添加成功！');
+                                _this.drawToCanvas(_this.photoUrl);
                                 _this.handleReset('formValidate');
                                 _this.householdDto = {};
                             }
+                            _this.init();
                         })
                         .catch(function(error){
                             console.info(error);

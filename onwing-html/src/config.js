@@ -1,4 +1,4 @@
-const test = '//192.168.1.102';
+const test = '//192.168.1.54';
 const Origin = location.origin;
 const ServerHost = Origin + ':8080/';
 const login = ServerHost + 'onwing-web/adminiStator/login.do';

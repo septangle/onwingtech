@@ -153,6 +153,10 @@ export default {
                     key: 'outOffTime',
                     align: 'center'
                 },{
+                    title: '门',
+                    key: 'doorName',
+                    align: 'center'
+                },{
                     title: '门禁设备号',
                     key: 'controlID',
                     align: 'center'
@@ -191,6 +195,7 @@ export default {
                     // tempArr = data.houseAccessRecordDtosList;
 
                     /* 遍历tempArr数组，将数组中每一条出入记录对象中的单元号和房号进行拼接 */
+                    _this.inout_thumb = [];
                     _this.inout_data = data.houseAccessRecordDtosList.map(function(value){
                         let tempObj = {};
                         let tempDate = _this.setDate(value.outOffTime);
@@ -201,6 +206,7 @@ export default {
                         tempObj.roomPath = value.roomPath.replace(/\//g,'-').replace(/^\-/,'');
                         tempObj.outOffTime = tempDate;
                         //controlID门禁设备号,cameraID摄像头设备号
+                        tempObj.doorName = value.doorName;
                         tempObj.controlID = value.controlId;
                         tempObj.cameraID = value.cameraId;
                         _this.inout_thumb.push(GlobalServer.ServerHost + 'onwing-web/' + value.photoUrl);
