@@ -192,7 +192,14 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 				return;
 			}
 			Camara curCamera = cameraList.get(0);
-
+			// 根据摄像头获取其位于哪个小区
+			long cameraCommunityId = -2;
+			try {
+				cameraCommunityId = curCamera.getControl().getDoor().getCommunity().getId();
+			} catch (Exception ex) {
+				cameraCommunityId = -2;
+			}
+			// end
 			String identifyCard = null;
 			try {
 				String[] photoNameSplitList = photoName.split("\\.");
@@ -207,6 +214,12 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
 			if (houseHoldList == null || houseHoldList.size() != 1) {
 				// 日志记录错误，查找无人或不止一个人
 				logger.error("no houseHold or not single household found in DB with photoName: {}", photoName);
+				return;
+			}
+			long houseHoldCommunityId = houseHoldList.get(0).getCommunity().getId();
+			if (cameraCommunityId != houseHoldCommunityId) {
+				logger.warn("household: {} and camera: {} are not in same community, will not open lock",
+						houseHoldList.get(0).getHouseholdName(), cameraName);
 				return;
 			}
 			Date enterTime = personEnterTimeMap.get(photoName); // 上一次成功进入时间

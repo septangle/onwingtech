@@ -30,6 +30,10 @@ public class HouseAccessRecordDto {
 
 	private String controlName;
 
+	private Long doorId;
+
+	private String doorName;
+
 	public Long getId() {
 		return id;
 	}
@@ -132,6 +136,22 @@ public class HouseAccessRecordDto {
 
 	public void setControlName(String controlName) {
 		this.controlName = controlName;
+	}
+
+	public Long getDoorId() {
+		return doorId;
+	}
+
+	public void setDoorId(Long doorId) {
+		this.doorId = doorId;
+	}
+
+	public String getDoorName() {
+		return doorName;
+	}
+
+	public void setDoorName(String doorName) {
+		this.doorName = doorName;
 	}
 
 }
