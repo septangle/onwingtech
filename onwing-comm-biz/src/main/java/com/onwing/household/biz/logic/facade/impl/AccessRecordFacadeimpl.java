@@ -53,10 +53,18 @@ public class AccessRecordFacadeimpl implements AccessRecordFacade {
 				houseAccessRecordDto.setCommunityName(houseAccessRecord.getCommunityName());
 				houseAccessRecordDto.setCameraId(houseAccessRecord.getCamara().getId());
 				houseAccessRecordDto.setCameraName(houseAccessRecord.getCameraName());
-				// todo
+				
 				Camara camera2 = camaraMapper.selectByPrimaryKey(houseAccessRecord.getCamara().getId());
 				houseAccessRecordDto.setControlId(camera2.getControl().getId());
 				houseAccessRecordDto.setControlName(camera2.getControl().getName());
+				//获取door_name
+				String doorName = "";
+				try {
+					doorName = camera2.getControl().getDoor().getName();
+				} catch (Exception ex) {
+					doorName = "";
+				}
+				houseAccessRecordDto.setDoorName(doorName);
 				houseAccessRecordDto.setRoomPath(houseAccessRecord.getHouseHold().getRoomPath());
 				// end
 				houseAccessRecordDtoList.add(houseAccessRecordDto);
