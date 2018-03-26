@@ -276,6 +276,8 @@
 			household_type like
 			'%${searchContent}%' or
 			identify_card like
+			'%${searchContent}%' or
+			community_name like
 			'%${searchContent}%')
 		</if>
 	</select>
