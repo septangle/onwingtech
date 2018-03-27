@@ -44,7 +44,8 @@
 		tbl_access_record.community_name,
 		tbl_access_record.camera_id,
 		tbl_access_record.camera_name,
-		tbl_household.room_path
+		tbl_household.room_path,
+		tbl_door.name as door_name
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
@@ -127,7 +128,7 @@
 		parameterType="com.onwing.household.comm.dal.model.AccessRecord">
 		select
 		<include refid="Base_Column_List2" />
-		from tbl_access_record, tbl_household
+		from tbl_access_record, tbl_household, tbl_camera, tbl_control, tbl_door
 		where 1=1
 		<if test="entity.id != null">
 			and tbl_access_record.id = #{entity.id,jdbcType=BIGINT}
@@ -160,8 +161,11 @@
 			and tbl_access_record.camera_name = #{entity.camara.name,jdbcType=VARCHAR} 
 		</if>
 			and tbl_access_record.household_id = tbl_household.id 
+			and tbl_access_record.camera_id = tbl_camera.id 
+			and tbl_camera.control_id = tbl_control.id  
+			and tbl_control.door_id = tbl_door.id 
 		<if test="searchContent != null">
-			and (tbl_access_record.household_name LIKE '%${searchContent}%' or tbl_access_record.community_name LIKE '%${searchContent}%' or tbl_access_record.camera_name LIKE '%${searchContent}%') 
+			and (tbl_access_record.household_name LIKE '%${searchContent}%' or tbl_access_record.community_name LIKE '%${searchContent}%' or tbl_door.name LIKE '%${searchContent}%') 
 		</if>
 		ORDER BY tbl_access_record.id desc LIMIT #{startRow}, #{pageSize}
 	</select>
